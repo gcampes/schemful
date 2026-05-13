@@ -17,6 +17,9 @@ export default defineConfig({
         { icon: "github", label: "GitHub", href: "https://github.com/gcampes/schemful" },
       ],
       customCss: ["./src/styles/starlight.css"],
+      expressiveCode: {
+        themes: ["starlight-dark"],
+      },
       sidebar: [
         {
           label: "Getting Started",
