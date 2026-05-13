@@ -1,0 +1,73 @@
+---
+title: push
+description: Push local schema definitions directly to Contentful, bypassing the migration system.
+---
+
+## Push all schemas
+
+```bash
+schemful push
+```
+
+Reads every schema definition from your `schemas/` directory, diffs them against the remote content model, and applies the changes directly to your Contentful space. Before applying, Schemful shows a summary of changes and asks for confirmation.
+
+This command **bypasses the migration system entirely** — no migration files are generated or recorded.
+
+## Preview changes
+
+```bash
+schemful push --dry-run
+```
+
+Shows what would change without applying anything to Contentful. Useful for reviewing the diff before committing to it.
+
+```
++ blogPost         (new content type)
+~ author           title: "Writer" → "Author"
+= settings         (no changes)
+```
+
+## Skip confirmation
+
+```bash
+schemful push --force
+```
+
+Skips the interactive confirmation prompt and applies changes immediately.
+
+## Custom schemas directory
+
+```bash
+schemful push schemas-v2/
+```
+
+Points Schemful at a different directory instead of the default `schemas/`.
+
+## Flags
+
+| Flag | Description |
+|---|---|
+| `--dry-run` | Preview changes without applying them. |
+| `--force` | Skip the confirmation prompt. |
+| `<schemas-dir>` | Path to a custom schemas directory (default: `schemas/`). |
+
+## When to use push
+
+`push` is designed for **rapid prototyping and early development** — situations where you're iterating quickly on your content model and don't need a tracked migration history.
+
+| Scenario | Recommended command |
+|---|---|
+| Early development, solo work, throwaway environments | `schemful push` |
+| Team collaboration, production deployments, auditable history | `schemful generate` + `schemful migrate` |
+
+Once your content model stabilizes and you start working with a team or deploying to production, switch to the `generate` → `migrate` workflow so changes are tracked, reviewable, and reproducible.
+
+## How it differs from generate + migrate
+
+| | `push` | `generate` + `migrate` |
+|---|---|---|
+| Creates migration files | No | Yes |
+| Tracks execution history | No | Yes |
+| Reproducible across environments | No | Yes |
+| Speed | Fastest | Slightly more steps |
+| Best for | Prototyping | Production |

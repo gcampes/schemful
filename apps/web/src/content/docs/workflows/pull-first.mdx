@@ -1,0 +1,93 @@
+---
+title: Pull-first Workflow
+description: Adopt Schemful on an existing Contentful space by pulling your current content types into local TypeScript schema files.
+---
+
+The pull-first workflow is for teams that **already have content types in Contentful** and want to start managing them with Schemful. Instead of recreating your content model by hand, Schemful generates TypeScript schema files from your existing space.
+
+## How it works
+
+```
+pull → review generated schemas → adjust → continue with migration or push
+```
+
+1. **Pull** — Schemful reads your Contentful content types and generates schema files.
+2. **Review** — inspect the generated code, make adjustments.
+3. **Continue** — switch to the [migration](/workflows/migration) or [push](/workflows/push) workflow for ongoing changes.
+
+## Step by step
+
+### 1. Pull your content types
+
+```bash
+schemful pull
+```
+
+Schemful connects to your Contentful space, reads every content type, and generates a `.ts` file for each one in your `schemas/` directory:
+
+```
+✓ Pulled 5 content types
+  schemas/blogPost.ts
+  schemas/author.ts
+  schemas/category.ts
+  schemas/navigation.ts
+  schemas/siteSettings.ts
+```
+
+To pull a specific content type:
+
+```bash
+schemful pull --content-type blogPost
+```
+
+To overwrite existing local files:
+
+```bash
+schemful pull --force
+```
+
+### 2. Review the generated schemas
+
+Open the generated files and verify they look correct. Schemful maps Contentful field types, validations, and settings into their schema equivalents as accurately as possible.
+
+```bash
+schemful check
+```
+
+If `check` reports everything is in sync, the generated schemas faithfully represent your remote content model.
+
+### 3. Make adjustments
+
+You may want to:
+
+- **Reorganize files** — move schemas into subdirectories (e.g., `schemas/blog/blogPost.ts`). Schemful auto-discovers all `.ts` and `.js` files regardless of nesting.
+- **Add comments** — annotate fields with context that only exists in your team's heads.
+- **Clean up names** — rename the exported variables for consistency.
+- **Review edge cases** — complex field configurations, deeply nested validations, or unusual content type setups may need manual tweaking.
+
+### 4. Continue with your preferred workflow
+
+From here, you have two options:
+
+**Migration workflow** (recommended for teams):
+
+```bash
+# Make a schema change, then:
+schemful generate
+schemful migrate
+schemful check
+```
+
+**Push workflow** (for rapid iteration):
+
+```bash
+# Make a schema change, then:
+schemful push
+```
+
+## Tips
+
+- **Run `check` after pulling.** If the output shows no differences, you know the pull was accurate. If there are diffs, review and adjust before continuing.
+- **Commit the generated files.** Once you're happy with the schemas, commit them to source control. They're now the source of truth for your content model.
+- **Pull is a one-time operation.** You use it to bootstrap your local schemas. After that, you make changes locally and push or migrate them to Contentful — not the other way around.
+- **System content types are skipped.** Schemful won't pull its own internal content types (like `schemful_migration_history`).

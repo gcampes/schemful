@@ -1,0 +1,353 @@
+---
+title: Field Properties
+description: Complete reference of every property available on Schemful field definitions, including id, name, type, required, localized, disabled, omitted, helpText, validations, linkType, and items.
+---
+
+Every field in a `ContentTypeSchema` is a TypeScript object. This page documents every property you can set on a field.
+
+## Required properties
+
+These properties must be present on every field.
+
+### `id`
+
+**Type:** `string`
+
+The field's programmatic identifier. Used in API responses and when querying content. Must be unique within the content type. Use `camelCase` by convention.
+
+```ts
+{ id: "heroImage" }
+```
+
+### `name`
+
+**Type:** `string`
+
+The human-readable label shown in the Contentful web app.
+
+```ts
+{ name: "Hero Image" }
+```
+
+### `type`
+
+**Type:** `"Symbol" | "Text" | "RichText" | "Integer" | "Number" | "Date" | "Boolean" | "Location" | "Object" | "Link" | "Array"`
+
+The field's data type. See [Field Types](/schemas/field-types/) for details on each type.
+
+```ts
+{ type: "Symbol" }
+```
+
+### `required`
+
+**Type:** `boolean`
+
+Whether the field must have a value before the entry can be published.
+
+```ts
+{ required: true }
+```
+
+## Optional properties
+
+### `localized`
+
+**Type:** `boolean`  
+**Default:** `false`
+
+When `true`, the field stores a separate value per locale. Editors see a tab for each locale in the Contentful web app.
+
+```ts
+{
+  id: "title",
+  name: "Title",
+  type: "Symbol",
+  required: true,
+  localized: true,
+}
+```
+
+### `disabled`
+
+**Type:** `boolean`  
+**Default:** `false`
+
+When `true`, the field is hidden from the editing interface but still present in API responses. Useful for fields managed programmatically.
+
+```ts
+{
+  id: "internalId",
+  name: "Internal ID",
+  type: "Symbol",
+  required: false,
+  disabled: true,
+}
+```
+
+### `omitted`
+
+**Type:** `boolean`  
+**Default:** `false`
+
+When `true`, the field is excluded from API responses entirely. The data still exists in Contentful but won't be delivered to your frontend. This is the first step when deprecating a field.
+
+```ts
+{
+  id: "legacySlug",
+  name: "Legacy Slug",
+  type: "Symbol",
+  required: false,
+  omitted: true,
+}
+```
+
+:::tip[Disabling vs. omitting]
+`disabled` hides the field from editors but still delivers it via the API. `omitted` removes it from the API response but editors can still see it. To fully retire a field, set both to `true` before eventually deleting it.
+:::
+
+### `helpText`
+
+**Type:** `string`
+
+A short description displayed below the field in the editing interface. Use it to guide editors on what to enter.
+
+```ts
+{
+  id: "slug",
+  name: "Slug",
+  type: "Symbol",
+  required: true,
+  helpText: "URL-friendly identifier. Use lowercase letters, numbers, and hyphens only.",
+}
+```
+
+### `validations`
+
+**Type:** `Validation[]`
+
+An array of validation objects that constrain the field's value. The available validations depend on the field type. See [Validations](/schemas/validations/) for the full reference or [Validation Helpers](/schemas/validation-helpers/) for shorthand functions.
+
+```ts
+{
+  id: "email",
+  name: "Email",
+  type: "Symbol",
+  required: true,
+  validations: [
+    { regexp: { pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" } },
+  ],
+}
+```
+
+## Link-specific properties
+
+### `linkType`
+
+**Type:** `"Entry" | "Asset"`  
+**Applies to:** `Link` fields only
+
+Specifies whether the link points to a content entry or a media asset.
+
+```ts
+// Entry reference
+{
+  id: "author",
+  name: "Author",
+  type: "Link",
+  linkType: "Entry",
+  required: true,
+  validations: [
+    { linkContentType: ["person"] },
+  ],
+}
+```
+
+```ts
+// Asset reference
+{
+  id: "photo",
+  name: "Photo",
+  type: "Link",
+  linkType: "Asset",
+  required: false,
+  validations: [
+    { linkMimetypeGroup: ["image"] },
+  ],
+}
+```
+
+## Array-specific properties
+
+### `items`
+
+**Type:** `{ type: "Symbol" | "Link"; linkType?: "Entry" | "Asset"; validations?: Validation[] }`  
+**Applies to:** `Array` fields only
+
+Defines the shape of each element in the array.
+
+**Text list** — items are short text strings:
+
+```ts
+{
+  id: "tags",
+  name: "Tags",
+  type: "Array",
+  required: false,
+  items: {
+    type: "Symbol",
+  },
+}
+```
+
+**Entry list** — items are references to entries:
+
+```ts
+{
+  id: "sections",
+  name: "Sections",
+  type: "Array",
+  required: true,
+  items: {
+    type: "Link",
+    linkType: "Entry",
+    validations: [
+      { linkContentType: ["heroSection", "textSection", "ctaSection"] },
+    ],
+  },
+}
+```
+
+**Asset list** — items are references to assets:
+
+```ts
+{
+  id: "gallery",
+  name: "Gallery",
+  type: "Array",
+  required: false,
+  items: {
+    type: "Link",
+    linkType: "Asset",
+    validations: [
+      { linkMimetypeGroup: ["image"] },
+    ],
+  },
+}
+```
+
+Note that `items.validations` validates **each individual item**, while the top-level `validations` on the array field validates the **array itself** (e.g. item count).
+
+## Complete example
+
+Here's a field definition using every available property:
+
+```ts
+import type { ContentTypeSchema } from "schemful";
+import { validators } from "schemful";
+
+const page: ContentTypeSchema = {
+  id: "page",
+  name: "Page",
+  description: "A generic content page",
+  displayField: "title",
+  fields: [
+    {
+      id: "title",
+      name: "Title",
+      type: "Symbol",
+      required: true,
+      localized: true,
+      disabled: false,
+      omitted: false,
+      helpText: "The page title, shown in the browser tab and as the main heading.",
+      validations: [
+        validators.textLength(1, 120),
+        validators.unique(),
+      ],
+    },
+    {
+      id: "slug",
+      name: "Slug",
+      type: "Symbol",
+      required: true,
+      localized: true,
+      helpText: "URL path segment. Lowercase letters, numbers, and hyphens only.",
+      validations: [
+        validators.slug(),
+        validators.unique(),
+      ],
+    },
+    {
+      id: "internalNotes",
+      name: "Internal Notes",
+      type: "Text",
+      required: false,
+      disabled: true,
+      helpText: "Notes visible only in the CMS, not exposed to the frontend.",
+    },
+    {
+      id: "legacyPath",
+      name: "Legacy Path",
+      type: "Symbol",
+      required: false,
+      omitted: true,
+      helpText: "Deprecated. Will be removed in a future migration.",
+    },
+    {
+      id: "sections",
+      name: "Sections",
+      type: "Array",
+      required: true,
+      localized: false,
+      helpText: "The content sections that make up this page.",
+      items: {
+        type: "Link",
+        linkType: "Entry",
+        validations: [
+          { linkContentType: ["heroSection", "textSection", "ctaSection"] },
+        ],
+      },
+      validations: [
+        validators.arraySize(1, 20),
+      ],
+    },
+    {
+      id: "ogImage",
+      name: "OG Image",
+      type: "Link",
+      linkType: "Asset",
+      required: false,
+      helpText: "Social sharing image. Recommended: 1200×630px.",
+      validations: [
+        { linkMimetypeGroup: ["image"] },
+        {
+          assetImageDimensions: {
+            width: { min: 1200 },
+            height: { min: 630 },
+          },
+        },
+        { assetFileSize: { max: 5_242_880 } },
+      ],
+    },
+  ],
+};
+
+export default page;
+```
+
+## Property summary
+
+| Property | Type | Required | Applies to |
+|---|---|---|---|
+| `id` | `string` | Yes | All fields |
+| `name` | `string` | Yes | All fields |
+| `type` | `string` | Yes | All fields |
+| `required` | `boolean` | Yes | All fields |
+| `localized` | `boolean` | No | All fields |
+| `disabled` | `boolean` | No | All fields |
+| `omitted` | `boolean` | No | All fields |
+| `helpText` | `string` | No | All fields |
+| `validations` | `Validation[]` | No | All fields (varies by type) |
+| `linkType` | `"Entry" \| "Asset"` | Yes | `Link` fields |
+| `items` | `object` | Yes | `Array` fields |

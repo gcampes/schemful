@@ -1,14 +1,11 @@
 ---
-import { Code } from "astro:components";
-
 interface Props {
   code: string;
-  lang?: string;
   filename?: string;
   showDots?: boolean;
 }
 
-const { code, lang = "typescript", filename, showDots = true } = Astro.props;
+const { code, filename, showDots = true } = Astro.props;
 ---
 
 <div class="code-block group relative overflow-hidden rounded-2xl border border-[var(--color-border)]">
@@ -26,13 +23,11 @@ const { code, lang = "typescript", filename, showDots = true } = Astro.props;
       )}
     </div>
   )}
-  <div class="code-content overflow-hidden">
-    <Code code={code} lang={lang} theme="github-dark-default" />
-  </div>
+  <pre class="code-pre"><code set:html={code} /></pre>
 </div>
 
 <style>
-  .code-content :global(pre) {
+  .code-pre {
     margin: 0 !important;
     border: none !important;
     border-radius: 0 !important;
@@ -41,14 +36,7 @@ const { code, lang = "typescript", filename, showDots = true } = Astro.props;
     font-size: 0.8125rem !important;
     line-height: 1.75 !important;
     overflow-x: auto !important;
-  }
-
-  .code-content :global(code) {
     font-family: var(--font-mono) !important;
-  }
-
-  .code-content :global(.astro-code) {
-    max-width: 100% !important;
-    overflow-x: auto !important;
+    color: var(--color-text) !important;
   }
 </style>

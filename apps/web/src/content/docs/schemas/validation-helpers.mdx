@@ -1,0 +1,445 @@
+---
+title: Validation Helpers
+description: Pre-built validation helper functions that generate common validation objects, so you don't have to write regex patterns or node-type arrays by hand.
+---
+
+Schemful ships two sets of helper functions that return validation objects. Use them instead of writing raw validation objects to keep your schemas readable and typo-free.
+
+```ts
+import { validators, richTextValidators } from "schemful";
+```
+
+## Text validators
+
+All text validators return a `TextValidation` object.
+
+### `snakeCase()`
+
+Validates that the value matches `snake_case` format.
+
+```ts
+validators.snakeCase()
+// → { regexp: { pattern: "^[a-z][a-z0-9_]*$" } }
+```
+
+```ts
+{
+  id: "apiKey",
+  name: "API Key",
+  type: "Symbol",
+  required: true,
+  validations: [validators.snakeCase()],
+}
+```
+
+### `kebabCase()`
+
+Validates that the value matches `kebab-case` format.
+
+```ts
+validators.kebabCase()
+// → { regexp: { pattern: "^[a-z][a-z0-9-]*$" } }
+```
+
+### `camelCase()`
+
+Validates that the value matches `camelCase` format.
+
+```ts
+validators.camelCase()
+// → { regexp: { pattern: "^[a-z][a-zA-Z0-9]*$" } }
+```
+
+### `slug()`
+
+Validates a URL-safe slug (`lowercase-words-separated-by-hyphens`).
+
+```ts
+validators.slug()
+// → { regexp: { pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }
+```
+
+```ts
+{
+  id: "slug",
+  name: "Slug",
+  type: "Symbol",
+  required: true,
+  validations: [validators.slug(), validators.unique()],
+}
+```
+
+### `email()`
+
+Validates a basic email address format.
+
+```ts
+validators.email()
+// → { regexp: { pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" } }
+```
+
+### `url()`
+
+Validates that the value starts with `http://` or `https://`.
+
+```ts
+validators.url()
+// → { regexp: { pattern: "^https?:\\/\\/.+" } }
+```
+
+### `hexColor()`
+
+Validates a 6-digit hex color code (e.g. `#FF5733`).
+
+```ts
+validators.hexColor()
+// → { regexp: { pattern: "^#[0-9A-Fa-f]{6}$" } }
+```
+
+```ts
+{
+  id: "brandColor",
+  name: "Brand Color",
+  type: "Symbol",
+  required: false,
+  validations: [validators.hexColor()],
+}
+```
+
+### `uuid()`
+
+Validates a standard UUID format (case-insensitive).
+
+```ts
+validators.uuid()
+// → { regexp: { pattern: "^[0-9a-f]{8}-...", flags: "i" } }
+```
+
+### `textLength(min?, max?)`
+
+Restricts string length. Both parameters are optional.
+
+```ts
+validators.textLength(1, 120)
+// → { size: { min: 1, max: 120 } }
+
+validators.textLength(10)
+// → { size: { min: 10 } }
+
+validators.textLength(undefined, 500)
+// → { size: { max: 500 } }
+```
+
+### `textIn(values)`
+
+Restricts the value to an array of allowed strings.
+
+```ts
+validators.textIn(["draft", "review", "published"])
+// → { in: ["draft", "review", "published"] }
+```
+
+```ts
+{
+  id: "status",
+  name: "Status",
+  type: "Symbol",
+  required: true,
+  validations: [validators.textIn(["active", "inactive", "archived"])],
+}
+```
+
+### `unique()`
+
+Marks the field as unique across all entries.
+
+```ts
+validators.unique()
+// → { unique: true }
+```
+
+Also available as the more specific `uniqueText()`:
+
+```ts
+validators.uniqueText()
+// → { unique: true }
+```
+
+### `customRegex(pattern, flags?)`
+
+Validates against a custom regular expression.
+
+```ts
+validators.customRegex("^[A-Z]{2}-\\d{4}$")
+// → { regexp: { pattern: "^[A-Z]{2}-\\d{4}$" } }
+
+validators.customRegex("^(foo|bar)$", "i")
+// → { regexp: { pattern: "^(foo|bar)$", flags: "i" } }
+```
+
+## Number validators
+
+All number validators return a `NumberValidation` object.
+
+### `numberRange(min?, max?)`
+
+Restricts the number to a range. Both parameters are optional.
+
+```ts
+validators.numberRange(1, 100)
+// → { range: { min: 1, max: 100 } }
+
+validators.numberRange(0)
+// → { range: { min: 0 } }
+```
+
+```ts
+{
+  id: "rating",
+  name: "Rating",
+  type: "Integer",
+  required: true,
+  validations: [validators.numberRange(1, 5)],
+}
+```
+
+### `numberIn(values)`
+
+Restricts the value to an array of allowed numbers.
+
+```ts
+validators.numberIn([1, 2, 3, 4, 6, 12])
+// → { in: [1, 2, 3, 4, 6, 12] }
+```
+
+### `uniqueNumber()`
+
+Marks the number field as unique across all entries.
+
+```ts
+validators.uniqueNumber()
+// → { unique: true }
+```
+
+## Array validators
+
+### `arraySize(min?, max?)`
+
+Restricts the number of items in an array field.
+
+```ts
+validators.arraySize(1, 10)
+// → { size: { min: 1, max: 10 } }
+```
+
+```ts
+{
+  id: "tags",
+  name: "Tags",
+  type: "Array",
+  required: false,
+  items: { type: "Symbol" },
+  validations: [validators.arraySize(1, 5)],
+}
+```
+
+## Rich text validators
+
+All rich text validators return a `RichTextValidation` object.
+
+```ts
+import { richTextValidators } from "schemful";
+```
+
+### `basicFormatting()`
+
+Enables only bold, italic, underline, and strikethrough marks.
+
+```ts
+richTextValidators.basicFormatting()
+// → { enabledMarks: ["bold", "italic", "underline", "strikethrough"] }
+```
+
+```ts
+{
+  id: "summary",
+  name: "Summary",
+  type: "RichText",
+  required: true,
+  validations: [richTextValidators.basicFormatting()],
+}
+```
+
+### `paragraphsOnly()`
+
+Restricts the field to plain paragraphs with no formatting at all.
+
+```ts
+richTextValidators.paragraphsOnly()
+// → { enabledNodeTypes: ["paragraph", "text"], enabledMarks: [] }
+```
+
+### `noHeadings()`
+
+Allows all standard block elements except headings.
+
+```ts
+richTextValidators.noHeadings()
+// → {
+//     enabledNodeTypes: [
+//       "paragraph", "ordered-list", "unordered-list",
+//       "list-item", "blockquote", "hr", "text"
+//     ]
+//   }
+```
+
+### `headingLevels(levels)`
+
+Allows paragraphs plus only the specified heading levels.
+
+```ts
+richTextValidators.headingLevels([2, 3])
+// → { enabledNodeTypes: ["paragraph", "text", "heading-2", "heading-3"] }
+```
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+  validations: [
+    richTextValidators.headingLevels([2, 3, 4]),
+    richTextValidators.basicFormatting(),
+  ],
+}
+```
+
+### `noEmbeddedContent()`
+
+Allows all standard text and structure nodes but disables all embedded entries, embedded assets, and embedded resources.
+
+```ts
+richTextValidators.noEmbeddedContent()
+// → {
+//     enabledNodeTypes: [
+//       "paragraph", "heading-1", "heading-2", "heading-3",
+//       "heading-4", "heading-5", "heading-6",
+//       "ordered-list", "unordered-list", "list-item",
+//       "blockquote", "hr", "text"
+//     ]
+//   }
+```
+
+### `embeddedEntries(contentTypes)`
+
+Restricts which content types can be embedded as block or inline entries.
+
+```ts
+richTextValidators.embeddedEntries(["cta", "codeBlock"])
+// → {
+//     nodes: {
+//       "embedded-entry-block":  [{ linkContentType: ["cta", "codeBlock"] }],
+//       "embedded-entry-inline": [{ linkContentType: ["cta", "codeBlock"] }],
+//     }
+//   }
+```
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+  validations: [
+    richTextValidators.embeddedEntries(["callout", "videoEmbed"]),
+  ],
+}
+```
+
+### `allowedMarks(marks)`
+
+Enables exactly the specified inline marks.
+
+```ts
+richTextValidators.allowedMarks(["bold", "italic", "code"])
+// → { enabledMarks: ["bold", "italic", "code"] }
+```
+
+### `allowedNodeTypes(nodeTypes)`
+
+Enables exactly the specified node types.
+
+```ts
+richTextValidators.allowedNodeTypes([
+  "paragraph",
+  "heading-2",
+  "heading-3",
+  "unordered-list",
+  "hyperlink",
+  "text",
+])
+// → { enabledNodeTypes: ["paragraph", "heading-2", ...] }
+```
+
+## Combining helpers
+
+Validators compose naturally — just spread them into the `validations` array:
+
+```ts
+import { validators, richTextValidators } from "schemful";
+import type { ContentTypeSchema } from "schemful";
+
+const article: ContentTypeSchema = {
+  id: "article",
+  name: "Article",
+  displayField: "title",
+  fields: [
+    {
+      id: "title",
+      name: "Title",
+      type: "Symbol",
+      required: true,
+      validations: [
+        validators.textLength(1, 120),
+        validators.unique(),
+      ],
+    },
+    {
+      id: "slug",
+      name: "Slug",
+      type: "Symbol",
+      required: true,
+      validations: [validators.slug(), validators.unique()],
+    },
+    {
+      id: "body",
+      name: "Body",
+      type: "RichText",
+      required: true,
+      validations: [
+        richTextValidators.headingLevels([2, 3]),
+        richTextValidators.basicFormatting(),
+        richTextValidators.embeddedEntries(["cta", "codeBlock"]),
+      ],
+    },
+    {
+      id: "rating",
+      name: "Rating",
+      type: "Integer",
+      required: false,
+      validations: [validators.numberRange(1, 5)],
+    },
+    {
+      id: "tags",
+      name: "Tags",
+      type: "Array",
+      required: false,
+      items: { type: "Symbol" },
+      validations: [validators.arraySize(1, 10)],
+    },
+  ],
+};
+
+export default article;
+```

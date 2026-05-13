@@ -1,0 +1,65 @@
+---
+title: Installation
+description: Install Schemful and get your environment ready to manage Contentful content models from code.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Requirements
+
+- **Node.js 18** or later
+- A Contentful space with a management token
+
+## Install Schemful
+
+You can install Schemful as a project dependency (recommended) or globally.
+
+### Project dependency
+
+<Tabs>
+  <TabItem label="npm">
+    ```bash
+    npm install schemful
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm add schemful
+    ```
+  </TabItem>
+  <TabItem label="yarn">
+    ```bash
+    yarn add schemful
+    ```
+  </TabItem>
+</Tabs>
+
+Then run it with `npx schemful`, `pnpm schemful`, or `yarn schemful`.
+
+### Global install
+
+<Tabs>
+  <TabItem label="npm">
+    ```bash
+    npm install -g schemful
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm add -g schemful
+    ```
+  </TabItem>
+  <TabItem label="yarn">
+    ```bash
+    yarn global add schemful
+    ```
+  </TabItem>
+</Tabs>
+
+## Verify installation
+
+```bash
+schemful --version
+```
+
+You should see the installed version printed to stdout. If you installed locally, use `npx schemful --version`.

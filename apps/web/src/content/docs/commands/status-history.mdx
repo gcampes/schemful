@@ -1,0 +1,68 @@
+---
+title: status & history
+description: Inspect migration state, execution history, and test your Contentful connection.
+---
+
+## Status
+
+```bash
+schemful status
+```
+
+Prints a summary of migration state for the current Contentful environment:
+
+```
+Migration status:
+  Total:    8
+  Executed: 6
+  Pending:  1
+  Failed:   1
+```
+
+| Field | Meaning |
+|---|---|
+| **Total** | Number of migration files found in `migrations/`. |
+| **Executed** | Migrations that have been applied successfully. |
+| **Pending** | Migrations that have not been run yet. |
+| **Failed** | Migrations that were attempted but did not complete successfully. |
+
+If there are failed migrations, `status` also shows which ones failed so you can investigate and re-run them with `schemful migrate --force`.
+
+## History
+
+```bash
+schemful history
+```
+
+Displays the full execution log — every migration that has been run against the current environment, including timing information.
+
+```
+Migration history:
+  ✓ 20250701T080000_create_blog_post.js     2025-07-01 08:01:23   1.2s
+  ✓ 20250701T090000_create_author.js        2025-07-01 09:00:45   0.8s
+  ✓ 20250702T143021_crystal_lion_hammer.js   2025-07-02 14:31:02   2.1s
+  ✗ 20250703T091500_add-author-bio.js        2025-07-03 09:16:10   0.3s  (failed)
+```
+
+Each entry shows:
+
+- **Status** — `✓` for success, `✗` for failed
+- **Migration ID** — the migration filename
+- **Executed at** — when it was applied (UTC)
+- **Duration** — how long the migration took
+
+## Test connection
+
+```bash
+schemful test
+```
+
+Verifies that Schemful can connect to your Contentful space using the configured credentials. On success:
+
+```
+✓ Connected to space "My Website" (environment: master)
+```
+
+On failure, the error message indicates what went wrong — invalid token, missing space ID, network issues, etc.
+
+Run `test` as a first step when setting up a new project or troubleshooting authentication issues.

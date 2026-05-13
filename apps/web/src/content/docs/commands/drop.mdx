@@ -1,0 +1,81 @@
+---
+title: drop
+description: Delete content types and their entries from your Contentful space.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="danger">
+  `drop` is a destructive command. It deletes content types **and all entries of that type** from your Contentful space. This cannot be undone.
+</Aside>
+
+## Drop schemful-managed content types
+
+```bash
+schemful drop
+```
+
+Deletes every content type that Schemful manages (those with a corresponding local schema definition) along with all entries of those types. Before executing, Schemful displays what will be deleted and requires you to type `DELETE` to confirm.
+
+```
+The following content types and their entries will be deleted:
+  - blogPost (12 entries)
+  - author (3 entries)
+
+Type DELETE to confirm:
+```
+
+## Drop all content types
+
+```bash
+schemful drop --all
+```
+
+Deletes **every** content type in the space — not just the ones Schemful manages. Use this to completely reset a space.
+
+## Drop a specific content type
+
+```bash
+schemful drop --content-type blogPost
+```
+
+Deletes only the specified content type and its entries.
+
+## Clear migration history
+
+```bash
+schemful drop --include-migration-history
+```
+
+Also removes the migration tracking data that Schemful stores in Contentful. This effectively resets the migration state so that `schemful migrate` treats all migrations as pending.
+
+Can be combined with other flags:
+
+```bash
+schemful drop --all --include-migration-history
+```
+
+## Skip confirmation
+
+```bash
+schemful drop --force
+```
+
+Skips the interactive `DELETE` confirmation prompt. Useful in scripts or CI teardown steps, but handle with extreme care.
+
+## Flags
+
+| Flag | Description |
+|---|---|
+| `--all` | Delete all content types in the space, not just schemful-managed ones. |
+| `--content-type <name>` | Delete only the specified content type. |
+| `--include-migration-history` | Also clear migration tracking data from Contentful. |
+| `--force` | Skip the confirmation prompt. |
+
+## Typical use cases
+
+| Scenario | Command |
+|---|---|
+| Tear down a dev/test environment | `schemful drop --all --include-migration-history --force` |
+| Remove a single deprecated content type | `schemful drop --content-type legacyPage` |
+| Reset migration state without deleting content types | `schemful drop --include-migration-history` (with no content types selected) |

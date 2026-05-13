@@ -1,0 +1,91 @@
+---
+title: Migration Tracking
+description: How Schemful tracks migration history using a dedicated content type in your Contentful space.
+---
+
+When you use the [migration workflow](/workflows/migration), Schemful needs to know which migrations have already been applied. It tracks this inside Contentful itself — no external database or state file required.
+
+## How it works
+
+The first time you run `schemful migrate`, Schemful creates a content type called **`schemful_migration_history`** in your Contentful space. Each time a migration runs, a new entry is created in this content type recording what happened.
+
+The content type is named "🔄 Schemful Migration History" in the Contentful UI and is marked as system-managed. You should not edit these entries by hand.
+
+## What gets recorded
+
+Each migration record stores:
+
+| Field | Type | Description |
+|---|---|---|
+| `migrationId` | Symbol | Unique identifier, e.g. `20250702T143021_add_blog_fields`. Validated as unique. |
+| `filename` | Symbol | The migration file name. |
+| `executedAt` | Date | When the migration was executed (ISO 8601). |
+| `checksum` | Symbol | SHA-256 hash of the migration file contents. |
+| `executionTimeMs` | Integer | How long the migration took in milliseconds. |
+| `status` | Symbol | Either `success` or `failed`. |
+| `errorMessage` | Text | Error details if the migration failed. Empty on success. |
+| `description` | Text | Human-readable summary of what the migration does. |
+| `schemfulVersion` | Symbol | The version of Schemful that executed the migration. |
+| `environment` | Symbol | The Contentful environment (`development`, `staging`, `production`, `test`). |
+
+## Checking migration status
+
+```bash
+schemful status
+```
+
+This reads from the `schemful_migration_history` content type and shows:
+
+- Which migrations have been executed (with timestamps)
+- Which migrations are pending
+- Whether any migrations failed
+
+```
+✓ success    20250702T121925_crystal_lion_hammer    (2 hours ago)
+✓ success    20250702T143021_add_blog_fields        (1 hour ago)
+⏳ pending    20250703T091500_add_categories
+
+2 executed, 1 pending, 0 failed
+```
+
+## Checksum verification
+
+Every migration file is hashed with SHA-256 when it's executed. The hash is stored in the migration record.
+
+This serves as a tamper detection mechanism: if a migration file is modified after it was executed, Schemful can detect the mismatch. This prevents scenarios where someone edits an already-applied migration, creating an inconsistency between what the migration history says happened and what the file currently contains.
+
+## Failed migrations
+
+When a migration fails, Schemful records the failure with:
+
+- `status: "failed"`
+- The error message
+- The execution time up to the point of failure
+
+Failed migrations are **not** automatically retried. To retry a failed migration after fixing the issue:
+
+```bash
+schemful migrate --force
+```
+
+The `--force` flag tells Schemful to re-run migrations that were previously recorded (including failed ones), rather than skipping them.
+
+## Manual inspection
+
+You can view migration history entries directly in the Contentful web UI:
+
+1. Open your Contentful space.
+2. Go to **Content**.
+3. Filter by content type: **🔄 Schemful Migration History**.
+4. Entries are ordered by `executedAt` (most recent first).
+
+This is useful for debugging, auditing, or understanding what happened in a specific environment.
+
+## Why track in Contentful?
+
+Storing migration history inside Contentful itself means:
+
+- **No external state** — no database, no S3 bucket, no lock file to manage.
+- **Environment-aware** — each Contentful environment has its own migration history. You can see exactly what's been applied to `staging` vs. `production`.
+- **Portable** — anyone with access to the Contentful space can inspect migration status. No tooling required beyond the Contentful UI.
+- **Cloneable** — when you clone a Contentful environment, the migration history comes with it.

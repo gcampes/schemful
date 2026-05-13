@@ -1,0 +1,338 @@
+---
+title: Field Types
+description: Complete reference of all 14 Contentful field types and how to define them in Schemful schemas.
+---
+
+Schemful supports all 14 Contentful field types. Each field is a TypeScript object with at minimum an `id`, `name`, `type`, and `required` property.
+
+## Type overview
+
+| Contentful type | Schemful `type` | Description |
+|---|---|---|
+| Short text | `"Symbol"` | Single-line string, max 256 chars |
+| Long text | `"Text"` | Multi-line string, no char limit |
+| Rich text | `"RichText"` | Structured rich text (headings, lists, embeds) |
+| Integer | `"Integer"` | Whole number |
+| Decimal | `"Number"` | Floating-point number |
+| Date & time | `"Date"` | ISO 8601 date string |
+| Boolean | `"Boolean"` | `true` / `false` |
+| Location | `"Location"` | Latitude / longitude pair |
+| JSON object | `"Object"` | Arbitrary JSON |
+| Entry reference | `"Link"` + `linkType: "Entry"` | Link to another entry |
+| Asset reference | `"Link"` + `linkType: "Asset"` | Link to a media asset |
+| Text list | `"Array"` + items `"Symbol"` | Array of short text values |
+| Entry list | `"Array"` + items `"Link"` / `"Entry"` | Array of entry references |
+| Asset list | `"Array"` + items `"Link"` / `"Asset"` | Array of asset references |
+
+## Text fields
+
+### Short text (`Symbol`)
+
+Short text fields store single-line strings up to 256 characters. Use them for titles, slugs, and labels.
+
+```ts
+{
+  id: "title",
+  name: "Title",
+  type: "Symbol",
+  required: true,
+}
+```
+
+### Long text (`Text`)
+
+Long text fields store multi-line strings with no character limit. Use them for descriptions, markdown content, or any freeform text.
+
+```ts
+{
+  id: "description",
+  name: "Description",
+  type: "Text",
+  required: false,
+}
+```
+
+### Rich text (`RichText`)
+
+Rich text fields store structured content with headings, lists, embedded entries, and inline formatting.
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+}
+```
+
+Rich text fields accept [validations](/schemas/validations/#rich-text-validations) to control which marks and node types are available to editors.
+
+## Number fields
+
+### Integer (`Integer`)
+
+Stores whole numbers without decimals.
+
+```ts
+{
+  id: "sortOrder",
+  name: "Sort Order",
+  type: "Integer",
+  required: false,
+}
+```
+
+### Decimal (`Number`)
+
+Stores floating-point numbers.
+
+```ts
+{
+  id: "price",
+  name: "Price",
+  type: "Number",
+  required: true,
+}
+```
+
+## Date field
+
+### Date & time (`Date`)
+
+Stores an ISO 8601 date string. Contentful editors get a date/time picker.
+
+```ts
+{
+  id: "publishedAt",
+  name: "Published At",
+  type: "Date",
+  required: false,
+}
+```
+
+## Boolean field
+
+Stores `true` or `false`. Contentful editors get a toggle.
+
+```ts
+{
+  id: "featured",
+  name: "Featured",
+  type: "Boolean",
+  required: true,
+}
+```
+
+## Location field
+
+Stores a latitude/longitude coordinate pair. Contentful editors get a map picker.
+
+```ts
+{
+  id: "coordinates",
+  name: "Coordinates",
+  type: "Location",
+  required: false,
+}
+```
+
+## JSON object field
+
+Stores arbitrary JSON. No schema enforcement from Contentful — use this for flexible or unstructured data.
+
+```ts
+{
+  id: "metadata",
+  name: "Metadata",
+  type: "Object",
+  required: false,
+}
+```
+
+## Link fields
+
+Link fields create references to other entries or assets. You must specify a `linkType` to indicate the target.
+
+### Entry reference
+
+Links to another content entry. Use `validations` with `linkContentType` to restrict which content types can be linked.
+
+```ts
+{
+  id: "author",
+  name: "Author",
+  type: "Link",
+  linkType: "Entry",
+  required: true,
+  validations: [
+    { linkContentType: ["person"] },
+  ],
+}
+```
+
+### Asset reference
+
+Links to a media asset (image, video, PDF, etc.). Use `validations` to restrict file types or image dimensions.
+
+```ts
+{
+  id: "heroImage",
+  name: "Hero Image",
+  type: "Link",
+  linkType: "Asset",
+  required: true,
+  validations: [
+    { linkMimetypeGroup: ["image"] },
+  ],
+}
+```
+
+## Array fields
+
+Array fields store lists of values. The `items` property defines what each element in the array looks like.
+
+### Text list (array of symbols)
+
+An array of short text strings. Useful for tags, categories, or any list of simple values.
+
+```ts
+{
+  id: "tags",
+  name: "Tags",
+  type: "Array",
+  required: false,
+  items: {
+    type: "Symbol",
+  },
+  validations: [
+    { size: { min: 1, max: 10 } },
+  ],
+}
+```
+
+### Entry list (array of entry references)
+
+An array of links to other entries. Add `linkContentType` inside `items.validations` to restrict the allowed content types.
+
+```ts
+{
+  id: "relatedArticles",
+  name: "Related Articles",
+  type: "Array",
+  required: false,
+  items: {
+    type: "Link",
+    linkType: "Entry",
+    validations: [
+      { linkContentType: ["article", "blogPost"] },
+    ],
+  },
+}
+```
+
+### Asset list (array of asset references)
+
+An array of links to media assets. Add `linkMimetypeGroup` inside `items.validations` to restrict file types.
+
+```ts
+{
+  id: "gallery",
+  name: "Gallery",
+  type: "Array",
+  required: false,
+  items: {
+    type: "Link",
+    linkType: "Asset",
+    validations: [
+      { linkMimetypeGroup: ["image"] },
+    ],
+  },
+  validations: [
+    { size: { min: 1, max: 20 } },
+  ],
+}
+```
+
+## Full schema example
+
+Here's a complete `ContentTypeSchema` using many of the field types above:
+
+```ts
+import type { ContentTypeSchema } from "schemful";
+
+const blogPost: ContentTypeSchema = {
+  id: "blogPost",
+  name: "Blog Post",
+  description: "A blog post with rich text content",
+  displayField: "title",
+  fields: [
+    {
+      id: "title",
+      name: "Title",
+      type: "Symbol",
+      required: true,
+    },
+    {
+      id: "slug",
+      name: "Slug",
+      type: "Symbol",
+      required: true,
+      validations: [{ unique: true }],
+    },
+    {
+      id: "body",
+      name: "Body",
+      type: "RichText",
+      required: true,
+    },
+    {
+      id: "publishedAt",
+      name: "Published At",
+      type: "Date",
+      required: false,
+    },
+    {
+      id: "featured",
+      name: "Featured",
+      type: "Boolean",
+      required: true,
+    },
+    {
+      id: "author",
+      name: "Author",
+      type: "Link",
+      linkType: "Entry",
+      required: true,
+      validations: [{ linkContentType: ["person"] }],
+    },
+    {
+      id: "heroImage",
+      name: "Hero Image",
+      type: "Link",
+      linkType: "Asset",
+      required: true,
+      validations: [{ linkMimetypeGroup: ["image"] }],
+    },
+    {
+      id: "tags",
+      name: "Tags",
+      type: "Array",
+      required: false,
+      items: { type: "Symbol" },
+    },
+    {
+      id: "relatedPosts",
+      name: "Related Posts",
+      type: "Array",
+      required: false,
+      items: {
+        type: "Link",
+        linkType: "Entry",
+        validations: [{ linkContentType: ["blogPost"] }],
+      },
+    },
+  ],
+};
+
+export default blogPost;
+```

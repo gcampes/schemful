@@ -1,0 +1,438 @@
+---
+title: Validations
+description: Reference for all field validation rules available in Schemful schemas, including text, number, link, array, and rich text validations.
+---
+
+Validations are objects placed in a field's `validations` array. Each validation object can contain one or more rules. Different field types support different validation rules.
+
+## Text validations
+
+Text validations apply to `Symbol` and `Text` fields.
+
+### Unique
+
+Ensures no two entries have the same value for this field.
+
+```ts
+{
+  id: "slug",
+  name: "Slug",
+  type: "Symbol",
+  required: true,
+  validations: [{ unique: true }],
+}
+```
+
+### Size (character length)
+
+Restricts the string length. Both `min` and `max` are optional.
+
+```ts
+{
+  id: "title",
+  name: "Title",
+  type: "Symbol",
+  required: true,
+  validations: [
+    { size: { min: 1, max: 120 } },
+  ],
+}
+```
+
+### Regular expression
+
+Validates the value against a regex pattern. The optional `flags` property accepts standard regex flags like `"i"` for case-insensitive.
+
+```ts
+{
+  id: "slug",
+  name: "Slug",
+  type: "Symbol",
+  required: true,
+  validations: [
+    { regexp: { pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" } },
+  ],
+}
+```
+
+With flags:
+
+```ts
+{
+  id: "code",
+  name: "Code",
+  type: "Symbol",
+  required: true,
+  validations: [
+    { regexp: { pattern: "^[A-Z]{3}-\\d{4}$", flags: "i" } },
+  ],
+}
+```
+
+### Enumeration (`in`)
+
+Restricts the value to a predefined list.
+
+```ts
+{
+  id: "status",
+  name: "Status",
+  type: "Symbol",
+  required: true,
+  validations: [
+    { in: ["draft", "review", "published", "archived"] },
+  ],
+}
+```
+
+### Combining text validations
+
+Each validation object in the array is applied independently. You can combine multiple rules:
+
+```ts
+validations: [
+  { size: { min: 1, max: 255 } },
+  { unique: true },
+  { regexp: { pattern: "^[a-z0-9-]+$" } },
+]
+```
+
+## Number validations
+
+Number validations apply to `Integer` and `Number` fields.
+
+### Range
+
+Restricts the value to a numeric range. Both `min` and `max` are optional.
+
+```ts
+{
+  id: "rating",
+  name: "Rating",
+  type: "Integer",
+  required: true,
+  validations: [
+    { range: { min: 1, max: 5 } },
+  ],
+}
+```
+
+Open-ended ranges are supported:
+
+```ts
+// Minimum only
+validations: [{ range: { min: 0 } }]
+
+// Maximum only
+validations: [{ range: { max: 100 } }]
+```
+
+### Enumeration (`in`)
+
+Restricts the value to a predefined list of numbers.
+
+```ts
+{
+  id: "columns",
+  name: "Columns",
+  type: "Integer",
+  required: true,
+  validations: [
+    { in: [1, 2, 3, 4, 6, 12] },
+  ],
+}
+```
+
+### Unique
+
+Ensures no two entries share the same number value.
+
+```ts
+{
+  id: "sortOrder",
+  name: "Sort Order",
+  type: "Integer",
+  required: true,
+  validations: [{ unique: true }],
+}
+```
+
+## Link validations
+
+Link validations apply to `Link` fields (both `Entry` and `Asset` link types).
+
+### Content type restriction
+
+Limits which content types can be linked. This is the most common link validation.
+
+```ts
+{
+  id: "author",
+  name: "Author",
+  type: "Link",
+  linkType: "Entry",
+  required: true,
+  validations: [
+    { linkContentType: ["person", "organization"] },
+  ],
+}
+```
+
+### MIME type group restriction
+
+Limits which types of assets can be linked. Common groups: `"image"`, `"audio"`, `"video"`, `"plaintext"`, `"richtext"`, `"spreadsheet"`, `"pdfdocument"`, `"archive"`, `"code"`, `"markup"`, `"presentation"`.
+
+```ts
+{
+  id: "heroImage",
+  name: "Hero Image",
+  type: "Link",
+  linkType: "Asset",
+  required: true,
+  validations: [
+    { linkMimetypeGroup: ["image"] },
+  ],
+}
+```
+
+Multiple MIME type groups:
+
+```ts
+validations: [
+  { linkMimetypeGroup: ["image", "video"] },
+]
+```
+
+### Image dimensions
+
+Restricts the pixel dimensions of linked image assets.
+
+```ts
+{
+  id: "thumbnail",
+  name: "Thumbnail",
+  type: "Link",
+  linkType: "Asset",
+  required: true,
+  validations: [
+    { linkMimetypeGroup: ["image"] },
+    {
+      assetImageDimensions: {
+        width: { min: 200, max: 800 },
+        height: { min: 200, max: 800 },
+      },
+    },
+  ],
+}
+```
+
+You can specify only width or only height, and within each, only `min` or only `max`:
+
+```ts
+validations: [
+  {
+    assetImageDimensions: {
+      width: { min: 1200 },
+    },
+  },
+]
+```
+
+### File size
+
+Restricts the file size of linked assets in bytes.
+
+```ts
+{
+  id: "document",
+  name: "Document",
+  type: "Link",
+  linkType: "Asset",
+  required: false,
+  validations: [
+    { linkMimetypeGroup: ["pdfdocument"] },
+    { assetFileSize: { min: 0, max: 10_485_760 } }, // 10 MB
+  ],
+}
+```
+
+## Array validations
+
+Array validations apply to `Array` fields and control the number of items.
+
+### Size (item count)
+
+Restricts how many items the array can contain.
+
+```ts
+{
+  id: "tags",
+  name: "Tags",
+  type: "Array",
+  required: false,
+  items: { type: "Symbol" },
+  validations: [
+    { size: { min: 1, max: 10 } },
+  ],
+}
+```
+
+Note that validations on the **items themselves** go inside `items.validations`, while validations on the **array** go in the top-level `validations`:
+
+```ts
+{
+  id: "relatedArticles",
+  name: "Related Articles",
+  type: "Array",
+  required: false,
+  items: {
+    type: "Link",
+    linkType: "Entry",
+    validations: [
+      { linkContentType: ["article"] }, // validates each item
+    ],
+  },
+  validations: [
+    { size: { min: 1, max: 5 } },       // validates the array itself
+  ],
+}
+```
+
+## Rich text validations
+
+Rich text validations control which formatting options and embedded content types are available in a `RichText` field.
+
+### Enabled marks
+
+Controls which inline formatting marks are available. There are 7 marks:
+
+| Mark | Value |
+|---|---|
+| Bold | `"bold"` |
+| Italic | `"italic"` |
+| Underline | `"underline"` |
+| Code | `"code"` |
+| Superscript | `"superscript"` |
+| Subscript | `"subscript"` |
+| Strikethrough | `"strikethrough"` |
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+  validations: [
+    { enabledMarks: ["bold", "italic", "underline", "code"] },
+  ],
+}
+```
+
+Pass an empty array to disable all formatting:
+
+```ts
+validations: [{ enabledMarks: [] }]
+```
+
+### Enabled node types
+
+Controls which block-level elements are available. Common node types:
+
+| Node type | Value |
+|---|---|
+| Paragraph | `"paragraph"` |
+| Heading 1–6 | `"heading-1"` through `"heading-6"` |
+| Ordered list | `"ordered-list"` |
+| Unordered list | `"unordered-list"` |
+| Blockquote | `"blockquote"` |
+| Horizontal rule | `"hr"` |
+| Embedded entry (block) | `"embedded-entry-block"` |
+| Embedded entry (inline) | `"embedded-entry-inline"` |
+| Embedded asset (block) | `"embedded-asset-block"` |
+| Hyperlink | `"hyperlink"` |
+| Entry hyperlink | `"entry-hyperlink"` |
+| Asset hyperlink | `"asset-hyperlink"` |
+| Table | `"table"` |
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+  validations: [
+    {
+      enabledNodeTypes: [
+        "paragraph",
+        "heading-2",
+        "heading-3",
+        "ordered-list",
+        "unordered-list",
+        "blockquote",
+        "hyperlink",
+        "embedded-entry-block",
+        "embedded-asset-block",
+      ],
+    },
+  ],
+}
+```
+
+### Embedded entry restrictions (`nodes`)
+
+The `nodes` property restricts which content types can be embedded for specific node types.
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+  validations: [
+    {
+      nodes: {
+        "embedded-entry-block": [
+          { linkContentType: ["cta", "codeBlock", "videoEmbed"] },
+        ],
+        "embedded-entry-inline": [
+          { linkContentType: ["person"] },
+        ],
+      },
+    },
+  ],
+}
+```
+
+### Combining rich text validations
+
+You can combine marks, node types, and node restrictions in a single schema:
+
+```ts
+{
+  id: "body",
+  name: "Body",
+  type: "RichText",
+  required: true,
+  validations: [
+    { enabledMarks: ["bold", "italic", "code"] },
+    {
+      enabledNodeTypes: [
+        "paragraph",
+        "heading-2",
+        "heading-3",
+        "ordered-list",
+        "unordered-list",
+        "hyperlink",
+        "embedded-entry-block",
+      ],
+    },
+    {
+      nodes: {
+        "embedded-entry-block": [
+          { linkContentType: ["cta", "codeBlock"] },
+        ],
+      },
+    },
+  ],
+}
+```

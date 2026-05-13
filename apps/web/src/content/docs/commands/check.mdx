@@ -1,0 +1,62 @@
+---
+title: check
+description: Compare local schema definitions against the remote Contentful content model.
+---
+
+## Check sync status
+
+```bash
+schemful check
+```
+
+Compares every local schema definition in your `schemas/` directory against the current content model in your Contentful space and reports the differences.
+
+### Output format
+
+```
++ blogPost         new content type, not yet in Contentful
+~ author           fields differ (added: bio, removed: website)
+= settings         in sync
+  category         remote only, not defined locally
+```
+
+| Symbol | Meaning |
+|---|---|
+| `+` | New — defined locally but does not exist in Contentful yet. |
+| `~` | Modified — exists in both but the definitions differ. |
+| `=` | Unchanged — local and remote are identical. |
+| *(no symbol)* | Remote only — exists in Contentful but has no local schema file. |
+
+When everything matches, you'll see:
+
+```
+✓ Everything is in sync.
+```
+
+## Custom schemas directory
+
+```bash
+schemful check schemas-v2/
+```
+
+Points Schemful at a different directory instead of the default `schemas/`.
+
+## Flags
+
+| Flag | Description |
+|---|---|
+| `<schemas-dir>` | Path to a custom schemas directory (default: `schemas/`). |
+
+## When to use check
+
+Run `check` after any operation that modifies the content model to verify that local and remote are aligned:
+
+- After `schemful migrate` — confirm all migrations applied cleanly.
+- After `schemful push` — confirm the push produced the expected state.
+- After manual edits in the Contentful web app — see if the remote drifted from your local definitions.
+- In CI — fail the build if local schemas are out of sync with the target environment.
+
+```bash
+# CI gate example
+schemful check || exit 1
+```

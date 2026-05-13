@@ -1,0 +1,99 @@
+---
+title: Push Workflow
+description: For rapid prototyping and early development — push schema changes directly to Contentful without migration files.
+---
+
+The push workflow is the fastest way to iterate on your content model. Edit your schemas, run one command, and the changes are live in Contentful. No migration files, no history tracking.
+
+## How it works
+
+```
+edit schema → push
+```
+
+1. **Edit your schema** — modify or create files in `schemas/`.
+2. **Push** — Schemful diffs local vs. remote and applies changes directly.
+
+That's it. Two steps.
+
+## Step by step
+
+### 1. Edit your schema
+
+Create or modify a schema file:
+
+```ts title="schemas/blogPost.ts"
+import { contentType, fields } from 'schemful';
+
+export const blogPost = contentType('blogPost', {
+  name: 'Blog Post',
+  fields: {
+    title: fields.symbol({
+      name: 'Title',
+      required: true,
+    }),
+    body: fields.richText({
+      name: 'Body',
+    }),
+  },
+});
+```
+
+### 2. Push to Contentful
+
+```bash
+schemful push
+```
+
+Schemful shows a summary of what will change and asks for confirmation:
+
+```
++ blogPost         (new content type)
+  + title           Symbol (required)
+  + body            RichText
+
+Apply these changes? (y/n)
+```
+
+To skip the confirmation prompt:
+
+```bash
+schemful push --force
+```
+
+To preview without applying:
+
+```bash
+schemful push --dry-run
+```
+
+## What push does NOT do
+
+- **No migration files** — nothing is written to `migrations/`.
+- **No execution history** — Schemful doesn't record what changed or when.
+- **No reproducibility** — you can't replay the same changes against another environment.
+
+This is intentional. Push trades traceability for speed.
+
+## When to use this workflow
+
+| Scenario | Push workflow? |
+|---|---|
+| Solo development | Yes |
+| Experimenting with content models | Yes |
+| Throwaway or sandbox environments | Yes |
+| Hackathons, spikes, proof of concepts | Yes |
+| Team collaboration | No — use [migration](/workflows/migration) |
+| Production deployments | No — use [migration](/workflows/migration) |
+
+## Switching to migrations later
+
+You can start with push and switch to the migration workflow at any point. There's no lock-in.
+
+When you're ready:
+
+1. Stop using `schemful push`.
+2. Start using `schemful generate` + `schemful migrate`.
+3. Your first generated migration will capture whatever differs between your local schemas and the current remote state.
+
+The `migrations/` directory starts fresh — Schemful doesn't need prior migration history to begin tracking changes.

@@ -1,0 +1,313 @@
+---
+title: Examples
+description: Overview of the example schemas included in the Schemful repository, covering blog, e-commerce, landing page, and portfolio patterns.
+---
+
+The Schemful repository includes complete example schemas for common content modeling patterns. Each example demonstrates different field types, validations, and relationships.
+
+## Blog
+
+**Content types:** BlogPost, Author, Category, CodeBlock
+
+A blog with rich text content, SEO fields, entry references, and embedded entries within rich text.
+
+### Rich text with embedded entries
+
+The blog post schema shows how to configure rich text with restricted heading levels and embedded entry types:
+
+```ts
+{
+  id: "content",
+  name: "Content",
+  type: "RichText",
+  required: true,
+  validations: [
+    richTextValidators.headingLevels([2, 3, 4]),
+    richTextValidators.allowedMarks(["bold", "italic", "code", "strikethrough"]),
+    richTextValidators.embeddedEntries(["codeBlock", "imageGallery", "quote"]),
+  ],
+}
+```
+
+### Entry references with array size limits
+
+Categories are linked as an array of references, constrained to 1–5 entries:
+
+```ts
+{
+  id: "categories",
+  name: "Categories",
+  type: "Array",
+  items: {
+    type: "Link",
+    linkType: "Entry",
+    validations: [{ linkContentType: ["category"] }],
+  },
+  validations: [validators.arraySize(1, 5)],
+}
+```
+
+### Unique slug with regex validation
+
+The Category schema enforces unique, URL-friendly slugs:
+
+```ts
+{
+  id: "slug",
+  name: "URL Slug",
+  type: "Symbol",
+  required: true,
+  validations: [
+    validators.slug(),
+    validators.unique(),
+  ],
+}
+```
+
+---
+
+## E-commerce
+
+**Content types:** Product, ProductCategory, Brand
+
+Products with pricing, inventory management, number validations, and hierarchical categories via self-references.
+
+### Number validations
+
+The product schema uses number ranges for pricing and inventory:
+
+```ts
+{
+  id: "price",
+  name: "Price",
+  type: "Number",
+  required: true,
+  validations: [validators.numberRange(0, 999999.99)],
+},
+{
+  id: "quantity",
+  name: "Quantity in Stock",
+  type: "Integer",
+  required: false,
+  validations: [validators.numberRange(0, 99999)],
+}
+```
+
+### Array of asset links
+
+Product images are an array of asset references with mime type restrictions:
+
+```ts
+{
+  id: "images",
+  name: "Product Images",
+  type: "Array",
+  required: true,
+  items: {
+    type: "Link",
+    linkType: "Asset",
+    validations: [{ linkMimetypeGroup: ["image"] }],
+  },
+  validations: [validators.arraySize(1, 10)],
+}
+```
+
+### Self-referencing content type
+
+ProductCategory links to itself to create a hierarchy:
+
+```ts
+{
+  id: "parentCategory",
+  name: "Parent Category",
+  type: "Link",
+  linkType: "Entry",
+  required: false,
+  validations: [{ linkContentType: ["productCategory"] }],
+}
+```
+
+### Asset image dimensions
+
+The Brand schema constrains logo dimensions:
+
+```ts
+{
+  id: "logo",
+  name: "Brand Logo",
+  type: "Link",
+  linkType: "Asset",
+  validations: [
+    { linkMimetypeGroup: ["image"] },
+    {
+      assetImageDimensions: {
+        width: { min: 100, max: 1000 },
+        height: { min: 100, max: 1000 },
+      },
+    },
+  ],
+}
+```
+
+---
+
+## Landing Page
+
+**Content types:** HeroSection, Feature, FeatureSection
+
+Landing page components with design tokens (colors, opacity), multiple media types, and CTA fields.
+
+### Hex color validation
+
+The hero section validates background and text colors as hex values:
+
+```ts
+{
+  id: "backgroundColor",
+  name: "Background Color",
+  type: "Symbol",
+  required: false,
+  validations: [validators.hexColor()],
+},
+{
+  id: "textColor",
+  name: "Text Color",
+  type: "Symbol",
+  required: false,
+  validations: [validators.hexColor()],
+}
+```
+
+### Numeric range for opacity
+
+Overlay opacity is a float constrained between 0 and 1:
+
+```ts
+{
+  id: "overlayOpacity",
+  name: "Overlay Opacity",
+  type: "Number",
+  required: false,
+  validations: [validators.numberRange(0, 1)],
+}
+```
+
+### Mixed media (image + video)
+
+The hero section supports both image and video assets as separate fields with different mime type constraints:
+
+```ts
+{
+  id: "heroImage",
+  name: "Hero Image",
+  type: "Link",
+  linkType: "Asset",
+  validations: [
+    { linkMimetypeGroup: ["image"] },
+    { assetImageDimensions: { width: { min: 800, max: 2400 }, height: { min: 400, max: 1600 } } },
+  ],
+},
+{
+  id: "heroVideo",
+  name: "Hero Video",
+  type: "Link",
+  linkType: "Asset",
+  validations: [{ linkMimetypeGroup: ["video"] }],
+}
+```
+
+---
+
+## Portfolio
+
+**Content types:** Project, Skill, Testimonial
+
+Portfolio projects with multiple rich text fields using different configurations, enum validations, and cross-references.
+
+### Multiple rich text fields with different configs
+
+The Project schema uses several rich text fields, each with its own validation rules — full formatting for the main description, basic formatting for supporting sections:
+
+```ts
+{
+  id: "fullDescription",
+  name: "Full Description",
+  type: "RichText",
+  required: true,
+  validations: [
+    richTextValidators.headingLevels([2, 3, 4]),
+    richTextValidators.allowedMarks(["bold", "italic", "code"]),
+    richTextValidators.embeddedEntries(["codeBlock", "imageGallery"]),
+  ],
+},
+{
+  id: "challenges",
+  name: "Key Challenges",
+  type: "RichText",
+  required: false,
+  validations: [
+    richTextValidators.basicFormatting(),
+    richTextValidators.noHeadings(),
+  ],
+}
+```
+
+### Enum validation with `textIn`
+
+The Skill schema restricts categories and proficiency levels to predefined values:
+
+```ts
+{
+  id: "category",
+  name: "Skill Category",
+  type: "Symbol",
+  required: true,
+  validations: [
+    validators.textIn([
+      "programming-languages",
+      "frameworks",
+      "databases",
+      "tools",
+      "cloud-platforms",
+      "design",
+      "soft-skills",
+      "certifications",
+      "other",
+    ]),
+  ],
+},
+{
+  id: "proficiencyLevel",
+  name: "Proficiency Level",
+  type: "Symbol",
+  required: true,
+  validations: [
+    validators.textIn(["beginner", "intermediate", "advanced", "expert"]),
+  ],
+}
+```
+
+### Cross-referencing content types
+
+The Testimonial schema links back to a Project entry:
+
+```ts
+{
+  id: "projectReference",
+  name: "Related Project",
+  type: "Link",
+  linkType: "Entry",
+  required: false,
+  validations: [{ linkContentType: ["project"] }],
+}
+```
+
+---
+
+## Using the examples
+
+The examples live in `packages/schemful/examples/` in the Schemful repository. You can use them as:
+
+- **Starting points** — copy an example into your `schemas/` directory and adapt it.
+- **Reference** — see how to model specific patterns (self-references, rich text configurations, asset validations).
+- **Learning material** — read through the schemas to understand the full range of field types and validators Schemful supports.

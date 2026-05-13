@@ -1,0 +1,119 @@
+---
+title: Project Structure
+description: Recommended directory layout, file conventions, and what to commit to source control.
+---
+
+## Recommended layout
+
+After running `schemful init`, your project looks like this:
+
+```
+my-project/
+  schemas/
+    blogPost.ts
+    author.ts
+  migrations/
+    20250702T121925_crystal_lion_hammer.js
+  schemful.config.ts
+  .env
+  .env.example
+```
+
+| Path | Purpose | Commit to git? |
+|---|---|---|
+| `schemas/` | Your content type definitions — the source of truth | Yes |
+| `migrations/` | Generated migration files — your version-controlled schema history | Yes |
+| `schemful.config.ts` | Project configuration | Yes |
+| `.env` | Credentials (management token, space ID) | **No** |
+| `.env.example` | Template showing which variables are needed | Yes |
+
+## Schemas directory
+
+Schema files live in `schemas/`. Schemful auto-discovers all `.ts` and `.js` files recursively — you can organize them however you like.
+
+### Flat structure
+
+Good for small projects with a handful of content types:
+
+```
+schemas/
+  blogPost.ts
+  author.ts
+  category.ts
+  siteSettings.ts
+```
+
+### Nested structure
+
+Better for larger projects where grouping by domain makes sense:
+
+```
+schemas/
+  blog/
+    blogPost.ts
+    author.ts
+    category.ts
+  ecommerce/
+    product.ts
+    productCategory.ts
+    brand.ts
+  settings/
+    navigation.ts
+    siteSettings.ts
+```
+
+File names don't affect the content type ID — the ID comes from the first argument to `contentType()`. You can name files whatever you want and nest them as deep as you need.
+
+## Migrations directory
+
+Generated migrations are timestamped files that describe content model changes:
+
+```
+migrations/
+  20250702T121925_crystal_lion_hammer.js
+  20250702T143021_add_blog_fields.js
+  20250703T091500_add_categories.js
+```
+
+File names combine a UTC timestamp with either a random slug or a custom name (via `--name`). They're applied in chronological order.
+
+**Always commit migration files.** They're the history of your content model — the equivalent of database migration files in a traditional backend project. When a teammate pulls your branch, they get the same migrations and can apply them to their own Contentful environment.
+
+**Don't edit migration files after they've been applied.** Schemful stores a SHA-256 checksum of each migration when it runs. Modifying a file after execution creates a checksum mismatch. If you need to change something, generate a new migration instead.
+
+## Environment variables
+
+### `.env`
+
+Contains your Contentful credentials:
+
+```bash title=".env"
+CONTENTFUL_MANAGEMENT_TOKEN=CFPAT-xxxxxxxxxxxxx
+CONTENTFUL_SPACE_ID=your_space_id
+CONTENTFUL_ENVIRONMENT_ID=master
+```
+
+**Do not commit this file.** Add it to `.gitignore`. Management tokens grant full write access to your space.
+
+### `.env.example`
+
+A template that shows which variables are needed without exposing actual values:
+
+```bash title=".env.example"
+CONTENTFUL_MANAGEMENT_TOKEN=
+CONTENTFUL_SPACE_ID=
+CONTENTFUL_ENVIRONMENT_ID=master
+```
+
+**Commit this file.** It helps teammates set up their local environment.
+
+## Gitignore
+
+A minimal `.gitignore` for a Schemful project:
+
+```gitignore
+.env
+node_modules/
+```
+
+Everything else — `schemas/`, `migrations/`, `schemful.config.ts`, `.env.example` — should be version-controlled.
