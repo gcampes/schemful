@@ -26,6 +26,7 @@ html {
   background-color: var(--color-bg);
   color: var(--color-text);
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 ::selection {
