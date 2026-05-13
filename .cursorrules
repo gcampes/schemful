@@ -1,0 +1,43 @@
+# Root-level project description
+[project]
+name = "Schemful"
+description = """
+An open-source developer tool that provides a Drizzle ORM–style workflow for managing Contentful content models.
+
+Key features:
+- Schema-as-code in TypeScript
+- Safe create/update of content types via Contentful Management API
+- Versioned migration system (like Drizzle or Prisma)
+- CLI with commands like `schemful push`, `schemful migrate`, `schemful diff`
+- Rich field and validation abstractions (e.g., regex helpers, common types)
+- Extensible and dev-friendly
+
+Target users: Contentful developers, frontend engineers, full-stack teams.
+"""
+
+# Mark main entry points
+[entrypoints]
+paths = [
+  "src/runner.ts",              # migration runner entry point
+  "src/cli.ts",                 # CLI command entry point
+  "schemas/**/*.ts",            # content model schemas
+  "migrations/**/*.ts",         # versioned migrations
+]
+
+# Give more context to Cursor's model about how the code is structured
+[files]
+"src/runner.ts" = "Runs all migration files in order, applying create/update logic to content types in Contentful."
+"src/cli.ts" = "Command-line interface entry that supports commands like push, migrate, diff, generate."
+"schemas/**/*.ts" = "Schema definitions for Contentful content types with type-safe field definitions."
+"migrations/**/*.js" = "Migration files that create or update content types in Contentful environments."
+
+# Optional: declare reusable helpers, config, or types
+"src/utils/contentfulClient.ts" = "Initializes and exports a Contentful management client using credentials from .env."
+"src/utils/validators.ts" = "Predefined common validation patterns like snake_case, pipe-delimited titles, etc."
+"src/types/Field.ts" = "Shared TS types for schema field definitions, validations, etc."
+
+# Explain folders to Cursor
+[folders]
+schemas = "Holds schema-as-code definitions for Contentful content types."
+migrations = "Holds versioned migration files that sync schema definitions to Contentful environments."
+src = "Contains core source code for the CLI, runner, helpers, and Contentful integrations."

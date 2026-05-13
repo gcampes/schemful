@@ -1,0 +1,433 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import TerminalBlock from "../components/TerminalBlock.astro";
+import FeatureCard from "../components/FeatureCard.astro";
+import "../styles/global.css";
+
+const schemaExample = `import { ContentTypeSchema } from 'schemful';
+
+const blogPost: ContentTypeSchema = {
+  id: 'blogPost',
+  name: 'Blog Post',
+  displayField: 'title',
+  fields: [
+    {
+      id: 'title',
+      type: 'Symbol',
+      name: 'Title',
+      required: true,
+      validations: [
+        { unique: true },
+        { size: { min: 1, max: 200 } },
+      ],
+    },
+    {
+      id: 'slug',
+      type: 'Symbol',
+      name: 'Slug',
+      required: true,
+      validations: [
+        { unique: true },
+        { regexp: { pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' } },
+      ],
+    },
+    {
+      id: 'body',
+      type: 'RichText',
+      name: 'Body',
+      required: true,
+      validations: [
+        { enabledMarks: ['bold', 'italic', 'code'] },
+        { enabledNodeTypes: [
+            'heading-2', 'heading-3',
+            'ordered-list', 'unordered-list',
+            'blockquote', 'hyperlink',
+        ]},
+      ],
+    },
+    {
+      id: 'author',
+      type: 'Link',
+      linkType: 'Entry',
+      name: 'Author',
+      required: true,
+      validations: [
+        { linkContentType: ['author'] },
+      ],
+    },
+  ],
+};
+
+export default blogPost;`;
+
+const productExample = `import { ContentTypeSchema } from 'schemful';
+
+const product: ContentTypeSchema = {
+  id: 'product',
+  name: 'Product',
+  description: 'An e-commerce product',
+  displayField: 'name',
+  fields: [
+    {
+      id: 'name',
+      type: 'Symbol',
+      name: 'Name',
+      required: true,
+    },
+    {
+      id: 'price',
+      type: 'Number',
+      name: 'Price',
+      required: true,
+      validations: [{ range: { min: 0 } }],
+    },
+    {
+      id: 'sku',
+      type: 'Symbol',
+      name: 'SKU',
+      required: true,
+      validations: [{ unique: true }],
+    },
+    {
+      id: 'images',
+      type: 'Array',
+      name: 'Images',
+      required: false,
+      items: {
+        type: 'Link',
+        linkType: 'Asset',
+        validations: [
+          { linkMimetypeGroup: ['image'] },
+        ],
+      },
+      validations: [{ size: { max: 10 } }],
+    },
+    {
+      id: 'brand',
+      type: 'Link',
+      linkType: 'Entry',
+      name: 'Brand',
+      required: false,
+      validations: [
+        { linkContentType: ['brand'] },
+      ],
+    },
+  ],
+};
+
+export default product;`;
+---
+
+<Layout title="Schemful - Schema-as-code for Contentful">
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border-subtle)] bg-[var(--color-bg)]/80 backdrop-blur-xl">
+    <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+      <a href={import.meta.env.BASE_URL} class="flex items-center gap-2.5 font-semibold tracking-tight">
+        <svg viewBox="0 0 32 32" fill="none" class="h-7 w-7" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#6366f1"/>
+          <text x="16" y="22" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="18" fill="white">S</text>
+        </svg>
+        schemful
+      </a>
+      <div class="flex items-center gap-6">
+        <a href="#features" class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">Features</a>
+        <a href="#workflow" class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">Workflow</a>
+        <a href="#examples" class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">Examples</a>
+        <a href="https://github.com/gcampes/schemful" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="noise relative overflow-hidden pt-36 pb-24 md:pt-44 md:pb-32">
+      <div class="hero-grid pointer-events-none absolute inset-0"></div>
+      <div class="hero-glow pointer-events-none absolute top-0 left-1/2 h-[600px] w-[900px] -translate-x-1/2"></div>
+
+      <div class="relative mx-auto max-w-4xl px-6 text-center">
+        <div class="fade-in glow-badge mb-8 inline-flex items-center gap-2.5 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-1.5 text-sm text-[var(--color-text-muted)]">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-green)] opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-green)]"></span>
+          </span>
+          v0.1.0 &mdash; Now open source
+        </div>
+
+        <h1 class="fade-in text-5xl font-bold tracking-tight md:text-7xl lg:text-8xl">
+          <span class="gradient-text">Schema-as-code</span><br/>
+          <span class="text-[var(--color-text-muted)]">for Contentful</span>
+        </h1>
+
+        <p class="fade-in fade-in-delay-1 mx-auto mt-6 max-w-2xl text-lg text-[var(--color-text-muted)] md:text-xl leading-relaxed">
+          Define content models in TypeScript. Generate versioned migrations.
+          The <span class="text-[var(--color-text)] font-medium">Drizzle ORM workflow</span> you know &mdash; for your CMS.
+        </p>
+
+        <div class="fade-in fade-in-delay-2 mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <!-- Install command with animated border -->
+          <div class="gradient-border">
+            <div class="flex items-center gap-3 rounded-[11px] bg-[var(--color-bg-subtle)] px-5 py-3 font-mono text-sm">
+              <span class="text-[var(--color-text-subtle)]">$</span>
+              <span>npm install -g schemful</span>
+              <button id="copy-btn" class="ml-2 text-[var(--color-text-subtle)] transition-colors hover:text-[var(--color-text)]" aria-label="Copy to clipboard">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+          <a href="https://github.com/gcampes/schemful" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-5 py-3 text-sm font-medium text-[var(--color-text-muted)] transition-all hover:text-[var(--color-text)] hover:border-[var(--color-accent)]/30 hover:shadow-lg hover:shadow-[var(--color-accent)]/5">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ CODE PREVIEW ═══════════════ -->
+    <section class="mx-auto max-w-5xl px-6 pb-24">
+      <div class="fade-in grid gap-4 md:grid-cols-2">
+        <CodeBlock code={schemaExample} lang="typescript" filename="schemas/blogPost.ts" />
+        <TerminalBlock title="Terminal">
+          <div class="space-y-1">
+            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful generate</span></div>
+            <div><span class="terminal-line-info">&#128269;</span> <span class="terminal-line-muted">Analyzing schema changes...</span></div>
+            <div><span class="terminal-line-success">&#10003;</span> Generated migration:</div>
+            <div class="terminal-line-muted pl-4">20250702T143021_crystal_lion_hammer.js</div>
+            <div class="mt-2"></div>
+            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful migrate</span></div>
+            <div><span class="terminal-line-info">&#128269;</span> <span class="terminal-line-muted">Found 1 pending migration</span></div>
+            <div><span class="terminal-line-success">&#10003;</span> Applied crystal_lion_hammer <span class="terminal-line-muted">(342ms)</span></div>
+            <div><span class="terminal-line-success">&#10003;</span> All migrations applied</div>
+            <div class="mt-2"></div>
+            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful check</span></div>
+            <div><span class="terminal-line-success">&#10003;</span> All schemas are up to date</div>
+          </div>
+        </TerminalBlock>
+      </div>
+    </section>
+
+    <!-- ═══════════════ FEATURES ═══════════════ -->
+    <section id="features" class="noise relative border-t border-[var(--color-border-subtle)] py-24 md:py-32">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="fade-in text-center">
+          <p class="text-sm font-medium tracking-widest text-[var(--color-accent)] uppercase">Features</p>
+          <h2 class="mt-3 text-3xl font-bold md:text-5xl">Everything you need</h2>
+          <p class="mt-3 text-[var(--color-text-muted)]">The Contentful workflow, done right.</p>
+        </div>
+
+        <div class="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <FeatureCard title="Schema-as-code" description="Define content types in TypeScript. Full type safety, autocompletion, and version control." color="accent">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </FeatureCard>
+
+          <FeatureCard title="Auto-generated migrations" description="Diff local schemas against Contentful. Get timestamped migration files automatically." color="green">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </FeatureCard>
+
+          <FeatureCard title="Migration tracking" description="SHA-256 checksums, execution history, and status. Tracked in Contentful itself." color="accent">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </FeatureCard>
+
+          <FeatureCard title="Pull from Contentful" description="Reverse-engineer existing content types into local TypeScript schemas." color="green">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </FeatureCard>
+
+          <FeatureCard title="Direct push" description="Skip migrations during prototyping. Push schemas directly with dry-run support." color="accent">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </FeatureCard>
+
+          <FeatureCard title="Full validation support" description="Regex, ranges, unique constraints, enums, image dimensions, rich text nodes. All typed." color="green">
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </FeatureCard>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ WORKFLOW ═══════════════ -->
+    <section id="workflow" class="border-t border-[var(--color-border-subtle)] py-24 md:py-32">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="fade-in text-center">
+          <p class="text-sm font-medium tracking-widest text-[var(--color-accent)] uppercase">Workflow</p>
+          <h2 class="mt-3 text-3xl font-bold md:text-5xl">The workflow you already know</h2>
+          <p class="mt-3 text-[var(--color-text-muted)]">If you've used Drizzle Kit, you're already home.</p>
+        </div>
+
+        <div class="mt-16 space-y-0">
+          <div class="fade-in relative flex gap-6 pb-12">
+            <div class="flex flex-col items-center">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent-muted)] font-mono text-sm font-medium text-[var(--color-accent)] shadow-lg shadow-[var(--color-accent)]/10">1</div>
+              <div class="step-line w-px flex-1"></div>
+            </div>
+            <div class="pb-2 pt-1.5">
+              <h3 class="font-semibold text-lg">Define your schema</h3>
+              <p class="mt-1 text-sm text-[var(--color-text-muted)]">Write content types as TypeScript. Get type safety, autocompletion, and version control.</p>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-text-muted)]">schemas/blogPost.ts</code>
+            </div>
+          </div>
+
+          <div class="fade-in relative flex gap-6 pb-12">
+            <div class="flex flex-col items-center">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent-muted)] font-mono text-sm font-medium text-[var(--color-accent)] shadow-lg shadow-[var(--color-accent)]/10">2</div>
+              <div class="step-line w-px flex-1"></div>
+            </div>
+            <div class="pb-2 pt-1.5">
+              <h3 class="font-semibold text-lg">Generate a migration</h3>
+              <p class="mt-1 text-sm text-[var(--color-text-muted)]">Schemful diffs your local schemas against Contentful and produces a timestamped migration file.</p>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-accent)]">$ schemful generate</code>
+            </div>
+          </div>
+
+          <div class="fade-in relative flex gap-6 pb-12">
+            <div class="flex flex-col items-center">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent-muted)] font-mono text-sm font-medium text-[var(--color-accent)] shadow-lg shadow-[var(--color-accent)]/10">3</div>
+              <div class="step-line w-px flex-1"></div>
+            </div>
+            <div class="pb-2 pt-1.5">
+              <h3 class="font-semibold text-lg">Review and apply</h3>
+              <p class="mt-1 text-sm text-[var(--color-text-muted)]">Check the generated migration, then apply it. Migration history is tracked automatically.</p>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-accent)]">$ schemful migrate</code>
+            </div>
+          </div>
+
+          <div class="fade-in relative flex gap-6">
+            <div class="flex flex-col items-center">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-green)] bg-[var(--color-green-muted)] font-mono text-sm font-medium text-[var(--color-green)] shadow-lg shadow-[var(--color-green)]/10">4</div>
+            </div>
+            <div class="pt-1.5">
+              <h3 class="font-semibold text-lg">Verify</h3>
+              <p class="mt-1 text-sm text-[var(--color-text-muted)]">Confirm your local schemas match Contentful. Done.</p>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-green)]">$ schemful check &mdash; All schemas are up to date</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ EXAMPLES ═══════════════ -->
+    <section id="examples" class="noise relative border-t border-[var(--color-border-subtle)] py-24 md:py-32">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="fade-in text-center">
+          <p class="text-sm font-medium tracking-widest text-[var(--color-accent)] uppercase">Examples</p>
+          <h2 class="mt-3 text-3xl font-bold md:text-5xl">Expressive schema definitions</h2>
+          <p class="mt-3 text-[var(--color-text-muted)]">Every Contentful field type, validation, and property &mdash; fully typed.</p>
+        </div>
+
+        <div class="fade-in mt-12 grid gap-4 md:grid-cols-2">
+          <CodeBlock code={schemaExample} lang="typescript" filename="schemas/blogPost.ts" />
+          <CodeBlock code={productExample} lang="typescript" filename="schemas/product.ts" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ COMMANDS ═══════════════ -->
+    <section class="border-t border-[var(--color-border-subtle)] py-24 md:py-32">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="fade-in text-center">
+          <p class="text-sm font-medium tracking-widest text-[var(--color-accent)] uppercase">CLI</p>
+          <h2 class="mt-3 text-3xl font-bold md:text-5xl">Familiar commands</h2>
+          <p class="mt-3 text-[var(--color-text-muted)]">The same command structure as Drizzle Kit.</p>
+        </div>
+
+        <div class="fade-in commands-table mt-12 overflow-hidden rounded-xl border border-[var(--color-border)]">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-[var(--color-border)] bg-[var(--color-bg-subtle)]">
+                <th class="px-6 py-3 font-medium text-[var(--color-text-muted)]">Command</th>
+                <th class="px-6 py-3 font-medium text-[var(--color-text-muted)]">Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--color-border-subtle)]">
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful generate</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Generate migration from schema diff</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful migrate</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Apply pending migrations</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful push</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Push schemas directly to Contentful</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful check</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Diff local schemas vs Contentful</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful pull</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Pull content types into local schemas</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful status</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Show migration status</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful drop</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Delete content types</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ CTA ═══════════════ -->
+    <section class="noise relative border-t border-[var(--color-border-subtle)] py-24 md:py-32">
+      <!-- CTA glow -->
+      <div class="pointer-events-none absolute bottom-0 left-1/2 h-[400px] w-[600px] -translate-x-1/2 opacity-10" style="background: radial-gradient(ellipse at center, #6366f1, transparent 70%);"></div>
+
+      <div class="relative mx-auto max-w-3xl px-6 text-center">
+        <div class="fade-in">
+          <h2 class="text-3xl font-bold md:text-5xl">Get started in seconds</h2>
+          <p class="mt-3 text-[var(--color-text-muted)]">Install, init, and push your first schema.</p>
+        </div>
+        <div class="fade-in mt-10">
+          <TerminalBlock title="Getting started">
+            <div class="space-y-1">
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">npm install -g schemful</span></div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful init</span></div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful test</span></div>
+              <div><span class="terminal-line-success">&#10003;</span> Connected to Contentful</div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful push</span></div>
+              <div><span class="terminal-line-success">&#10003;</span> All schemas pushed successfully</div>
+            </div>
+          </TerminalBlock>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[var(--color-border-subtle)] py-8">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6">
+      <p class="text-sm text-[var(--color-text-subtle)]">
+        MIT License &mdash; Built by <a href="https://github.com/gcampes" target="_blank" rel="noopener" class="text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">gcampes</a>
+      </p>
+      <a href="https://github.com/gcampes/schemful" target="_blank" rel="noopener" class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]">
+        GitHub
+      </a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Copy to clipboard
+    document.getElementById('copy-btn')?.addEventListener('click', () => {
+      navigator.clipboard.writeText('npm install -g schemful');
+      const btn = document.getElementById('copy-btn');
+      if (btn) {
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(() => {
+          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        }, 2000);
+      }
+    });
+
+    // Scroll fade-in observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+
+    // Feature card mouse glow tracking
+    document.querySelectorAll('.feature-card').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        const x = ((e as MouseEvent).clientX - rect.left) / rect.width * 100;
+        const y = ((e as MouseEvent).clientY - rect.top) / rect.height * 100;
+        (e.currentTarget as HTMLElement).style.setProperty('--mouse-x', `${x}%`);
+        (e.currentTarget as HTMLElement).style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+  </script>
+</Layout>

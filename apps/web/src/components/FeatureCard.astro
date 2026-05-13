@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  color?: "accent" | "green";
+}
+
+const { title, description, color = "accent" } = Astro.props;
+
+const iconBg = color === "green" ? "bg-[var(--color-green-muted)]" : "bg-[var(--color-accent-muted)]";
+const iconColor = color === "green" ? "text-[var(--color-green)]" : "text-[var(--color-accent)]";
+---
+
+<div class="feature-card group relative overflow-hidden rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-card)] p-6 transition-all duration-300 hover:border-[var(--color-border)] hover:shadow-lg hover:shadow-[var(--color-accent)]/5">
+  <!-- Hover glow -->
+  <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99, 102, 241, 0.06), transparent 60%);"></div>
+
+  <div class:list={["relative mb-4 flex h-10 w-10 items-center justify-center rounded-lg", iconBg, iconColor]}>
+    <slot name="icon" />
+  </div>
+  <h3 class="relative font-semibold">{title}</h3>
+  <p class="relative mt-2 text-sm text-[var(--color-text-muted)]">{description}</p>
+</div>

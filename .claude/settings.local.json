@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm run:*)",
+      "Bash(pnpm test:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(git push:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(npm run build:*)",
+      "Bash(pnpm install:*)",
+      "Bash(schemful status:*)",
+      "Bash(schemful migrate:*)",
+      "Bash(find:*)",
+      "Bash(timeout:*)",
+      "Bash(schemful drop:*)",
+      "Bash(source .env)",
+      "Bash(npm run schemful:*)",
+      "Bash(npx schemful:*)",
+      "Bash(pnpm:*)",
+      "Bash(npm run test:run:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git branch:*)",
+      "Bash(npm test:*)",
+      "Bash(rg:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(schemful:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run type-check:*)"
+    ],
+    "deny": []
+  }
+}
