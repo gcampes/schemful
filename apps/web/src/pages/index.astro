@@ -5,7 +5,11 @@ import TerminalBlock from "../components/TerminalBlock.astro";
 import FeatureCard from "../components/FeatureCard.astro";
 import "../styles/global.css";
 
-const schemaExample = `import { ContentTypeSchema } from '@ctkit/cli';
+const schemaExample = `import {
+  ContentTypeSchema,
+  FieldType, LinkType, Mark, NodeType,
+  validators, richTextValidators,
+} from '@ctkit/cli';
 
 const blogPost: ContentTypeSchema = {
   id: 'blogPost',
@@ -14,43 +18,45 @@ const blogPost: ContentTypeSchema = {
   fields: [
     {
       id: 'title',
-      type: 'Symbol',
       name: 'Title',
+      type: FieldType.Symbol,
       required: true,
       validations: [
-        { unique: true },
-        { size: { min: 1, max: 200 } },
+        validators.unique(),
+        validators.textLength(1, 200),
       ],
     },
     {
       id: 'slug',
-      type: 'Symbol',
       name: 'Slug',
+      type: FieldType.Symbol,
       required: true,
       validations: [
-        { unique: true },
-        { regexp: { pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' } },
+        validators.unique(),
+        validators.slug(),
       ],
     },
     {
       id: 'body',
-      type: 'RichText',
       name: 'Body',
+      type: FieldType.RichText,
       required: true,
       validations: [
-        { enabledMarks: ['bold', 'italic', 'code'] },
-        { enabledNodeTypes: [
-            'heading-2', 'heading-3',
-            'ordered-list', 'unordered-list',
-            'blockquote', 'hyperlink',
-        ]},
+        richTextValidators.allowedMarks([
+          Mark.Bold, Mark.Italic, Mark.Code,
+        ]),
+        richTextValidators.allowedNodeTypes([
+          NodeType.Heading2, NodeType.Heading3,
+          NodeType.OrderedList, NodeType.UnorderedList,
+          NodeType.Blockquote, NodeType.Hyperlink,
+        ]),
       ],
     },
     {
       id: 'author',
-      type: 'Link',
-      linkType: 'Entry',
       name: 'Author',
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: true,
       validations: [
         { linkContentType: ['author'] },
@@ -61,7 +67,11 @@ const blogPost: ContentTypeSchema = {
 
 export default blogPost;`;
 
-const productExample = `import { ContentTypeSchema } from '@ctkit/cli';
+const productExample = `import {
+  ContentTypeSchema,
+  FieldType, LinkType, MimeType,
+  validators,
+} from '@ctkit/cli';
 
 const product: ContentTypeSchema = {
   id: 'product',
@@ -71,43 +81,43 @@ const product: ContentTypeSchema = {
   fields: [
     {
       id: 'name',
-      type: 'Symbol',
       name: 'Name',
+      type: FieldType.Symbol,
       required: true,
     },
     {
       id: 'price',
-      type: 'Number',
       name: 'Price',
+      type: FieldType.Number,
       required: true,
-      validations: [{ range: { min: 0 } }],
+      validations: [validators.numberRange(0)],
     },
     {
       id: 'sku',
-      type: 'Symbol',
       name: 'SKU',
+      type: FieldType.Symbol,
       required: true,
-      validations: [{ unique: true }],
+      validations: [validators.unique()],
     },
     {
       id: 'images',
-      type: 'Array',
       name: 'Images',
+      type: FieldType.Array,
       required: false,
       items: {
-        type: 'Link',
-        linkType: 'Asset',
+        type: FieldType.Link,
+        linkType: LinkType.Asset,
         validations: [
-          { linkMimetypeGroup: ['image'] },
+          { linkMimetypeGroup: [MimeType.Image] },
         ],
       },
-      validations: [{ size: { max: 10 } }],
+      validations: [validators.arraySize(0, 10)],
     },
     {
       id: 'brand',
-      type: 'Link',
-      linkType: 'Entry',
       name: 'Brand',
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: false,
       validations: [
         { linkContentType: ['brand'] },
