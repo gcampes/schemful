@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "remotion studio",
-    "render": "remotion render DemoVideo out/demo.mp4 --codec h264",
+    "render": "remotion render DemoVideo out/demo.mp4 --codec h264 --crf 18 --scale 2",
     "render:webm": "remotion render DemoVideo out/demo.webm --codec vp8"
   },
   "dependencies": {
