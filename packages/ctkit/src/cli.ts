@@ -1,13 +1,6 @@
 import { Command } from "commander";
 import chalk from "chalk";
-import { generateMigration } from "./commands/generate";
 import { initProject } from "./commands/init";
-import { pushSchemas } from "./commands/push";
-import { diffSchemas } from "./commands/diff";
-import { migrateCommand } from "./commands/migrate";
-import { statusCommand } from "./commands/status";
-import { historyCommand } from "./commands/history";
-import { testContentfulConnection } from "./utils/contentfulClient";
 import { handleError } from "./utils/errors";
 import packageJson from "../package.json";
 
@@ -18,7 +11,7 @@ program
   .description(packageJson.description)
   .version(packageJson.version);
 
-// Init command - initialize new ctkit project
+// Init command - initialize new ctkit project (no Contentful credentials needed)
 program
   .command("init")
   .description("Initialize a new ctkit project")
@@ -33,7 +26,10 @@ program
     }
   });
 
-// Generate command - auto-generate migration from schema changes (like drizzle-kit generate)
+// All commands below use dynamic imports to avoid loading env.ts
+// (which validates Contentful credentials) until actually needed.
+
+// Generate command
 program
   .command("generate [schemas-dir]")
   .description("Generate migration from schema changes (defaults to 'schemas' directory)")
@@ -41,6 +37,9 @@ program
   .option("--custom", "Generate empty migration for custom SQL")
   .action(async (schemasDir = "schemas", options) => {
     try {
+      const { generateMigration } = await import("./commands/generate");
+      const { testContentfulConnection } = await import("./utils/contentfulClient");
+
       if (options.custom) {
         console.log(chalk.blue("📝 Generating custom migration..."));
         const name = options.name || "custom";
@@ -80,6 +79,7 @@ program
   )
   .action(async (options) => {
     try {
+      const { generateMigration } = await import("./commands/generate");
       console.log(chalk.blue("🌱 Generating seed file..."));
       await generateMigration("seed", options.name, {
         environment: options.environment,
@@ -90,7 +90,7 @@ program
     }
   });
 
-// Migrate command - apply migration files with tracking
+// Migrate command
 program
   .command("migrate")
   .description("Apply migration files with tracking")
@@ -106,6 +106,7 @@ program
   .option("-y, --yes", "Skip confirmation prompts")
   .action(async (options) => {
     try {
+      const { migrateCommand } = await import("./commands/migrate");
       await migrateCommand({
         target: options.target,
         dryRun: options.dryRun,
@@ -117,7 +118,7 @@ program
     }
   });
 
-// Push command - push schema definitions directly
+// Push command
 program
   .command("push [schemas-dir]")
   .description("Push schema definitions directly to Contentful (defaults to 'schemas' directory)")
@@ -125,6 +126,9 @@ program
   .option("--force", "Push changes without confirmation")
   .action(async (schemasDir = "schemas", options) => {
     try {
+      const { pushSchemas } = await import("./commands/push");
+      const { testContentfulConnection } = await import("./utils/contentfulClient");
+
       console.log(chalk.blue("⬆️  Pushing schemas to Contentful..."));
 
       const connected = await testContentfulConnection();
@@ -144,12 +148,15 @@ program
     }
   });
 
-// Check command - check differences between local and remote (like drizzle-kit check)
+// Check command
 program
   .command("check [schemas-dir]")
   .description("Check differences between local schemas and Contentful (defaults to 'schemas' directory)")
   .action(async (schemasDir = "schemas") => {
     try {
+      const { diffSchemas } = await import("./commands/diff");
+      const { testContentfulConnection } = await import("./utils/contentfulClient");
+
       console.log(chalk.blue("🔍 Checking schema differences..."));
 
       const connected = await testContentfulConnection();
@@ -168,7 +175,7 @@ program
     }
   });
 
-// Pull command - pull schema from Contentful (like drizzle-kit pull)
+// Pull command
 program
   .command("pull")
   .description("Pull schema from Contentful and save to local files")
@@ -176,6 +183,9 @@ program
   .option("--force", "Overwrite existing schema files")
   .action(async (options) => {
     try {
+      const { pullSchemas } = await import("./commands/pull");
+      const { testContentfulConnection } = await import("./utils/contentfulClient");
+
       console.log(chalk.blue("⬇️  Pulling schema from Contentful..."));
 
       const connected = await testContentfulConnection();
@@ -188,8 +198,6 @@ program
         process.exit(1);
       }
 
-      // Import the pull command
-      const { pullSchemas } = await import("./commands/pull");
       await pullSchemas(options);
       console.log(chalk.green("✅ Schema pulled successfully!"));
     } catch (error) {
@@ -197,7 +205,7 @@ program
     }
   });
 
-// Drop command - delete content types from Contentful (like a destructive drizzle operation)
+// Drop command
 program
   .command("drop")
   .description("🚨 DANGEROUS: Delete content types from Contentful")
@@ -222,36 +230,40 @@ program
     }
   });
 
-// Status command - show migration status
+// Status command
 program
   .command("status")
   .description("Show migration status summary")
   .action(async () => {
     try {
+      const { statusCommand } = await import("./commands/status");
       await statusCommand();
     } catch (error) {
       handleError(error, "Failed to get migration status");
     }
   });
 
-// History command - show migration execution history
+// History command
 program
   .command("history")
   .description("Show migration execution history")
   .action(async () => {
     try {
+      const { historyCommand } = await import("./commands/history");
       await historyCommand();
     } catch (error) {
       handleError(error, "Failed to get migration history");
     }
   });
 
-// Test command - test Contentful connection
+// Test command
 program
   .command("test")
   .description("Test connection to Contentful")
   .action(async () => {
     try {
+      const { testContentfulConnection } = await import("./utils/contentfulClient");
+
       console.log(chalk.blue("🔗 Testing connection to Contentful..."));
 
       const connected = await testContentfulConnection();

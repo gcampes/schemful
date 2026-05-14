@@ -1,6 +1,59 @@
 import fs from "fs";
 import path from "path";
+import { execSync } from "child_process";
 import chalk from "chalk";
+
+/**
+ * Detect which package manager is being used in the current directory.
+ */
+function detectPackageManager(): "pnpm" | "yarn" | "npm" {
+  const cwd = process.cwd();
+
+  if (fs.existsSync(path.join(cwd, "pnpm-lock.yaml"))) return "pnpm";
+  if (fs.existsSync(path.join(cwd, "yarn.lock"))) return "yarn";
+  if (fs.existsSync(path.join(cwd, "package-lock.json"))) return "npm";
+
+  // Check if the command is available
+  try {
+    execSync("pnpm --version", { stdio: "ignore" });
+    return "pnpm";
+  } catch {}
+
+  try {
+    execSync("yarn --version", { stdio: "ignore" });
+    return "yarn";
+  } catch {}
+
+  return "npm";
+}
+
+/**
+ * Install @ctkit/core as a dev dependency using the detected package manager.
+ */
+function installCore(pm: "pnpm" | "yarn" | "npm"): boolean {
+  const commands: Record<string, string> = {
+    npm: "npm install @ctkit/core --save-dev",
+    pnpm: "pnpm add @ctkit/core --save-dev",
+    yarn: "yarn add @ctkit/core --dev",
+  };
+
+  const cmd = commands[pm];
+  console.log(chalk.blue(`\nInstalling @ctkit/core with ${pm}...`));
+  console.log(chalk.gray(`  $ ${cmd}`));
+
+  try {
+    execSync(cmd, { stdio: "inherit" });
+    return true;
+  } catch {
+    console.log(
+      chalk.yellow(
+        `\n⚠️  Could not install @ctkit/core automatically. Install it manually:`
+      )
+    );
+    console.log(chalk.gray(`  $ ${cmd}`));
+    return false;
+  }
+}
 
 /**
  * Initialize a new ctkit project
@@ -123,6 +176,20 @@ export default blogPost;
     );
   } else {
     console.log(chalk.yellow("⚠️  Example migration already exists"));
+  }
+
+  // Install @ctkit/core if package.json exists (i.e., this is a node project)
+  const pkgJsonPath = path.join(cwd, "package.json");
+  if (fs.existsSync(pkgJsonPath)) {
+    const pm = detectPackageManager();
+    installCore(pm);
+  } else {
+    console.log(
+      chalk.yellow(
+        "\n⚠️  No package.json found. Install @ctkit/core manually in your project:"
+      )
+    );
+    console.log(chalk.gray("  $ npm install @ctkit/core --save-dev"));
   }
 
   console.log("\n" + chalk.blue("🎉 ctkit project initialized!"));

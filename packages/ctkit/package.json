@@ -70,6 +70,9 @@
   "engines": {
     "node": ">=18"
   },
+  "peerDependencies": {
+    "@ctkit/core": "workspace:*"
+  },
   "dependencies": {
     "@ctkit/core": "workspace:*",
     "chalk": "^4.1.2",
