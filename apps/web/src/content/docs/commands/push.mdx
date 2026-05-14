@@ -9,7 +9,7 @@ description: Push local schema definitions directly to Contentful, bypassing the
 ctkit push
 ```
 
-Reads every schema definition from your `schemas/` directory, diffs them against the remote content model, and applies the changes directly to your Contentful space. Before applying, CTKit shows a summary of changes and asks for confirmation.
+Reads every schema definition from your `schemas/` directory, diffs them against the remote content model, and applies the changes directly to your Contentful space. Before applying, ctkit shows a summary of changes and asks for confirmation.
 
 This command **bypasses the migration system entirely** — no migration files are generated or recorded.
 
@@ -41,7 +41,7 @@ Skips the interactive confirmation prompt and applies changes immediately.
 ctkit push schemas-v2/
 ```
 
-Points CTKit at a different directory instead of the default `schemas/`.
+Points ctkit at a different directory instead of the default `schemas/`.
 
 ## Flags
 

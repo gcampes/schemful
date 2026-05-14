@@ -5,8 +5,9 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
   validators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const codeBlockSchema: ContentTypeSchema = {
   id: "codeBlock",
@@ -17,7 +18,7 @@ export const codeBlockSchema: ContentTypeSchema = {
     {
       id: "title",
       name: "Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(1, 100),
@@ -26,13 +27,13 @@ export const codeBlockSchema: ContentTypeSchema = {
     {
       id: "code",
       name: "Code",
-      type: "Text",
+      type: FieldType.Text,
       required: true,
     },
     {
       id: "language",
       name: "Programming Language",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn([
@@ -65,7 +66,7 @@ export const codeBlockSchema: ContentTypeSchema = {
     {
       id: "filename",
       name: "Filename",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 255),
@@ -74,7 +75,7 @@ export const codeBlockSchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Description",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
       validations: [
         validators.textLength(1, 500),
@@ -83,13 +84,13 @@ export const codeBlockSchema: ContentTypeSchema = {
     {
       id: "showLineNumbers",
       name: "Show Line Numbers",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
     {
       id: "highlightLines",
       name: "Highlight Lines",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.customRegex("^[0-9,-\\s]+$"), // e.g., "1,3-5,8"

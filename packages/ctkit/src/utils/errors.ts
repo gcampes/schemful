@@ -1,5 +1,5 @@
 /**
- * Centralized error handling utilities for CTKit
+ * Centralized error handling utilities for ctkit
  */
 
 import chalk from "chalk";
@@ -19,7 +19,7 @@ export enum CtkitErrorCode {
 }
 
 /**
- * Custom error class for CTKit-specific errors
+ * Custom error class for ctkit-specific errors
  */
 export class CtkitError extends Error {
   constructor(

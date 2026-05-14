@@ -15,7 +15,7 @@ import { Aside } from '@astrojs/starlight/components';
 ctkit drop
 ```
 
-Deletes every content type that CTKit manages (those with a corresponding local schema definition) along with all entries of those types. Before executing, CTKit displays what will be deleted and requires you to type `DELETE` to confirm.
+Deletes every content type that ctkit manages (those with a corresponding local schema definition) along with all entries of those types. Before executing, ctkit displays what will be deleted and requires you to type `DELETE` to confirm.
 
 ```
 The following content types and their entries will be deleted:
@@ -31,7 +31,7 @@ Type DELETE to confirm:
 ctkit drop --all
 ```
 
-Deletes **every** content type in the space — not just the ones CTKit manages. Use this to completely reset a space.
+Deletes **every** content type in the space — not just the ones ctkit manages. Use this to completely reset a space.
 
 ## Drop a specific content type
 
@@ -47,7 +47,7 @@ Deletes only the specified content type and its entries.
 ctkit drop --include-migration-history
 ```
 
-Also removes the migration tracking data that CTKit stores in Contentful. This effectively resets the migration state so that `ctkit migrate` treats all migrations as pending.
+Also removes the migration tracking data that ctkit stores in Contentful. This effectively resets the migration state so that `ctkit migrate` treats all migrations as pending.
 
 Can be combined with other flags:
 

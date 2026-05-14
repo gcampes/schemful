@@ -55,7 +55,7 @@ describe("Clean Command", () => {
           sys: { id: "regularType" },
           name: "Regular Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -98,7 +98,7 @@ describe("Clean Command", () => {
           sys: { id: "regularType" },
           name: "Regular Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -127,7 +127,7 @@ describe("Clean Command", () => {
           sys: { id: "targetType" },
           name: "Target Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -136,7 +136,7 @@ describe("Clean Command", () => {
           sys: { id: "otherType" },
           name: "Other Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -167,7 +167,7 @@ describe("Clean Command", () => {
           sys: { id: "existingType" },
           name: "Existing Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -201,7 +201,7 @@ describe("Clean Command", () => {
       sys: { id: "regularType" },
       name: "Regular Type",
       fields: [
-        { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+        { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
       ],
       unpublish: vi.fn(),
       delete: vi.fn(),
@@ -261,7 +261,7 @@ describe("Clean Command", () => {
           sys: { id: "forceType" },
           name: "Force Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -288,7 +288,7 @@ describe("Clean Command", () => {
           sys: { id: "cancelType" },
           name: "Cancel Type",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -319,7 +319,7 @@ describe("Clean Command", () => {
       sys: { id: "publishedType", publishedVersion: 2 },
       name: "Published Type",
       fields: [
-        { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+        { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
       ],
       unpublish: vi.fn().mockResolvedValue(undefined),
       delete: vi.fn(),
@@ -348,7 +348,7 @@ describe("Clean Command", () => {
       sys: { id: "problematicType" },
       name: "Problematic Type",
       fields: [
-        { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+        { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
       ],
       unpublish: vi.fn(),
       delete: vi
@@ -388,7 +388,7 @@ describe("Clean Command", () => {
           sys: { id: "blogPost" },
           name: "Blog Post Content",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),
@@ -397,7 +397,7 @@ describe("Clean Command", () => {
           sys: { id: "author" },
           name: "Author",
           fields: [
-            { id: "ctkitManaged", name: "CTKit Managed", type: "Boolean" }
+            { id: "ctkitManaged", name: "ctkit managed", type: "Boolean" }
           ],
           unpublish: vi.fn(),
           delete: vi.fn(),

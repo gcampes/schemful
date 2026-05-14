@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const featureSchema: ContentTypeSchema = {
   id: "feature",
@@ -18,7 +21,7 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "title",
       name: "Feature Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(2, 100),
@@ -27,7 +30,7 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: true,
       validations: [
         richTextValidators.basicFormatting(),
@@ -37,12 +40,12 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "icon",
       name: "Feature Icon",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -55,12 +58,12 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "image",
       name: "Feature Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -73,7 +76,7 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "ctaText",
       name: "Call-to-Action Text",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 50),
@@ -82,7 +85,7 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "ctaUrl",
       name: "Call-to-Action URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -91,7 +94,7 @@ export const featureSchema: ContentTypeSchema = {
     {
       id: "sortOrder",
       name: "Sort Order",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 100),

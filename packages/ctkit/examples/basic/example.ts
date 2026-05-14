@@ -1,9 +1,11 @@
 import {
   ContentTypeSchema,
+  FieldType,
+  Mark,
   commonFields,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const exampleSchema: ContentTypeSchema = {
   id: "example",
@@ -18,7 +20,7 @@ export const exampleSchema: ContentTypeSchema = {
     {
       id: "customField",
       name: "Custom Field",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 100),
@@ -30,7 +32,7 @@ export const exampleSchema: ContentTypeSchema = {
     {
       id: "excerpt",
       name: "Excerpt",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.noHeadings(),
@@ -42,11 +44,11 @@ export const exampleSchema: ContentTypeSchema = {
     {
       id: "content",
       name: "Content",
-      type: "RichText",
+      type: FieldType.RichText,
       required: true,
       validations: [
         richTextValidators.headingLevels([1, 2, 3]), // Only allow H1, H2, H3
-        richTextValidators.allowedMarks(["bold", "italic", "code"]),
+        richTextValidators.allowedMarks([Mark.Bold, Mark.Italic, Mark.Code]),
       ],
     },
   ],

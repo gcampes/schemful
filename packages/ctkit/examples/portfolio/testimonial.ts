@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const testimonialSchema: ContentTypeSchema = {
   id: "testimonial",
@@ -18,7 +21,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "clientName",
       name: "Client Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(2, 100),
@@ -27,7 +30,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "clientTitle",
       name: "Client Title/Position",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(2, 150),
@@ -36,7 +39,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "companyName",
       name: "Company Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 100),
@@ -45,7 +48,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "content",
       name: "Testimonial Content",
-      type: "RichText",
+      type: FieldType.RichText,
       required: true,
       validations: [
         richTextValidators.basicFormatting(),
@@ -55,7 +58,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "shortQuote",
       name: "Short Quote (for cards)",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
       validations: [
         validators.textLength(10, 200),
@@ -64,7 +67,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "rating",
       name: "Rating (1-5)",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(1, 5),
@@ -73,12 +76,12 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "clientPhoto",
       name: "Client Photo",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -91,12 +94,12 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "companyLogo",
       name: "Company Logo",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -109,8 +112,8 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "projectReference",
       name: "Related Project",
-      type: "Link",
-      linkType: "Entry",
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: false,
       validations: [
         {
@@ -121,25 +124,25 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "dateReceived",
       name: "Date Received",
-      type: "Date",
+      type: FieldType.Date,
       required: false,
     },
     {
       id: "isPublic",
       name: "Show Publicly",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "isFeatured",
       name: "Featured Testimonial",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
     {
       id: "platform",
       name: "Platform/Source",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textIn([
@@ -158,7 +161,7 @@ export const testimonialSchema: ContentTypeSchema = {
     {
       id: "platformUrl",
       name: "Platform URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),

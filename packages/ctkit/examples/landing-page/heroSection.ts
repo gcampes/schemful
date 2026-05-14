@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const heroSectionSchema: ContentTypeSchema = {
   id: "heroSection",
@@ -19,7 +22,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "headline",
       name: "Headline",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(5, 120),
@@ -28,7 +31,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "subheadline",
       name: "Subheadline",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(5, 200),
@@ -37,7 +40,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.paragraphsOnly(),
@@ -48,7 +51,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "primaryCtaText",
       name: "Primary CTA Text",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(1, 50),
@@ -57,7 +60,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "primaryCtaUrl",
       name: "Primary CTA URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.url(),
@@ -66,7 +69,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "secondaryCtaText",
       name: "Secondary CTA Text",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 50),
@@ -75,7 +78,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "secondaryCtaUrl",
       name: "Secondary CTA URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -86,12 +89,12 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "heroImage",
       name: "Hero Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -104,12 +107,12 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "heroVideo",
       name: "Hero Video",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["video"],
+          linkMimetypeGroup: [MimeType.Video],
         },
       ],
     },
@@ -118,7 +121,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "layout",
       name: "Layout",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["left", "center", "right", "split"]),
@@ -127,7 +130,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "backgroundColor",
       name: "Background Color",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.hexColor(),
@@ -136,7 +139,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "textColor",
       name: "Text Color",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.hexColor(),
@@ -145,7 +148,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "overlayOpacity",
       name: "Overlay Opacity",
-      type: "Number",
+      type: FieldType.Number,
       required: false,
       validations: [
         validators.numberRange(0, 1),
@@ -156,7 +159,7 @@ export const heroSectionSchema: ContentTypeSchema = {
     {
       id: "trackingId",
       name: "Analytics Tracking ID",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.customRegex("^[a-zA-Z0-9_-]+$"),

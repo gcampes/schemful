@@ -5,8 +5,11 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const skillSchema: ContentTypeSchema = {
   id: "skill",
@@ -17,7 +20,7 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "name",
       name: "Skill Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(1, 100),
@@ -27,7 +30,7 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "category",
       name: "Skill Category",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn([
@@ -46,7 +49,7 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "proficiencyLevel",
       name: "Proficiency Level",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["beginner", "intermediate", "advanced", "expert"]),
@@ -55,7 +58,7 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "yearsOfExperience",
       name: "Years of Experience",
-      type: "Number",
+      type: FieldType.Number,
       required: false,
       validations: [
         validators.numberRange(0, 50),
@@ -64,12 +67,12 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "icon",
       name: "Skill Icon",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -82,7 +85,7 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "color",
       name: "Display Color",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.hexColor(),
@@ -91,13 +94,13 @@ export const skillSchema: ContentTypeSchema = {
     {
       id: "isVisible",
       name: "Show on Portfolio",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "sortOrder",
       name: "Sort Order",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 1000),

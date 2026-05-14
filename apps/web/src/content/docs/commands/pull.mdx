@@ -20,7 +20,7 @@ Pulled 5 content types:
   schemas/navigation.ts
 ```
 
-By default, CTKit will **not** overwrite existing schema files. If a file already exists for a content type, it is skipped and a warning is shown.
+By default, ctkit will **not** overwrite existing schema files. If a file already exists for a content type, it is skipped and a warning is shown.
 
 ## Pull a specific content type
 
@@ -47,7 +47,7 @@ Overwrites existing schema files instead of skipping them. Use this to reset a l
 
 ## Generated file format
 
-Each pulled content type produces a TypeScript file using the CTKit schema API:
+Each pulled content type produces a TypeScript file using the ctkit schema API:
 
 ```ts title="schemas/blogPost.ts"
 import { contentType, fields } from '@ctkit/cli';
@@ -77,7 +77,7 @@ All field options, validations, and appearances are preserved in the generated s
 
 ## When to use pull
 
-`pull` is the recommended way to **adopt CTKit on an existing Contentful space**. Instead of rewriting your content model from scratch:
+`pull` is the recommended way to **adopt ctkit on an existing Contentful space**. Instead of rewriting your content model from scratch:
 
 1. Run `ctkit pull` to generate schema files for your current content types.
 2. Review the generated files — adjust naming or organization as needed.

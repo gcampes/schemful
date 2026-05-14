@@ -1,6 +1,6 @@
-# CTKit Examples
+# ctkit Examples
 
-This folder contains comprehensive examples of content type schemas for different use cases. Each example demonstrates best practices for field validation, rich text configuration, and content modeling with CTKit.
+This folder contains comprehensive examples of content type schemas for different use cases. Each example demonstrates best practices for field validation, rich text configuration, and content modeling with ctkit.
 
 ## 📁 Example Categories
 
@@ -9,7 +9,7 @@ Simple content types demonstrating fundamental concepts:
 - **Page Schema**: Basic page content type with title, content, and metadata
 - **User Schema**: User profile with validation examples
 
-Perfect for getting started with CTKit.
+Perfect for getting started with ctkit.
 
 ### Blog Example (`/blog`)
 Complete blog content management system:
@@ -210,7 +210,7 @@ pnpm validate-schemas
 
 ## 📚 Additional Resources
 
-- [CTKit Documentation](../README.md)
+- [ctkit Documentation](../README.md)
 - [Contentful Content Management API](https://www.contentful.com/developers/docs/references/content-management-api/)
 - [Content Modeling Best Practices](https://www.contentful.com/developers/docs/concepts/data-model/)
 - [Rich Text Field Documentation](https://www.contentful.com/developers/docs/concepts/rich-text/)

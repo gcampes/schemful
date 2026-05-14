@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const authorSchema: ContentTypeSchema = {
   id: "author",
@@ -19,7 +22,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "name",
       name: "Full Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(2, 100),
@@ -28,7 +31,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.slug(),
@@ -39,7 +42,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "email",
       name: "Email",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.email(),
@@ -49,7 +52,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "jobTitle",
       name: "Job Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(2, 100),
@@ -58,7 +61,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "bio",
       name: "Biography",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.basicFormatting(),
@@ -70,12 +73,12 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "profileImage",
       name: "Profile Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -90,7 +93,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "website",
       name: "Website",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -99,7 +102,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "twitter",
       name: "Twitter Handle",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.customRegex("^@?[A-Za-z0-9_]+$"),
@@ -109,7 +112,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "linkedin",
       name: "LinkedIn URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.customRegex("^https://www\\.linkedin\\.com/in/.+$"),
@@ -118,7 +121,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "github",
       name: "GitHub Username",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.customRegex("^[A-Za-z0-9-]+$"),
@@ -129,7 +132,7 @@ export const authorSchema: ContentTypeSchema = {
     {
       id: "isActive",
       name: "Active Author",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
   ],

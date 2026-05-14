@@ -5,9 +5,13 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  Mark,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const blogPostSchema: ContentTypeSchema = {
   id: "blogPost",
@@ -19,7 +23,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "title",
       name: "Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       helpText: "The main title of your blog post. Keep it engaging and under 100 characters for best SEO performance.",
       validations: [
@@ -30,7 +34,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       helpText: "URL-friendly version of the title. Use lowercase letters, numbers, and hyphens only.",
       validations: [
@@ -42,7 +46,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "excerpt",
       name: "Excerpt",
-      type: "RichText",
+      type: FieldType.RichText,
       required: true,
       validations: [
         richTextValidators.paragraphsOnly(),
@@ -52,18 +56,18 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "content",
       name: "Content",
-      type: "RichText",
+      type: FieldType.RichText,
       required: true,
       validations: [
         richTextValidators.headingLevels([2, 3, 4]), // H2, H3, H4 only
-        richTextValidators.allowedMarks(["bold", "italic", "code", "strikethrough"]),
+        richTextValidators.allowedMarks([Mark.Bold, Mark.Italic, Mark.Code, Mark.Strikethrough]),
         richTextValidators.embeddedEntries(["codeBlock", "imageGallery", "quote"]),
       ],
     },
     {
       id: "dataTable",
       name: "Data Table",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       helpText: "Add data tables with formatted content. Supports basic text formatting within table cells.",
       validations: [
@@ -75,13 +79,13 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "publishedAt",
       name: "Published Date",
-      type: "Date",
+      type: FieldType.Date,
       required: false,
     },
     {
       id: "status",
       name: "Status",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["draft", "published", "archived"]),
@@ -90,7 +94,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "featured",
       name: "Featured Post",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
 
@@ -98,8 +102,8 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "author",
       name: "Author",
-      type: "Link",
-      linkType: "Entry",
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: true,
       validations: [
         {
@@ -110,11 +114,11 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "categories",
       name: "Categories",
-      type: "Array",
+      type: FieldType.Array,
       required: false,
       items: {
-        type: "Link",
-        linkType: "Entry",
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
         validations: [
           {
             linkContentType: ["category"],
@@ -128,10 +132,10 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "tags",
       name: "Tags",
-      type: "Array",
+      type: FieldType.Array,
       required: false,
       items: {
-        type: "Symbol",
+        type: FieldType.Symbol,
       },
       validations: [
         validators.arraySize(0, 10),
@@ -142,12 +146,12 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "featuredImage",
       name: "Featured Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -162,7 +166,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "seoTitle",
       name: "SEO Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       helpText: "Custom title for search engines. If left blank, the main title will be used. Aim for 50-60 characters.",
       validations: [
@@ -172,7 +176,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "seoDescription",
       name: "SEO Description",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
       helpText: "Brief description that appears in search results. Should be compelling and 150-160 characters long.",
       validations: [
@@ -182,12 +186,12 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "socialImage",
       name: "Social Media Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -202,7 +206,7 @@ export const blogPostSchema: ContentTypeSchema = {
     {
       id: "readingTime",
       name: "Reading Time (minutes)",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(1, 120),

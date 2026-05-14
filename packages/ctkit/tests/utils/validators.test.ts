@@ -4,9 +4,8 @@ import {
   commonFields,
   REGEX_PATTERNS,
   richTextValidators,
-  RICH_TEXT_MARKS,
-  RICH_TEXT_NODE_TYPES,
 } from "../../src/utils/validators";
+import { Mark, NodeType } from "../../src/constants";
 
 describe("Validators", () => {
   describe("Text validators", () => {
@@ -351,40 +350,41 @@ describe("Validators", () => {
   });
 });
 
-describe("Rich Text Constants", () => {
+describe("Constants", () => {
   it("should have correct marks constants", () => {
-    expect(RICH_TEXT_MARKS.BOLD).toBe("bold");
-    expect(RICH_TEXT_MARKS.ITALIC).toBe("italic");
-    expect(RICH_TEXT_MARKS.UNDERLINE).toBe("underline");
-    expect(RICH_TEXT_MARKS.CODE).toBe("code");
-    expect(RICH_TEXT_MARKS.SUPERSCRIPT).toBe("superscript");
-    expect(RICH_TEXT_MARKS.SUBSCRIPT).toBe("subscript");
+    expect(Mark.Bold).toBe("bold");
+    expect(Mark.Italic).toBe("italic");
+    expect(Mark.Underline).toBe("underline");
+    expect(Mark.Code).toBe("code");
+    expect(Mark.Superscript).toBe("superscript");
+    expect(Mark.Subscript).toBe("subscript");
+    expect(Mark.Strikethrough).toBe("strikethrough");
   });
 
-  it("should have correct node types constants", () => {
-    expect(RICH_TEXT_NODE_TYPES.PARAGRAPH).toBe("paragraph");
-    expect(RICH_TEXT_NODE_TYPES.HEADING_1).toBe("heading-1");
-    expect(RICH_TEXT_NODE_TYPES.HEADING_2).toBe("heading-2");
-    expect(RICH_TEXT_NODE_TYPES.HEADING_3).toBe("heading-3");
-    expect(RICH_TEXT_NODE_TYPES.HEADING_4).toBe("heading-4");
-    expect(RICH_TEXT_NODE_TYPES.HEADING_5).toBe("heading-5");
-    expect(RICH_TEXT_NODE_TYPES.HEADING_6).toBe("heading-6");
-    expect(RICH_TEXT_NODE_TYPES.ORDERED_LIST).toBe("ordered-list");
-    expect(RICH_TEXT_NODE_TYPES.UNORDERED_LIST).toBe("unordered-list");
-    expect(RICH_TEXT_NODE_TYPES.LIST_ITEM).toBe("list-item");
-    expect(RICH_TEXT_NODE_TYPES.BLOCKQUOTE).toBe("blockquote");
-    expect(RICH_TEXT_NODE_TYPES.HR).toBe("hr");
-    expect(RICH_TEXT_NODE_TYPES.TEXT).toBe("text");
-    expect(RICH_TEXT_NODE_TYPES.EMBEDDED_ENTRY_BLOCK).toBe("embedded-entry-block");
-    expect(RICH_TEXT_NODE_TYPES.EMBEDDED_ENTRY_INLINE).toBe("embedded-entry-inline");
-    expect(RICH_TEXT_NODE_TYPES.EMBEDDED_ASSET_BLOCK).toBe("embedded-asset-block");
-    expect(RICH_TEXT_NODE_TYPES.HYPERLINK).toBe("hyperlink");
-    expect(RICH_TEXT_NODE_TYPES.ENTRY_HYPERLINK).toBe("entry-hyperlink");
-    expect(RICH_TEXT_NODE_TYPES.ASSET_HYPERLINK).toBe("asset-hyperlink");
-    expect(RICH_TEXT_NODE_TYPES.TABLE).toBe("table");
-    expect(RICH_TEXT_NODE_TYPES.TABLE_ROW).toBe("table-row");
-    expect(RICH_TEXT_NODE_TYPES.TABLE_CELL).toBe("table-cell");
-    expect(RICH_TEXT_NODE_TYPES.TABLE_HEADER_CELL).toBe("table-header-cell");
+  it("should have correct node type constants", () => {
+    expect(NodeType.Paragraph).toBe("paragraph");
+    expect(NodeType.Heading1).toBe("heading-1");
+    expect(NodeType.Heading2).toBe("heading-2");
+    expect(NodeType.Heading3).toBe("heading-3");
+    expect(NodeType.Heading4).toBe("heading-4");
+    expect(NodeType.Heading5).toBe("heading-5");
+    expect(NodeType.Heading6).toBe("heading-6");
+    expect(NodeType.OrderedList).toBe("ordered-list");
+    expect(NodeType.UnorderedList).toBe("unordered-list");
+    expect(NodeType.ListItem).toBe("list-item");
+    expect(NodeType.Blockquote).toBe("blockquote");
+    expect(NodeType.HR).toBe("hr");
+    expect(NodeType.Text).toBe("text");
+    expect(NodeType.EmbeddedEntryBlock).toBe("embedded-entry-block");
+    expect(NodeType.EmbeddedEntryInline).toBe("embedded-entry-inline");
+    expect(NodeType.EmbeddedAssetBlock).toBe("embedded-asset-block");
+    expect(NodeType.Hyperlink).toBe("hyperlink");
+    expect(NodeType.EntryHyperlink).toBe("entry-hyperlink");
+    expect(NodeType.AssetHyperlink).toBe("asset-hyperlink");
+    expect(NodeType.Table).toBe("table");
+    expect(NodeType.TableRow).toBe("table-row");
+    expect(NodeType.TableCell).toBe("table-cell");
+    expect(NodeType.TableHeaderCell).toBe("table-header-cell");
   });
 });
 

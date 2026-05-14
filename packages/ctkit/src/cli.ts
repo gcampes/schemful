@@ -18,14 +18,14 @@ program
   .description(packageJson.description)
   .version(packageJson.version);
 
-// Init command - initialize new CTKit project
+// Init command - initialize new ctkit project
 program
   .command("init")
-  .description("Initialize a new CTKit project")
+  .description("Initialize a new ctkit project")
   .option("--force", "Overwrite existing files")
   .action(async (options) => {
     try {
-      console.log(chalk.blue("🚀 Initializing CTKit project..."));
+      console.log(chalk.blue("🚀 Initializing ctkit project..."));
       await initProject(options.force);
       console.log(chalk.green("✅ Project initialized successfully!"));
     } catch (error) {

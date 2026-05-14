@@ -244,7 +244,7 @@ export class MigrationTracker {
         // Add the field by mutating the fields array (CMA approach)
         existingContentType.fields.push({
           id: "ctkitManaged",
-          name: "CTKit Managed",
+          name: "ctkit managed",
           type: "Boolean",
           required: false,
           disabled: true,
@@ -397,7 +397,7 @@ export class MigrationTracker {
   }
 
   /**
-   * Get current CTKit version
+   * Get current ctkit version
    */
   private getCtkitVersion(): string {
     try {

@@ -1,11 +1,11 @@
 ---
 title: Configuration
-description: Configure CTKit with environment variables, schema paths, and migration directories.
+description: Configure ctkit with environment variables, schema paths, and migration directories.
 ---
 
 ## Environment variables
 
-CTKit reads credentials from environment variables. You can set them in a `.env` file at the project root.
+ctkit reads credentials from environment variables. You can set them in a `.env` file at the project root.
 
 ```ini
 # .env
@@ -31,7 +31,7 @@ Management tokens start with `CFPAT-`. Store them securely — they grant full w
 
 ## Schema directory
 
-By default, CTKit looks for content type definitions in the `schemas/` directory relative to your project root.
+By default, ctkit looks for content type definitions in the `schemas/` directory relative to your project root.
 
 ```
 schemas/
@@ -41,7 +41,7 @@ schemas/
     └── navigation.ts
 ```
 
-- Nested folders are supported — CTKit auto-discovers all `.ts` and `.js` files recursively.
+- Nested folders are supported — ctkit auto-discovers all `.ts` and `.js` files recursively.
 - Each file should export one or more `contentType()` definitions.
 - File names don't affect the content type ID; the ID comes from the first argument to `contentType()`.
 

@@ -19,7 +19,7 @@ export interface MigrationRecord {
   errorMessage?: string;
   /** Human-readable description of what the migration does */
   description?: string;
-  /** Version of CTKit that executed the migration */
+  /** Version of ctkit that executed the migration */
   ctkitVersion: string;
   /** Environment where migration was executed */
   environment?: string;

@@ -4,6 +4,7 @@ import {
   ArrayValidation,
   RichTextValidation,
 } from "../types/Field";
+import { Mark, NodeType, type MarkValue, type NodeTypeValue } from "../constants";
 
 // Common regex patterns
 export const REGEX_PATTERNS = {
@@ -166,59 +167,19 @@ export const validators = {
   }),
 };
 
-// Rich text configuration constants
-export const RICH_TEXT_MARKS = {
-  BOLD: "bold",
-  ITALIC: "italic",
-  UNDERLINE: "underline",
-  CODE: "code",
-  SUPERSCRIPT: "superscript",
-  SUBSCRIPT: "subscript",
-  STRIKETHROUGH: "strikethrough",
-} as const;
-
-export const RICH_TEXT_NODE_TYPES = {
-  PARAGRAPH: "paragraph",
-  HEADING_1: "heading-1",
-  HEADING_2: "heading-2",
-  HEADING_3: "heading-3",
-  HEADING_4: "heading-4",
-  HEADING_5: "heading-5",
-  HEADING_6: "heading-6",
-  ORDERED_LIST: "ordered-list",
-  UNORDERED_LIST: "unordered-list",
-  LIST_ITEM: "list-item",
-  BLOCKQUOTE: "blockquote",
-  HR: "hr",
-  EMBEDDED_ENTRY_BLOCK: "embedded-entry-block",
-  EMBEDDED_ASSET_BLOCK: "embedded-asset-block",
-  EMBEDDED_ENTRY_INLINE: "embedded-entry-inline",
-  EMBEDDED_RESOURCE_BLOCK: "embedded-resource-block",
-  EMBEDDED_RESOURCE_INLINE: "embedded-resource-inline",
-  HYPERLINK: "hyperlink",
-  ENTRY_HYPERLINK: "entry-hyperlink",
-  ASSET_HYPERLINK: "asset-hyperlink",
-  RESOURCE_HYPERLINK: "resource-hyperlink",
-  TEXT: "text",
-  TABLE: "table",
-  TABLE_ROW: "table-row",
-  TABLE_CELL: "table-cell",
-  TABLE_HEADER_CELL: "table-header-cell",
-} as const;
-
 // Rich text validator functions
 export const richTextValidators = {
   /**
    * Allow only specific marks (bold, italic, etc.)
    */
-  allowedMarks: (marks: string[]): RichTextValidation => ({
+  allowedMarks: (marks: MarkValue[]): RichTextValidation => ({
     enabledMarks: marks,
   }),
 
   /**
    * Allow only specific node types (paragraphs, headings, etc.)
    */
-  allowedNodeTypes: (nodeTypes: string[]): RichTextValidation => ({
+  allowedNodeTypes: (nodeTypes: NodeTypeValue[]): RichTextValidation => ({
     enabledNodeTypes: nodeTypes,
   }),
 
@@ -227,13 +188,13 @@ export const richTextValidators = {
    */
   noHeadings: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.PARAGRAPH,
-      RICH_TEXT_NODE_TYPES.ORDERED_LIST,
-      RICH_TEXT_NODE_TYPES.UNORDERED_LIST,
-      RICH_TEXT_NODE_TYPES.LIST_ITEM,
-      RICH_TEXT_NODE_TYPES.BLOCKQUOTE,
-      RICH_TEXT_NODE_TYPES.HR,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.Paragraph,
+      NodeType.OrderedList,
+      NodeType.UnorderedList,
+      NodeType.ListItem,
+      NodeType.Blockquote,
+      NodeType.HR,
+      NodeType.Text,
     ],
   }),
 
@@ -241,7 +202,7 @@ export const richTextValidators = {
    * Disable bold and italic formatting
    */
   noFormattingMarks: (): RichTextValidation => ({
-    enabledMarks: [RICH_TEXT_MARKS.CODE],
+    enabledMarks: [Mark.Code],
   }),
 
   /**
@@ -249,10 +210,10 @@ export const richTextValidators = {
    */
   basicFormatting: (): RichTextValidation => ({
     enabledMarks: [
-      RICH_TEXT_MARKS.BOLD,
-      RICH_TEXT_MARKS.ITALIC,
-      RICH_TEXT_MARKS.UNDERLINE,
-      RICH_TEXT_MARKS.STRIKETHROUGH,
+      Mark.Bold,
+      Mark.Italic,
+      Mark.Underline,
+      Mark.Strikethrough,
     ],
   }),
 
@@ -260,7 +221,7 @@ export const richTextValidators = {
    * Allow only paragraphs and basic text
    */
   paragraphsOnly: (): RichTextValidation => ({
-    enabledNodeTypes: [RICH_TEXT_NODE_TYPES.PARAGRAPH, RICH_TEXT_NODE_TYPES.TEXT],
+    enabledNodeTypes: [NodeType.Paragraph, NodeType.Text],
     enabledMarks: [],
   }),
 
@@ -269,13 +230,13 @@ export const richTextValidators = {
    */
   headingsOnly: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.HEADING_1,
-      RICH_TEXT_NODE_TYPES.HEADING_2,
-      RICH_TEXT_NODE_TYPES.HEADING_3,
-      RICH_TEXT_NODE_TYPES.HEADING_4,
-      RICH_TEXT_NODE_TYPES.HEADING_5,
-      RICH_TEXT_NODE_TYPES.HEADING_6,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.Heading1,
+      NodeType.Heading2,
+      NodeType.Heading3,
+      NodeType.Heading4,
+      NodeType.Heading5,
+      NodeType.Heading6,
+      NodeType.Text,
     ],
   }),
 
@@ -283,11 +244,11 @@ export const richTextValidators = {
    * Allow only specific heading levels
    */
   headingLevels: (levels: number[]): RichTextValidation => {
-    const allowedHeadings = levels.map(level => `heading-${level}`);
+    const allowedHeadings = levels.map(level => `heading-${level}` as NodeTypeValue);
     return {
       enabledNodeTypes: [
-        RICH_TEXT_NODE_TYPES.PARAGRAPH,
-        RICH_TEXT_NODE_TYPES.TEXT,
+        NodeType.Paragraph,
+        NodeType.Text,
         ...allowedHeadings,
       ],
     };
@@ -298,10 +259,10 @@ export const richTextValidators = {
    */
   listsOnly: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.ORDERED_LIST,
-      RICH_TEXT_NODE_TYPES.UNORDERED_LIST,
-      RICH_TEXT_NODE_TYPES.LIST_ITEM,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.OrderedList,
+      NodeType.UnorderedList,
+      NodeType.ListItem,
+      NodeType.Text,
     ],
   }),
 
@@ -310,10 +271,10 @@ export const richTextValidators = {
    */
   embeddedEntries: (contentTypes: string[]): RichTextValidation => ({
     nodes: {
-      [RICH_TEXT_NODE_TYPES.EMBEDDED_ENTRY_BLOCK]: [
+      [NodeType.EmbeddedEntryBlock]: [
         { linkContentType: contentTypes }
       ],
-      [RICH_TEXT_NODE_TYPES.EMBEDDED_ENTRY_INLINE]: [
+      [NodeType.EmbeddedEntryInline]: [
         { linkContentType: contentTypes }
       ],
     },
@@ -324,15 +285,15 @@ export const richTextValidators = {
    */
   tablesOnly: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.TABLE,
-      RICH_TEXT_NODE_TYPES.TABLE_ROW,
-      RICH_TEXT_NODE_TYPES.TABLE_CELL,
-      RICH_TEXT_NODE_TYPES.TABLE_HEADER_CELL,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.Table,
+      NodeType.TableRow,
+      NodeType.TableCell,
+      NodeType.TableHeaderCell,
+      NodeType.Text,
     ],
     enabledMarks: [
-      RICH_TEXT_MARKS.BOLD,
-      RICH_TEXT_MARKS.ITALIC,
+      Mark.Bold,
+      Mark.Italic,
     ],
   }),
 
@@ -341,12 +302,12 @@ export const richTextValidators = {
    */
   tablesWithContent: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.PARAGRAPH,
-      RICH_TEXT_NODE_TYPES.TABLE,
-      RICH_TEXT_NODE_TYPES.TABLE_ROW,
-      RICH_TEXT_NODE_TYPES.TABLE_CELL,
-      RICH_TEXT_NODE_TYPES.TABLE_HEADER_CELL,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.Paragraph,
+      NodeType.Table,
+      NodeType.TableRow,
+      NodeType.TableCell,
+      NodeType.TableHeaderCell,
+      NodeType.Text,
     ],
   }),
 
@@ -355,11 +316,11 @@ export const richTextValidators = {
    */
   embeddedResources: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.PARAGRAPH,
-      RICH_TEXT_NODE_TYPES.EMBEDDED_RESOURCE_BLOCK,
-      RICH_TEXT_NODE_TYPES.EMBEDDED_RESOURCE_INLINE,
-      RICH_TEXT_NODE_TYPES.RESOURCE_HYPERLINK,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.Paragraph,
+      NodeType.EmbeddedResourceBlock,
+      NodeType.EmbeddedResourceInline,
+      NodeType.ResourceHyperlink,
+      NodeType.Text,
     ],
   }),
 
@@ -368,19 +329,19 @@ export const richTextValidators = {
    */
   noEmbeddedContent: (): RichTextValidation => ({
     enabledNodeTypes: [
-      RICH_TEXT_NODE_TYPES.PARAGRAPH,
-      RICH_TEXT_NODE_TYPES.HEADING_1,
-      RICH_TEXT_NODE_TYPES.HEADING_2,
-      RICH_TEXT_NODE_TYPES.HEADING_3,
-      RICH_TEXT_NODE_TYPES.HEADING_4,
-      RICH_TEXT_NODE_TYPES.HEADING_5,
-      RICH_TEXT_NODE_TYPES.HEADING_6,
-      RICH_TEXT_NODE_TYPES.ORDERED_LIST,
-      RICH_TEXT_NODE_TYPES.UNORDERED_LIST,
-      RICH_TEXT_NODE_TYPES.LIST_ITEM,
-      RICH_TEXT_NODE_TYPES.BLOCKQUOTE,
-      RICH_TEXT_NODE_TYPES.HR,
-      RICH_TEXT_NODE_TYPES.TEXT,
+      NodeType.Paragraph,
+      NodeType.Heading1,
+      NodeType.Heading2,
+      NodeType.Heading3,
+      NodeType.Heading4,
+      NodeType.Heading5,
+      NodeType.Heading6,
+      NodeType.OrderedList,
+      NodeType.UnorderedList,
+      NodeType.ListItem,
+      NodeType.Blockquote,
+      NodeType.HR,
+      NodeType.Text,
     ],
   }),
 
@@ -388,8 +349,8 @@ export const richTextValidators = {
    * Custom rich text configuration
    */
   custom: (config: {
-    enabledMarks?: string[];
-    enabledNodeTypes?: string[];
+    enabledMarks?: MarkValue[];
+    enabledNodeTypes?: NodeTypeValue[];
     nodes?: RichTextValidation['nodes'];
   }): RichTextValidation => config,
 };

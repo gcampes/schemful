@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const categorySchema: ContentTypeSchema = {
   id: "category",
@@ -18,7 +21,7 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "name",
       name: "Category Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(1, 50),
@@ -28,7 +31,7 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.slug(),
@@ -38,7 +41,7 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.paragraphsOnly(),
@@ -47,7 +50,7 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "color",
       name: "Category Color",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.hexColor(),
@@ -56,12 +59,12 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "icon",
       name: "Category Icon",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -74,8 +77,8 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "parentCategory",
       name: "Parent Category",
-      type: "Link",
-      linkType: "Entry",
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: false,
       validations: [
         {
@@ -86,7 +89,7 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "sortOrder",
       name: "Sort Order",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 1000),
@@ -95,7 +98,7 @@ export const categorySchema: ContentTypeSchema = {
     {
       id: "isVisible",
       name: "Visible in Navigation",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
   ],

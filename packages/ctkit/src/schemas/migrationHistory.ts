@@ -2,7 +2,7 @@
  * Migration history content type schema
  * This tracks which migrations have been executed in Contentful
  *
- * Note: This is a system schema used internally by CTKit.
+ * Note: This is a system schema used internally by ctkit.
  * It will be automatically created when needed.
  */
 
@@ -10,14 +10,14 @@ import { ContentTypeSchema } from "../types";
 
 export const migrationHistorySchema: ContentTypeSchema = {
   id: "ctkit_migration_history",
-  name: "🔄 CTKit Migration History",
+  name: "🔄 ctkit migration history",
   description:
-    "Tracks executed CTKit migrations - managed automatically by CTKit CLI",
+    "Tracks executed ctkit migrations - managed automatically by ctkit CLI",
   displayField: "migrationId",
   fields: [
     {
       id: "ctkitManaged",
-      name: "CTKit Managed",
+      name: "ctkit managed",
       type: "Boolean",
       required: false,
       disabled: true,
@@ -103,7 +103,7 @@ export const migrationHistorySchema: ContentTypeSchema = {
     },
     {
       id: "ctkitVersion",
-      name: "CTKit Version",
+      name: "ctkit version",
       type: "Symbol",
       required: true,
     },

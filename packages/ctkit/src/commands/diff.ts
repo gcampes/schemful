@@ -100,7 +100,7 @@ export async function diffSchemas(schemasDir = "schemas"): Promise<void> {
 
     if (remoteOnlyContentTypes.length > 0) {
       console.log(
-        chalk.red("\n📊 Remote-only content types (not managed by CTKit):")
+        chalk.red("\n📊 Remote-only content types (not managed by ctkit):")
       );
       for (const ct of remoteOnlyContentTypes) {
         console.log(chalk.gray(`  • ${ct.sys.id} (${ct.name})`));

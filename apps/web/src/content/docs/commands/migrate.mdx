@@ -9,7 +9,7 @@ description: Apply pending migrations to your Contentful space in order.
 ctkit migrate
 ```
 
-Runs every migration that hasn't been executed yet, in chronological order. Before applying, CTKit displays a summary of pending migrations and asks for confirmation.
+Runs every migration that hasn't been executed yet, in chronological order. Before applying, ctkit displays a summary of pending migrations and asks for confirmation.
 
 ```
 Pending migrations:
@@ -19,7 +19,7 @@ Pending migrations:
 Apply 2 migrations? (y/N)
 ```
 
-Each migration is tracked in your Contentful space. After execution, CTKit records the migration ID, timestamp, and result (success or failed) so it knows which migrations have already run.
+Each migration is tracked in your Contentful space. After execution, ctkit records the migration ID, timestamp, and result (success or failed) so it knows which migrations have already run.
 
 ## Target a specific migration
 
@@ -69,7 +69,7 @@ ctkit migrate --yes
 
 ## Migration tracking
 
-CTKit stores migration state directly in your Contentful space. Each executed migration is recorded with:
+ctkit stores migration state directly in your Contentful space. Each executed migration is recorded with:
 
 - **Migration ID** — the filename without extension
 - **Status** — `success` or `failed`

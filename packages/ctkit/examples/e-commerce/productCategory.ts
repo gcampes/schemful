@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const productCategorySchema: ContentTypeSchema = {
   id: "productCategory",
@@ -18,7 +21,7 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "name",
       name: "Category Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(1, 100),
@@ -28,7 +31,7 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.slug(),
@@ -38,7 +41,7 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.basicFormatting(),
@@ -48,8 +51,8 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "parentCategory",
       name: "Parent Category",
-      type: "Link",
-      linkType: "Entry",
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: false,
       validations: [
         {
@@ -60,12 +63,12 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "image",
       name: "Category Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -78,7 +81,7 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "sortOrder",
       name: "Sort Order",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 1000),
@@ -87,13 +90,13 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "isVisible",
       name: "Visible in Navigation",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "seoTitle",
       name: "SEO Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(10, 60),
@@ -102,7 +105,7 @@ export const productCategorySchema: ContentTypeSchema = {
     {
       id: "seoDescription",
       name: "SEO Description",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
       validations: [
         validators.textLength(50, 160),

@@ -12,7 +12,7 @@ edit schema → push
 ```
 
 1. **Edit your schema** — modify or create files in `schemas/`.
-2. **Push** — CTKit diffs local vs. remote and applies changes directly.
+2. **Push** — ctkit diffs local vs. remote and applies changes directly.
 
 That's it. Two steps.
 
@@ -45,7 +45,7 @@ export const blogPost = contentType('blogPost', {
 ctkit push
 ```
 
-CTKit shows a summary of what will change and asks for confirmation:
+ctkit shows a summary of what will change and asks for confirmation:
 
 ```
 + blogPost         (new content type)
@@ -70,7 +70,7 @@ ctkit push --dry-run
 ## What push does NOT do
 
 - **No migration files** — nothing is written to `migrations/`.
-- **No execution history** — CTKit doesn't record what changed or when.
+- **No execution history** — ctkit doesn't record what changed or when.
 - **No reproducibility** — you can't replay the same changes against another environment.
 
 This is intentional. Push trades traceability for speed.
@@ -96,4 +96,4 @@ When you're ready:
 2. Start using `ctkit generate` + `ctkit migrate`.
 3. Your first generated migration will capture whatever differs between your local schemas and the current remote state.
 
-The `migrations/` directory starts fresh — CTKit doesn't need prior migration history to begin tracking changes.
+The `migrations/` directory starts fresh — ctkit doesn't need prior migration history to begin tracking changes.

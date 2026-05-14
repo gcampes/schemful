@@ -45,7 +45,7 @@ describe("Migration Generator", () => {
               },
               {
                 id: "ctkitManaged",
-                name: "CTKit Managed",
+                name: "ctkit managed",
                 type: "Boolean",
                 required: false,
                 disabled: true,
@@ -53,7 +53,7 @@ describe("Migration Generator", () => {
               },
               {
                 id: "ctkitManaged",
-                name: "CTKit Managed",
+                name: "ctkit managed",
                 type: "Boolean",
                 required: false,
                 disabled: true,
@@ -127,7 +127,7 @@ describe("Migration Generator", () => {
               },
               {
                 id: "ctkitManaged",
-                name: "CTKit Managed",
+                name: "ctkit managed",
                 type: "Boolean",
                 required: false,
                 disabled: true,
@@ -195,7 +195,7 @@ describe("Migration Generator", () => {
               },
               {
                 id: "ctkitManaged",
-                name: "CTKit Managed",
+                name: "ctkit managed",
                 type: "Boolean",
                 required: false,
                 disabled: true,
@@ -261,7 +261,7 @@ describe("Migration Generator", () => {
               },
               {
                 id: "ctkitManaged",
-                name: "CTKit Managed",
+                name: "ctkit managed",
                 type: "Boolean",
                 required: false,
                 disabled: true,
@@ -325,7 +325,7 @@ describe("Migration Generator", () => {
               },
               {
                 id: "ctkitManaged",
-                name: "CTKit Managed",
+                name: "ctkit managed",
                 type: "Boolean",
                 required: false,
                 disabled: true,

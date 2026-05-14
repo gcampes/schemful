@@ -5,9 +5,13 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  Mark,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const productSchema: ContentTypeSchema = {
   id: "product",
@@ -19,7 +23,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "name",
       name: "Product Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(2, 200),
@@ -28,7 +32,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.slug(),
@@ -38,7 +42,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "sku",
       name: "SKU",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.unique(),
@@ -49,7 +53,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Short Description",
-      type: "Text",
+      type: FieldType.Text,
       required: true,
       validations: [
         validators.textLength(10, 500),
@@ -58,11 +62,11 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "longDescription",
       name: "Detailed Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.headingLevels([2, 3]),
-        richTextValidators.allowedMarks(["bold", "italic", "underline"]),
+        richTextValidators.allowedMarks([Mark.Bold, Mark.Italic, Mark.Underline]),
       ],
     },
 
@@ -70,7 +74,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "price",
       name: "Price",
-      type: "Number",
+      type: FieldType.Number,
       required: true,
       validations: [
         validators.numberRange(0, 999999.99),
@@ -79,7 +83,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "compareAtPrice",
       name: "Compare at Price",
-      type: "Number",
+      type: FieldType.Number,
       required: false,
       validations: [
         validators.numberRange(0, 999999.99),
@@ -88,7 +92,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "costPrice",
       name: "Cost Price",
-      type: "Number",
+      type: FieldType.Number,
       required: false,
       validations: [
         validators.numberRange(0, 999999.99),
@@ -97,7 +101,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "currency",
       name: "Currency",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["USD", "EUR", "GBP", "CAD", "AUD", "JPY"]),
@@ -108,13 +112,13 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "trackQuantity",
       name: "Track Quantity",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "quantity",
       name: "Quantity in Stock",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 99999),
@@ -123,7 +127,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "lowStockThreshold",
       name: "Low Stock Threshold",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 1000),
@@ -132,7 +136,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "allowBackorder",
       name: "Allow Backorder",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
 
@@ -140,11 +144,11 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "categories",
       name: "Categories",
-      type: "Array",
+      type: FieldType.Array,
       required: true,
       items: {
-        type: "Link",
-        linkType: "Entry",
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
         validations: [
           {
             linkContentType: ["productCategory"],
@@ -158,10 +162,10 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "tags",
       name: "Tags",
-      type: "Array",
+      type: FieldType.Array,
       required: false,
       items: {
-        type: "Symbol",
+        type: FieldType.Symbol,
       },
       validations: [
         validators.arraySize(0, 20),
@@ -170,8 +174,8 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "brand",
       name: "Brand",
-      type: "Link",
-      linkType: "Entry",
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
       required: false,
       validations: [
         {
@@ -184,14 +188,14 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "images",
       name: "Product Images",
-      type: "Array",
+      type: FieldType.Array,
       required: true,
       items: {
-        type: "Link",
-        linkType: "Asset",
+        type: FieldType.Link,
+        linkType: LinkType.Asset,
         validations: [
           {
-            linkMimetypeGroup: ["image"],
+            linkMimetypeGroup: [MimeType.Image],
           },
         ],
       },
@@ -204,7 +208,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "weight",
       name: "Weight (grams)",
-      type: "Number",
+      type: FieldType.Number,
       required: false,
       validations: [
         validators.numberRange(0, 50000),
@@ -213,7 +217,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "dimensions",
       name: "Dimensions (L×W×H cm)",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.customRegex("^[0-9.]+×[0-9.]+×[0-9.]+$"), // e.g., "10.5×5.2×3.0"
@@ -222,19 +226,19 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "material",
       name: "Material",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
     },
     {
       id: "color",
       name: "Color",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
     },
     {
       id: "size",
       name: "Size",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textIn(["XS", "S", "M", "L", "XL", "XXL", "One Size"]),
@@ -245,17 +249,17 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "hasVariants",
       name: "Has Variants",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "variants",
       name: "Product Variants",
-      type: "Array",
+      type: FieldType.Array,
       required: false,
       items: {
-        type: "Link",
-        linkType: "Entry",
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
         validations: [
           {
             linkContentType: ["productVariant"],
@@ -271,7 +275,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "status",
       name: "Status",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["draft", "active", "archived"]),
@@ -280,13 +284,13 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "isVisible",
       name: "Visible in Store",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "isFeatured",
       name: "Featured Product",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
 
@@ -294,7 +298,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "seoTitle",
       name: "SEO Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(10, 60),
@@ -303,7 +307,7 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "seoDescription",
       name: "SEO Description",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
       validations: [
         validators.textLength(50, 160),
@@ -314,13 +318,13 @@ export const productSchema: ContentTypeSchema = {
     {
       id: "requiresShipping",
       name: "Requires Shipping",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
     {
       id: "shippingClass",
       name: "Shipping Class",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textIn(["standard", "heavy", "fragile", "hazardous", "digital"]),

@@ -29,7 +29,7 @@ my-project/
 
 ## Schemas directory
 
-Schema files live in `schemas/`. CTKit auto-discovers all `.ts` and `.js` files recursively — you can organize them however you like.
+Schema files live in `schemas/`. ctkit auto-discovers all `.ts` and `.js` files recursively — you can organize them however you like.
 
 ### Flat structure
 
@@ -79,7 +79,7 @@ File names combine a UTC timestamp with either a random slug or a custom name (v
 
 **Always commit migration files.** They're the history of your content model — the equivalent of database migration files in a traditional backend project. When a teammate pulls your branch, they get the same migrations and can apply them to their own Contentful environment.
 
-**Don't edit migration files after they've been applied.** CTKit stores a SHA-256 checksum of each migration when it runs. Modifying a file after execution creates a checksum mismatch. If you need to change something, generate a new migration instead.
+**Don't edit migration files after they've been applied.** ctkit stores a SHA-256 checksum of each migration when it runs. Modifying a file after execution creates a checksum mismatch. If you need to change something, generate a new migration instead.
 
 ## Environment variables
 
@@ -111,7 +111,7 @@ CONTENTFUL_ENVIRONMENT_ID=master
 
 ## Gitignore
 
-A minimal `.gitignore` for a CTKit project:
+A minimal `.gitignore` for a ctkit project:
 
 ```gitignore
 .env

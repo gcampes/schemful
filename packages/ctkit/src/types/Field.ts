@@ -1,3 +1,9 @@
+import {
+  type MarkValue,
+  type NodeTypeValue,
+  type MimeTypeValue,
+} from "../constants";
+
 export interface BaseField {
   id: string;
   name: string;
@@ -95,7 +101,7 @@ export interface DateValidation {
 
 export interface LinkValidation {
   linkContentType?: string[];
-  linkMimetypeGroup?: string[];
+  linkMimetypeGroup?: MimeTypeValue[];
   assetImageDimensions?: {
     width?: { min?: number; max?: number };
     height?: { min?: number; max?: number };
@@ -108,8 +114,8 @@ export interface ArrayValidation {
 }
 
 export interface RichTextValidation {
-  enabledMarks?: string[];
-  enabledNodeTypes?: string[];
+  enabledMarks?: MarkValue[];
+  enabledNodeTypes?: NodeTypeValue[];
   nodes?: {
     [nodeType: string]: Array<{
       linkContentType?: string[];

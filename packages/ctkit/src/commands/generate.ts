@@ -239,7 +239,7 @@ async function generateSchemaFile(name: string, cwd: string): Promise<void> {
     .trim();
   const variableName = schemaId.replace(/[^a-zA-Z0-9_]/g, "_");
 
-  const schemaTemplate = `import { ContentTypeSchema } from '@ctkit/cli';
+  const schemaTemplate = `import { ContentTypeSchema, FieldType } from '@ctkit/cli';
 
 const ${variableName}: ContentTypeSchema = {
   id: '${schemaId}',
@@ -250,7 +250,7 @@ const ${variableName}: ContentTypeSchema = {
     {
       id: 'title',
       name: 'Title',
-      type: 'Symbol',
+      type: FieldType.Symbol,
       required: true,
     },
   ],
@@ -299,7 +299,7 @@ export const environment = '${targetEnv}';
 /**
  * Seed function to populate content
  * @param environment - Contentful environment instance
- * @param config - CTKit configuration
+ * @param config - ctkit configuration
  */
 module.exports = async function(environment, config) {
   console.log('🌱 Running seed: ${name}');

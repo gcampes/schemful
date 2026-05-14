@@ -1,4 +1,4 @@
-# CTKit
+# ctkit
 
 [![CI](https://github.com/gcampes/ctkit/actions/workflows/test.yml/badge.svg)](https://github.com/gcampes/ctkit/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/@ctkit/cli.svg)](https://www.npmjs.com/package/@ctkit/cli)
@@ -10,9 +10,9 @@ A **Drizzle ORM-style workflow** for managing Contentful content models. Define 
 schemas/blogPost.ts  -->  ctkit generate  -->  ctkit migrate  -->  Contentful
 ```
 
-## Why CTKit?
+## Why ctkit?
 
-If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schemas, you already know this workflow. CTKit brings the same developer experience to Contentful:
+If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schemas, you already know this workflow. ctkit brings the same developer experience to Contentful:
 
 - **Schema-as-code** -- define content types in TypeScript with full type safety
 - **Auto-generated migrations** -- diff local schemas against Contentful and generate migration files

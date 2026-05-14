@@ -1,9 +1,9 @@
 ---
 title: Pull-first Workflow
-description: Adopt CTKit on an existing Contentful space by pulling your current content types into local TypeScript schema files.
+description: Adopt ctkit on an existing Contentful space by pulling your current content types into local TypeScript schema files.
 ---
 
-The pull-first workflow is for teams that **already have content types in Contentful** and want to start managing them with CTKit. Instead of recreating your content model by hand, CTKit generates TypeScript schema files from your existing space.
+The pull-first workflow is for teams that **already have content types in Contentful** and want to start managing them with ctkit. Instead of recreating your content model by hand, ctkit generates TypeScript schema files from your existing space.
 
 ## How it works
 
@@ -11,7 +11,7 @@ The pull-first workflow is for teams that **already have content types in Conten
 pull → review generated schemas → adjust → continue with migration or push
 ```
 
-1. **Pull** — CTKit reads your Contentful content types and generates schema files.
+1. **Pull** — ctkit reads your Contentful content types and generates schema files.
 2. **Review** — inspect the generated code, make adjustments.
 3. **Continue** — switch to the [migration](/workflows/migration) or [push](/workflows/push) workflow for ongoing changes.
 
@@ -23,7 +23,7 @@ pull → review generated schemas → adjust → continue with migration or push
 ctkit pull
 ```
 
-CTKit connects to your Contentful space, reads every content type, and generates a `.ts` file for each one in your `schemas/` directory:
+ctkit connects to your Contentful space, reads every content type, and generates a `.ts` file for each one in your `schemas/` directory:
 
 ```
 ✓ Pulled 5 content types
@@ -48,7 +48,7 @@ ctkit pull --force
 
 ### 2. Review the generated schemas
 
-Open the generated files and verify they look correct. CTKit maps Contentful field types, validations, and settings into their schema equivalents as accurately as possible.
+Open the generated files and verify they look correct. ctkit maps Contentful field types, validations, and settings into their schema equivalents as accurately as possible.
 
 ```bash
 ctkit check
@@ -60,7 +60,7 @@ If `check` reports everything is in sync, the generated schemas faithfully repre
 
 You may want to:
 
-- **Reorganize files** — move schemas into subdirectories (e.g., `schemas/blog/blogPost.ts`). CTKit auto-discovers all `.ts` and `.js` files regardless of nesting.
+- **Reorganize files** — move schemas into subdirectories (e.g., `schemas/blog/blogPost.ts`). ctkit auto-discovers all `.ts` and `.js` files regardless of nesting.
 - **Add comments** — annotate fields with context that only exists in your team's heads.
 - **Clean up names** — rename the exported variables for consistency.
 - **Review edge cases** — complex field configurations, deeply nested validations, or unusual content type setups may need manual tweaking.
@@ -90,4 +90,4 @@ ctkit push
 - **Run `check` after pulling.** If the output shows no differences, you know the pull was accurate. If there are diffs, review and adjust before continuing.
 - **Commit the generated files.** Once you're happy with the schemas, commit them to source control. They're now the source of truth for your content model.
 - **Pull is a one-time operation.** You use it to bootstrap your local schemas. After that, you make changes locally and push or migrate them to Contentful — not the other way around.
-- **System content types are skipped.** CTKit won't pull its own internal content types (like `ctkit_migration_history`).
+- **System content types are skipped.** ctkit won't pull its own internal content types (like `ctkit_migration_history`).

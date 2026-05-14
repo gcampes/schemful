@@ -6,7 +6,7 @@
  * It will be automatically created when needed.
  */
 
-import { ContentTypeSchema } from "../types";
+import { ContentTypeSchema, FieldType } from "@ctkit/cli";
 
 export const migrationHistorySchema: ContentTypeSchema = {
   id: "conform_migration_history",
@@ -17,7 +17,7 @@ export const migrationHistorySchema: ContentTypeSchema = {
     {
       id: "migrationId",
       name: "Migration ID",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         {
@@ -34,19 +34,19 @@ export const migrationHistorySchema: ContentTypeSchema = {
     {
       id: "filename",
       name: "Filename",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
     },
     {
       id: "executedAt",
       name: "Executed At",
-      type: "Date",
+      type: FieldType.Date,
       required: true,
     },
     {
       id: "checksum",
       name: "File Checksum",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         {
@@ -59,7 +59,7 @@ export const migrationHistorySchema: ContentTypeSchema = {
     {
       id: "executionTimeMs",
       name: "Execution Time (ms)",
-      type: "Integer",
+      type: FieldType.Integer,
       required: true,
       validations: [
         {
@@ -72,7 +72,7 @@ export const migrationHistorySchema: ContentTypeSchema = {
     {
       id: "status",
       name: "Status",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         {
@@ -83,25 +83,25 @@ export const migrationHistorySchema: ContentTypeSchema = {
     {
       id: "errorMessage",
       name: "Error Message",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
     },
     {
       id: "description",
       name: "Description",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
     },
     {
       id: "conformVersion",
       name: "Conform Version",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
     },
     {
       id: "environment",
       name: "Environment",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         {

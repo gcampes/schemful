@@ -12,7 +12,7 @@ edit schema → generate → review migration → migrate → check
 ```
 
 1. **Edit your schema** — modify or create files in `schemas/`.
-2. **Generate a migration** — CTKit diffs local vs. remote and produces a timestamped migration file.
+2. **Generate a migration** — ctkit diffs local vs. remote and produces a timestamped migration file.
 3. **Review the migration** — inspect the generated file, commit it, open a PR.
 4. **Migrate** — apply pending migrations to Contentful.
 5. **Check** — verify local and remote are in sync.
@@ -53,7 +53,7 @@ export const blogPost = contentType('blogPost', {
 ctkit generate
 ```
 
-CTKit connects to Contentful, compares your local schemas against the remote content model, and writes a migration file:
+ctkit connects to Contentful, compares your local schemas against the remote content model, and writes a migration file:
 
 ```
 migrations/20250702T143021_crystal_lion_hammer.js
@@ -119,8 +119,8 @@ If there's drift between local schemas and the remote model, `check` will show y
 
 - **Reviewable** — migration files are plain JavaScript. Teammates can review the exact changes in a PR before they hit Contentful.
 - **Reproducible** — run the same migrations against staging, then production. Every environment gets the same changes in the same order.
-- **Trackable** — CTKit records which migrations have run, when, and whether they succeeded. See [Migration Tracking](/advanced/migration-tracking) for details.
-- **Rollback-safe** — if a migration fails, CTKit records the failure. You can fix the issue and retry with `--force`.
+- **Trackable** — ctkit records which migrations have run, when, and whether they succeeded. See [Migration Tracking](/advanced/migration-tracking) for details.
+- **Rollback-safe** — if a migration fails, ctkit records the failure. You can fix the issue and retry with `--force`.
 
 ## CI/CD integration
 

@@ -5,9 +5,11 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const featureSectionSchema: ContentTypeSchema = {
   id: "featureSection",
@@ -18,7 +20,7 @@ export const featureSectionSchema: ContentTypeSchema = {
     {
       id: "title",
       name: "Section Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(2, 100),
@@ -27,7 +29,7 @@ export const featureSectionSchema: ContentTypeSchema = {
     {
       id: "subtitle",
       name: "Section Subtitle",
-      type: "Text",
+      type: FieldType.Text,
       required: false,
       validations: [
         validators.textLength(5, 300),
@@ -36,11 +38,11 @@ export const featureSectionSchema: ContentTypeSchema = {
     {
       id: "features",
       name: "Features",
-      type: "Array",
+      type: FieldType.Array,
       required: true,
       items: {
-        type: "Link",
-        linkType: "Entry",
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
         validations: [
           {
             linkContentType: ["feature"],
@@ -54,7 +56,7 @@ export const featureSectionSchema: ContentTypeSchema = {
     {
       id: "layout",
       name: "Layout Style",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["grid-2", "grid-3", "grid-4", "list", "carousel"]),
@@ -63,13 +65,13 @@ export const featureSectionSchema: ContentTypeSchema = {
     {
       id: "showIcons",
       name: "Show Feature Icons",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
     {
       id: "backgroundColor",
       name: "Background Color",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.hexColor(),

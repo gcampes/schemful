@@ -3,7 +3,7 @@ import path from "path";
 import chalk from "chalk";
 
 /**
- * Initialize a new CTKit project
+ * Initialize a new ctkit project
  */
 export async function initProject(force = false): Promise<void> {
   const cwd = process.cwd();
@@ -41,7 +41,7 @@ CONTENTFUL_ENVIRONMENT_ID=master
   }
 
   // Create example schema
-  const exampleSchema = `import { ContentTypeSchema } from '@ctkit/cli';
+  const exampleSchema = `import { ContentTypeSchema, FieldType } from '@ctkit/cli';
 
 const blogPost: ContentTypeSchema = {
   id: 'blogPost',
@@ -52,14 +52,14 @@ const blogPost: ContentTypeSchema = {
     {
       id: 'title',
       name: 'Title',
-      type: 'Symbol',
+      type: FieldType.Symbol,
       required: true,
       validations: [{ size: { min: 1, max: 200 } }],
     },
     {
       id: 'slug',
       name: 'Slug',
-      type: 'Symbol',
+      type: FieldType.Symbol,
       required: true,
       validations: [
         { unique: true },
@@ -69,13 +69,13 @@ const blogPost: ContentTypeSchema = {
     {
       id: 'body',
       name: 'Body',
-      type: 'RichText',
+      type: FieldType.RichText,
       required: true,
     },
     {
       id: 'publishDate',
       name: 'Publish Date',
-      type: 'Date',
+      type: FieldType.Date,
       required: false,
     },
   ],
@@ -170,9 +170,9 @@ export async function down(): Promise<void> {
   }
 
   // Create README
-  const readme = `# CTKit Project
+  const readme = `# ctkit Project
 
-This project uses CTKit to manage Contentful content models with a schema-as-code approach.
+This project uses ctkit to manage Contentful content models with a schema-as-code approach.
 
 ## Setup
 
@@ -220,7 +220,7 @@ See the example files created during initialization for reference.
     console.log(chalk.yellow("⚠️  README.md already exists"));
   }
 
-  console.log("\n" + chalk.blue("🎉 CTKit project initialized!"));
+  console.log("\n" + chalk.blue("🎉 ctkit project initialized!"));
   console.log("\nNext steps:");
   console.log(
     "1. Copy .env.example to .env and add your Contentful credentials"

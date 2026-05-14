@@ -5,9 +5,13 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  Mark,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const projectSchema: ContentTypeSchema = {
   id: "project",
@@ -18,7 +22,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "title",
       name: "Project Title",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(2, 100),
@@ -27,7 +31,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.slug(),
@@ -37,7 +41,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "shortDescription",
       name: "Short Description",
-      type: "Text",
+      type: FieldType.Text,
       required: true,
       validations: [
         validators.textLength(50, 300),
@@ -46,21 +50,21 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "fullDescription",
       name: "Full Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: true,
       validations: [
         richTextValidators.headingLevels([2, 3, 4]),
-        richTextValidators.allowedMarks(["bold", "italic", "code"]),
+        richTextValidators.allowedMarks([Mark.Bold, Mark.Italic, Mark.Code]),
         richTextValidators.embeddedEntries(["codeBlock", "imageGallery"]),
       ],
     },
     {
       id: "technologies",
       name: "Technologies Used",
-      type: "Array",
+      type: FieldType.Array,
       required: true,
       items: {
-        type: "Symbol",
+        type: FieldType.Symbol,
         validations: [
           validators.textLength(1, 50),
         ],
@@ -72,7 +76,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "category",
       name: "Project Category",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn([
@@ -91,7 +95,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "status",
       name: "Project Status",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textIn(["in-progress", "completed", "archived", "concept"]),
@@ -100,12 +104,12 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "featuredImage",
       name: "Featured Image",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: true,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -118,14 +122,14 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "gallery",
       name: "Project Gallery",
-      type: "Array",
+      type: FieldType.Array,
       required: false,
       items: {
-        type: "Link",
-        linkType: "Asset",
+        type: FieldType.Link,
+        linkType: LinkType.Asset,
         validations: [
           {
-            linkMimetypeGroup: ["image"],
+            linkMimetypeGroup: [MimeType.Image],
           },
         ],
       },
@@ -136,7 +140,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "liveUrl",
       name: "Live Project URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -145,7 +149,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "githubUrl",
       name: "GitHub Repository URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -154,7 +158,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "demoUrl",
       name: "Demo/Preview URL",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -163,19 +167,19 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "startDate",
       name: "Project Start Date",
-      type: "Date",
+      type: FieldType.Date,
       required: false,
     },
     {
       id: "endDate",
       name: "Project End Date",
-      type: "Date",
+      type: FieldType.Date,
       required: false,
     },
     {
       id: "clientName",
       name: "Client Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 100),
@@ -184,7 +188,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "teamSize",
       name: "Team Size",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(1, 50),
@@ -193,7 +197,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "role",
       name: "My Role",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(1, 100),
@@ -202,7 +206,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "challenges",
       name: "Key Challenges",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.basicFormatting(),
@@ -212,7 +216,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "solutions",
       name: "Solutions & Approach",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.basicFormatting(),
@@ -222,7 +226,7 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "results",
       name: "Results & Impact",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.basicFormatting(),
@@ -232,13 +236,13 @@ export const projectSchema: ContentTypeSchema = {
     {
       id: "isFeatured",
       name: "Featured Project",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: false,
     },
     {
       id: "sortOrder",
       name: "Sort Order",
-      type: "Integer",
+      type: FieldType.Integer,
       required: false,
       validations: [
         validators.numberRange(0, 1000),

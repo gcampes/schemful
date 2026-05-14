@@ -2,6 +2,7 @@ import { ContentTypeSchema, Field } from "../types/Field";
 import { ContentfulField, ContentfulContentType } from "../types/contentful";
 import { getContentfulEnvironment } from "./contentfulClient";
 import { CtkitError, CtkitErrorCode } from "./errors";
+import { FieldType, LinkType, Widget } from "../constants";
 import type { Environment } from "contentful-management";
 import chalk from "chalk";
 
@@ -101,7 +102,7 @@ export async function generateMigrationFromSchemas(
           contentTypeId: schema.id,
           field: {
             id: "ctkitManaged",
-            name: "CTKit Managed",
+            name: "ctkit managed",
             type: "Boolean",
             required: false,
             disabled: true,
@@ -317,7 +318,7 @@ function hasFieldChanged(existingField: any, schemaField: Field): boolean {
   }
 
   // Compare items for Array fields
-  if (existingField.type === "Array") {
+  if (existingField.type === FieldType.Array) {
     const existingItems = existingField.items || {};
     const schemaItems = ("items" in schemaField && schemaField.items) || {};
 
@@ -496,7 +497,7 @@ function generateFieldCreationCode(
   }
 
   // Add items for Array fields
-  if (field.type === "Array" && "items" in field) {
+  if (field.type === FieldType.Array && "items" in field) {
     const itemsCode = JSON.stringify(field.items, null, 6).replace(
       /\n/g,
       "\n    "
@@ -516,7 +517,7 @@ function generateCtkitManagedFieldCode(contentTypeId: string): string {
   const lines: string[] = [];
 
   lines.push(`  ${contentTypeId}.createField('ctkitManaged')`);
-  lines.push(`    .name('CTKit Managed')`);
+  lines.push(`    .name('ctkit managed')`);
   lines.push(`    .type('Boolean')`);
   lines.push(`    .required(false)`);
   lines.push(`    .disabled(true)`);
@@ -570,7 +571,7 @@ function generateFieldEditCode(contentTypeId: string, field: Field, existingFiel
   }
 
   // Handle items changes for Array fields
-  if (field.type === "Array" && "items" in field) {
+  if (field.type === FieldType.Array && "items" in field) {
     const existingItems = existingField?.items || {};
     const schemaItems = field.items;
     if (JSON.stringify(existingItems) !== JSON.stringify(schemaItems)) {
@@ -626,35 +627,35 @@ function generateEditorInterfaceCode(contentTypeId: string, field: Field): strin
  */
 function getDefaultFieldControl(fieldType: string, field?: Field): string {
   switch (fieldType) {
-    case "Symbol":
-      return "singleLine";
-    case "Text":
-      return "multipleLine";
-    case "Integer":
-    case "Number":
-      return "numberEditor";
-    case "Date":
-      return "datePicker";
-    case "Boolean":
-      return "boolean";
-    case "Location":
-      return "locationEditor";
-    case "Link":
+    case FieldType.Symbol:
+      return Widget.SingleLine;
+    case FieldType.Text:
+      return Widget.MultipleLine;
+    case FieldType.Integer:
+    case FieldType.Number:
+      return Widget.NumberEditor;
+    case FieldType.Date:
+      return Widget.DatePicker;
+    case FieldType.Boolean:
+      return Widget.Boolean;
+    case FieldType.Location:
+      return Widget.LocationEditor;
+    case FieldType.Link:
       if (field && "linkType" in field) {
-        return field.linkType === "Asset" ? "assetLinkEditor" : "entryLinkEditor";
+        return field.linkType === LinkType.Asset ? Widget.AssetLinkEditor : Widget.EntryLinkEditor;
       }
-      return "entryLinkEditor";
-    case "Array":
-      if (field && "items" in field && field.items.type === "Link") {
-        return field.items.linkType === "Asset" ? "assetLinksEditor" : "entryLinksEditor";
+      return Widget.EntryLinkEditor;
+    case FieldType.Array:
+      if (field && "items" in field && field.items.type === FieldType.Link) {
+        return field.items.linkType === LinkType.Asset ? Widget.AssetLinksEditor : Widget.EntryLinksEditor;
       }
-      return "tagEditor";
-    case "Object":
-      return "objectEditor";
-    case "RichText":
-      return "richTextEditor";
+      return Widget.TagEditor;
+    case FieldType.Object:
+      return Widget.ObjectEditor;
+    case FieldType.RichText:
+      return Widget.RichTextEditor;
     default:
-      return "singleLine";
+      return Widget.SingleLine;
   }
 }
 
@@ -728,7 +729,7 @@ function sortSchemasByDependencies(
 
     for (const field of schema.fields) {
       // Check RichText field validations for embedded content type references
-      if (field.type === "RichText" && field.validations) {
+      if (field.type === FieldType.RichText && field.validations) {
         for (const validation of field.validations) {
           if (validation.nodes) {
             // Check embedded-entry-inline references
@@ -769,7 +770,7 @@ function sortSchemasByDependencies(
       }
 
       // Check Link field validations for content type references
-      if (field.type === "Link" && field.validations) {
+      if (field.type === FieldType.Link && field.validations) {
         for (const validation of field.validations) {
           if (validation.linkContentType) {
             for (const contentTypeId of validation.linkContentType) {

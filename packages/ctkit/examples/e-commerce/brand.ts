@@ -5,9 +5,12 @@
 
 import {
   ContentTypeSchema,
+  FieldType,
+  LinkType,
+  MimeType,
   validators,
   richTextValidators,
-} from "cant-entful";
+} from "@ctkit/cli";
 
 export const brandSchema: ContentTypeSchema = {
   id: "brand",
@@ -18,7 +21,7 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "name",
       name: "Brand Name",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.textLength(1, 100),
@@ -28,7 +31,7 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "slug",
       name: "URL Slug",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: true,
       validations: [
         validators.slug(),
@@ -38,7 +41,7 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "description",
       name: "Brand Description",
-      type: "RichText",
+      type: FieldType.RichText,
       required: false,
       validations: [
         richTextValidators.basicFormatting(),
@@ -48,12 +51,12 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "logo",
       name: "Brand Logo",
-      type: "Link",
-      linkType: "Asset",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
       required: false,
       validations: [
         {
-          linkMimetypeGroup: ["image"],
+          linkMimetypeGroup: [MimeType.Image],
         },
         {
           assetImageDimensions: {
@@ -66,7 +69,7 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "website",
       name: "Website",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.url(),
@@ -75,7 +78,7 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "country",
       name: "Country of Origin",
-      type: "Symbol",
+      type: FieldType.Symbol,
       required: false,
       validations: [
         validators.textLength(2, 100),
@@ -84,7 +87,7 @@ export const brandSchema: ContentTypeSchema = {
     {
       id: "isActive",
       name: "Active Brand",
-      type: "Boolean",
+      type: FieldType.Boolean,
       required: true,
     },
   ],

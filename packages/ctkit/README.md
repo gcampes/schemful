@@ -1,4 +1,4 @@
-# CTKit
+# ctkit
 
 [![CI](https://github.com/gcampes/ctkit/actions/workflows/test.yml/badge.svg)](https://github.com/gcampes/ctkit/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/@ctkit/cli.svg)](https://www.npmjs.com/package/@ctkit/cli)
@@ -10,9 +10,9 @@ A **Drizzle ORM-style workflow** for managing Contentful content models. Define 
 schemas/blogPost.ts  -->  ctkit generate  -->  ctkit migrate  -->  Contentful
 ```
 
-## Why CTKit?
+## Why ctkit?
 
-If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schemas, you already know this workflow. CTKit brings the same developer experience to Contentful:
+If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schemas, you already know this workflow. ctkit brings the same developer experience to Contentful:
 
 - **Schema-as-code** -- define content types in TypeScript with full type safety
 - **Auto-generated migrations** -- diff local schemas against Contentful and generate migration files
@@ -203,7 +203,7 @@ ctkit check
 
 ### pull
 
-Reverse-engineer existing Contentful content types into local TypeScript schema files. Great for adopting CTKit on an existing project.
+Reverse-engineer existing Contentful content types into local TypeScript schema files. Great for adopting ctkit on an existing project.
 
 ```bash
 ctkit pull                          # Pull all content types
@@ -227,9 +227,9 @@ ctkit drop --force                            # Skip confirmation
 
 ### Field Types
 
-CTKit supports all Contentful field types:
+ctkit supports all Contentful field types:
 
-| Type | CTKit `type` | `linkType` | Notes |
+| Type | ctkit `type` | `linkType` | Notes |
 |------|-----------------|------------|-------|
 | Short text | `"Symbol"` | -- | Max 256 characters |
 | Long text | `"Text"` | -- | No character limit |
@@ -362,7 +362,7 @@ validations: [
 
 ### Validation Helpers
 
-CTKit includes helper functions for common validation patterns:
+ctkit includes helper functions for common validation patterns:
 
 ```typescript
 import { validators, richTextValidators } from "@ctkit/cli";
@@ -456,7 +456,7 @@ ctkit push
 
 ### Pull-first workflow (existing projects)
 
-Adopt CTKit on a Contentful space that already has content types.
+Adopt ctkit on a Contentful space that already has content types.
 
 ```bash
 # 1. Pull existing content types
@@ -468,12 +468,12 @@ ctkit pull
 
 ## Migration Tracking
 
-CTKit tracks which migrations have been applied using a dedicated content type (`ctkit_migration_history`) in your Contentful space. Each migration record includes:
+ctkit tracks which migrations have been applied using a dedicated content type (`ctkit_migration_history`) in your Contentful space. Each migration record includes:
 
 - Migration ID and filename
 - SHA-256 checksum (to detect tampering)
 - Execution time and status
-- CTKit version that ran it
+- ctkit version that ran it
 
 ```bash
 ctkit status    # See pending and executed migrations

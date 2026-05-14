@@ -1,15 +1,15 @@
 ---
 title: Migration Tracking
-description: How CTKit tracks migration history using a dedicated content type in your Contentful space.
+description: How ctkit tracks migration history using a dedicated content type in your Contentful space.
 ---
 
-When you use the [migration workflow](/workflows/migration), CTKit needs to know which migrations have already been applied. It tracks this inside Contentful itself — no external database or state file required.
+When you use the [migration workflow](/workflows/migration), ctkit needs to know which migrations have already been applied. It tracks this inside Contentful itself — no external database or state file required.
 
 ## How it works
 
-The first time you run `ctkit migrate`, CTKit creates a content type called **`ctkit_migration_history`** in your Contentful space. Each time a migration runs, a new entry is created in this content type recording what happened.
+The first time you run `ctkit migrate`, ctkit creates a content type called **`ctkit_migration_history`** in your Contentful space. Each time a migration runs, a new entry is created in this content type recording what happened.
 
-The content type is named "🔄 CTKit Migration History" in the Contentful UI and is marked as system-managed. You should not edit these entries by hand.
+The content type is named "🔄 ctkit migration history" in the Contentful UI and is marked as system-managed. You should not edit these entries by hand.
 
 ## What gets recorded
 
@@ -25,7 +25,7 @@ Each migration record stores:
 | `status` | Symbol | Either `success` or `failed`. |
 | `errorMessage` | Text | Error details if the migration failed. Empty on success. |
 | `description` | Text | Human-readable summary of what the migration does. |
-| `ctkitVersion` | Symbol | The version of CTKit that executed the migration. |
+| `ctkitVersion` | Symbol | The version of ctkit that executed the migration. |
 | `environment` | Symbol | The Contentful environment (`development`, `staging`, `production`, `test`). |
 
 ## Checking migration status
@@ -52,11 +52,11 @@ This reads from the `ctkit_migration_history` content type and shows:
 
 Every migration file is hashed with SHA-256 when it's executed. The hash is stored in the migration record.
 
-This serves as a tamper detection mechanism: if a migration file is modified after it was executed, CTKit can detect the mismatch. This prevents scenarios where someone edits an already-applied migration, creating an inconsistency between what the migration history says happened and what the file currently contains.
+This serves as a tamper detection mechanism: if a migration file is modified after it was executed, ctkit can detect the mismatch. This prevents scenarios where someone edits an already-applied migration, creating an inconsistency between what the migration history says happened and what the file currently contains.
 
 ## Failed migrations
 
-When a migration fails, CTKit records the failure with:
+When a migration fails, ctkit records the failure with:
 
 - `status: "failed"`
 - The error message
@@ -68,7 +68,7 @@ Failed migrations are **not** automatically retried. To retry a failed migration
 ctkit migrate --force
 ```
 
-The `--force` flag tells CTKit to re-run migrations that were previously recorded (including failed ones), rather than skipping them.
+The `--force` flag tells ctkit to re-run migrations that were previously recorded (including failed ones), rather than skipping them.
 
 ## Manual inspection
 
@@ -76,7 +76,7 @@ You can view migration history entries directly in the Contentful web UI:
 
 1. Open your Contentful space.
 2. Go to **Content**.
-3. Filter by content type: **🔄 CTKit Migration History**.
+3. Filter by content type: **🔄 ctkit migration history**.
 4. Entries are ordered by `executedAt` (most recent first).
 
 This is useful for debugging, auditing, or understanding what happened in a specific environment.
