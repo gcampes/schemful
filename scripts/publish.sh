@@ -65,18 +65,22 @@ pnpm --filter @ctkit/cli type-check
 echo "Running tests..."
 pnpm --filter @ctkit/cli test:run
 
-# OTP for 2FA (prompt once, use for both)
-read -p "npm OTP code: " otp
+# Ensure npm auth (supports passkeys, OTP, tokens, etc.)
+echo "Checking npm auth..."
+npm whoami 2>/dev/null || {
+  echo "Not logged in to npm. Starting login..."
+  npm login
+}
 
 echo ""
 echo "Publishing @ctkit/core@$new_version..."
 cd "$ROOT/packages/core"
-pnpm publish --access=public --no-git-checks --otp="$otp"
+pnpm publish --access=public --no-git-checks
 
 echo ""
 echo "Publishing @ctkit/cli@$new_version..."
 cd "$ROOT/packages/ctkit"
-pnpm publish --access=public --no-git-checks --otp="$otp"
+pnpm publish --access=public --no-git-checks
 
 echo ""
 echo "Done! Published @ctkit/core@$new_version and @ctkit/cli@$new_version"
