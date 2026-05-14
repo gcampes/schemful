@@ -100,16 +100,17 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const lines = visibleCode.split("\n");
 
-  // Auto-scroll: calculate how far to shift the content up
-  // so the cursor line is always visible.
+  // Auto-scroll: smooth scroll based on how far through the code we are.
+  // Use the character ratio (not line count) so it moves continuously
+  // instead of jumping when a new line appears.
   const lineHeight = 17 * 1.7; // fontSize * lineHeight
-  const containerHeight = 580; // approximate visible area in the window
+  const containerHeight = 580; // approximate visible area
   const padding = 20;
-  const contentHeight = lines.length * lineHeight + padding * 2;
-  const maxScroll = Math.max(0, contentHeight - containerHeight);
-  // Smoothly scroll as new lines appear, keeping a few lines of lookahead
-  const targetScroll = Math.max(0, (lines.length * lineHeight + padding) - containerHeight + lineHeight * 2);
-  const scrollY = Math.min(targetScroll, maxScroll);
+  const totalLines = code.split("\n").length;
+  const totalContentHeight = totalLines * lineHeight + padding * 2;
+  const maxScroll = Math.max(0, totalContentHeight - containerHeight);
+  const progress = Math.min(visibleChars / code.length, 1);
+  const scrollY = progress * maxScroll;
 
   return (
     <div
