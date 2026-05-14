@@ -16,6 +16,17 @@ import type {
   PendingMigration,
 } from "../types/migration";
 
+/**
+ * Resolve the actual migration function from a loaded module.
+ * Supports CommonJS (module.exports), ESM default export, and .up pattern.
+ */
+export function resolveMigrationFunction(migrationModule: any): ((...args: any[]) => any) | null {
+  if (typeof migrationModule === "function") return migrationModule;
+  if (typeof migrationModule?.default === "function") return migrationModule.default;
+  if (typeof migrationModule?.up === "function") return migrationModule.up;
+  return null;
+}
+
 export interface RunMigrationsOptions {
   /** Run migrations up to this specific migration ID (exclusive) */
   target?: string;
@@ -212,10 +223,11 @@ async function executeSingleMigration(
 
     // Load and execute the migration
     const migrationModule = require(path.resolve(migration.filepath));
-    
-    if (typeof migrationModule !== "function" && typeof migrationModule.up !== "function") {
+    const migrationFn = resolveMigrationFunction(migrationModule);
+
+    if (!migrationFn) {
       throw new CtkitError(
-        `Migration ${migration.id} must export a function or have an 'up' method`,
+        `Migration ${migration.id} must export a function (module.exports, export default, or .up)`,
         CtkitErrorCode.MIGRATION_FAILED
       );
     }
@@ -232,7 +244,7 @@ async function executeSingleMigration(
 
         await runMigration({
           ...options,
-          migrationFunction: migrationModule,
+          migrationFunction: migrationFn,
           yes: true, // Skip interactive confirmation
         });
       },
