@@ -10,6 +10,17 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 - **Node.js 18** or later
 - A Contentful space with a management token
 
+## Packages
+
+ctkit is split into two packages:
+
+| Package | Purpose |
+|---------|---------|
+| `@ctkit/cli` | The CLI tool — run commands like `ctkit push`, `ctkit generate`, `ctkit migrate` |
+| `@ctkit/core` | Types, constants, and validators — import these in your schema files |
+
+Installing `@ctkit/cli` automatically installs `@ctkit/core` as a dependency, so a single install gives you everything.
+
 ## Install ctkit
 
 You can install ctkit as a project dependency (recommended) or globally.
@@ -63,3 +74,11 @@ ctkit --version
 ```
 
 You should see the installed version printed to stdout. If you installed locally, use `npx ctkit --version`.
+
+## Importing in schemas
+
+Schema files import types, constants, and validators from `@ctkit/core`:
+
+```ts
+import { ContentTypeSchema, FieldType, validators } from '@ctkit/core';
+```

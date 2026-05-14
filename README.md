@@ -33,7 +33,7 @@ ctkit push
 
 ```typescript
 // schemas/blogPost.ts
-import { ContentTypeSchema } from "@ctkit/cli";
+import { ContentTypeSchema } from "@ctkit/core";
 
 const blogPost: ContentTypeSchema = {
   id: "blogPost",
@@ -102,7 +102,8 @@ This is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspaces):
 
 | Package | Description |
 |---------|-------------|
-| [`packages/ctkit`](packages/ctkit/) | CLI tool and core library ([npm](https://www.npmjs.com/package/@ctkit/cli)) |
+| [`packages/ctkit`](packages/ctkit/) | CLI tool ([npm](https://www.npmjs.com/package/@ctkit/cli)) |
+| [`packages/core`](packages/core/) | Types, constants, and validators ([npm](https://www.npmjs.com/package/@ctkit/core)) |
 | [`apps/web`](apps/web/) | Marketing site ([ctkit.dev](https://ctkit.dev)) |
 
 ## Development

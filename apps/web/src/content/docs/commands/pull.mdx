@@ -50,7 +50,7 @@ Overwrites existing schema files instead of skipping them. Use this to reset a l
 Each pulled content type produces a TypeScript file using the ctkit schema API:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from '@ctkit/cli';
+import { contentType, fields } from '@ctkit/core';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',

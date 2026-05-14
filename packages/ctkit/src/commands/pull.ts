@@ -181,7 +181,7 @@ function getRequiredImports(schema: any): string[] {
  */
 function generateSchemaFileContent(schema: any): string {
   const requiredImports = getRequiredImports(schema);
-  const imports = [`import { ${requiredImports.join(", ")} } from "@ctkit/cli";`];
+  const imports = [`import { ${requiredImports.join(", ")} } from "@ctkit/core";`];
 
   const variableName = camelCase(schema.id);
 

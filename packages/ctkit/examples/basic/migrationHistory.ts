@@ -6,7 +6,7 @@
  * It will be automatically created when needed.
  */
 
-import { ContentTypeSchema, FieldType } from "@ctkit/cli";
+import { ContentTypeSchema, FieldType } from "@ctkit/core";
 
 export const migrationHistorySchema: ContentTypeSchema = {
   id: "conform_migration_history",

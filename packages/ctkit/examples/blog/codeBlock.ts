@@ -7,7 +7,7 @@ import {
   ContentTypeSchema,
   FieldType,
   validators,
-} from "@ctkit/cli";
+} from "@ctkit/core";
 
 export const codeBlockSchema: ContentTypeSchema = {
   id: "codeBlock",

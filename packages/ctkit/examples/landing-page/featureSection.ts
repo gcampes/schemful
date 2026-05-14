@@ -9,7 +9,7 @@ import {
   LinkType,
   validators,
   richTextValidators,
-} from "@ctkit/cli";
+} from "@ctkit/core";
 
 export const featureSectionSchema: ContentTypeSchema = {
   id: "featureSection",

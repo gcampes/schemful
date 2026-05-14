@@ -30,6 +30,8 @@ npm install -g @ctkit/cli
 npm install @ctkit/cli --save-dev
 ```
 
+Installing `@ctkit/cli` automatically includes `@ctkit/core` (types, constants, and validators used in schema files).
+
 Requires **Node.js 18+**.
 
 ## Quick Start
@@ -64,7 +66,7 @@ ctkit test
 
 ```typescript
 // schemas/blogPost.ts
-import { ContentTypeSchema } from "@ctkit/cli";
+import { ContentTypeSchema } from "@ctkit/core";
 
 const blogPost: ContentTypeSchema = {
   id: "blogPost",
@@ -365,7 +367,7 @@ validations: [
 ctkit includes helper functions for common validation patterns:
 
 ```typescript
-import { validators, richTextValidators } from "@ctkit/cli";
+import { validators, richTextValidators } from "@ctkit/core";
 
 // Text validators
 validators.snakeCase()        // ^[a-z][a-z0-9_]*$

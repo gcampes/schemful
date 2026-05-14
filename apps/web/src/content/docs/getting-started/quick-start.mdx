@@ -41,7 +41,7 @@ This verifies that ctkit can reach your Contentful space. You should see a succe
 Create a schema file at `schemas/blogPost.ts`:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from '@ctkit/cli';
+import { contentType, fields } from '@ctkit/core';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',

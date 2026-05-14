@@ -41,7 +41,7 @@ CONTENTFUL_ENVIRONMENT_ID=master
   }
 
   // Create example schema
-  const exampleSchema = `import { ContentTypeSchema, FieldType } from '@ctkit/cli';
+  const exampleSchema = `import { ContentTypeSchema, FieldType } from '@ctkit/core';
 
 const blogPost: ContentTypeSchema = {
   id: 'blogPost',

@@ -11,7 +11,7 @@ import {
   MimeType,
   validators,
   richTextValidators,
-} from "@ctkit/cli";
+} from "@ctkit/core";
 
 export const productSchema: ContentTypeSchema = {
   id: "product",

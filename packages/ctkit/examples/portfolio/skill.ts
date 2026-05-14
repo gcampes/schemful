@@ -9,7 +9,7 @@ import {
   LinkType,
   MimeType,
   validators,
-} from "@ctkit/cli";
+} from "@ctkit/core";
 
 export const skillSchema: ContentTypeSchema = {
   id: "skill",

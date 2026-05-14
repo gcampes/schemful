@@ -24,7 +24,7 @@ edit schema → generate → review migration → migrate → check
 Say you have an existing `blogPost` schema and want to add a `subtitle` field:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from '@ctkit/cli';
+import { contentType, fields } from '@ctkit/core';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',

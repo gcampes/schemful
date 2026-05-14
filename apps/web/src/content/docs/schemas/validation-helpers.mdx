@@ -6,7 +6,7 @@ description: Pre-built validation helper functions that generate common validati
 ctkit ships two sets of helper functions that return validation objects. Use them instead of writing raw validation objects to keep your schemas readable and typo-free.
 
 ```ts
-import { validators, richTextValidators } from "@ctkit/cli";
+import { validators, richTextValidators } from "@ctkit/core";
 ```
 
 ## Text validators
@@ -248,7 +248,7 @@ validators.arraySize(1, 10)
 All rich text validators return a `RichTextValidation` object.
 
 ```ts
-import { richTextValidators } from "@ctkit/cli";
+import { richTextValidators } from "@ctkit/core";
 ```
 
 ### `basicFormatting()`
@@ -387,8 +387,8 @@ richTextValidators.allowedNodeTypes([
 Validators compose naturally — just spread them into the `validations` array:
 
 ```ts
-import { validators, richTextValidators } from "@ctkit/cli";
-import type { ContentTypeSchema } from "@ctkit/cli";
+import { validators, richTextValidators } from "@ctkit/core";
+import type { ContentTypeSchema } from "@ctkit/core";
 
 const article: ContentTypeSchema = {
   id: "article",

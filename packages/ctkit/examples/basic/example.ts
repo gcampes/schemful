@@ -5,7 +5,7 @@ import {
   commonFields,
   validators,
   richTextValidators,
-} from "@ctkit/cli";
+} from "@ctkit/core";
 
 export const exampleSchema: ContentTypeSchema = {
   id: "example",

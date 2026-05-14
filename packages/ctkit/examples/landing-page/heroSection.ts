@@ -10,7 +10,7 @@ import {
   MimeType,
   validators,
   richTextValidators,
-} from "@ctkit/cli";
+} from "@ctkit/core";
 
 export const heroSectionSchema: ContentTypeSchema = {
   id: "heroSection",

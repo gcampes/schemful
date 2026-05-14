@@ -1,0 +1,50 @@
+{
+  "name": "@ctkit/core",
+  "version": "0.1.0",
+  "description": "Types, constants, and validators for defining Contentful content models with ctkit",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "contentful",
+    "cms",
+    "schema",
+    "content-type",
+    "typescript",
+    "types"
+  ],
+  "author": "gcampes",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gcampes/ctkit.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://ctkit.dev",
+  "bugs": {
+    "url": "https://github.com/gcampes/ctkit/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.7.3"
+  }
+}

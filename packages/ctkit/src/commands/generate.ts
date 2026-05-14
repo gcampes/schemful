@@ -239,7 +239,7 @@ async function generateSchemaFile(name: string, cwd: string): Promise<void> {
     .trim();
   const variableName = schemaId.replace(/[^a-zA-Z0-9_]/g, "_");
 
-  const schemaTemplate = `import { ContentTypeSchema, FieldType } from '@ctkit/cli';
+  const schemaTemplate = `import { ContentTypeSchema, FieldType } from '@ctkit/core';
 
 const ${variableName}: ContentTypeSchema = {
   id: '${schemaId}',

@@ -8,7 +8,7 @@ sidebar:
 ctkit exports typed constant objects for every value you'd otherwise write as a raw string. Using them gives you autocompletion in your editor and catches typos at compile time.
 
 ```ts
-import { FieldType, LinkType, Mark, NodeType, MimeType } from '@ctkit/cli';
+import { FieldType, LinkType, Mark, NodeType, MimeType } from '@ctkit/core';
 ```
 
 Raw strings still work — the constants resolve to the same string literals. They're recommended but not required.
@@ -18,7 +18,7 @@ Raw strings still work — the constants resolve to the same string literals. Th
 All Contentful field types.
 
 ```ts
-import { FieldType } from '@ctkit/cli';
+import { FieldType } from '@ctkit/core';
 
 { type: FieldType.Symbol }    // "Symbol" — short text (max 256 chars)
 { type: FieldType.Text }      // "Text" — long text
@@ -38,7 +38,7 @@ import { FieldType } from '@ctkit/cli';
 Link target types. Used with `FieldType.Link` and `FieldType.Array` fields.
 
 ```ts
-import { LinkType } from '@ctkit/cli';
+import { LinkType } from '@ctkit/core';
 
 // Entry reference
 {
@@ -66,7 +66,7 @@ import { LinkType } from '@ctkit/cli';
 Inline formatting marks for rich text fields.
 
 ```ts
-import { Mark } from '@ctkit/cli';
+import { Mark } from '@ctkit/core';
 
 {
   type: FieldType.RichText,
@@ -91,7 +91,7 @@ import { Mark } from '@ctkit/cli';
 Block and inline node types for rich text fields.
 
 ```ts
-import { NodeType } from '@ctkit/cli';
+import { NodeType } from '@ctkit/core';
 
 {
   type: FieldType.RichText,
@@ -141,7 +141,7 @@ import { NodeType } from '@ctkit/cli';
 Asset MIME type groups for restricting file uploads on `LinkType.Asset` fields.
 
 ```ts
-import { MimeType } from '@ctkit/cli';
+import { MimeType } from '@ctkit/core';
 
 // Image only
 { linkMimetypeGroup: [MimeType.Image] }        // "image"
@@ -174,7 +174,7 @@ import {
   Mark,
   NodeType,
   MimeType,
-} from '@ctkit/cli';
+} from '@ctkit/core';
 
 const blogPost: ContentTypeSchema = {
   id: 'blogPost',
