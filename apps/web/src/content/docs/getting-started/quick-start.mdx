@@ -6,14 +6,14 @@ description: Define your first Contentful content model in TypeScript and push i
 ## 1. Initialize a project
 
 ```bash
-schemful init
+ctkit init
 ```
 
 This creates:
 
 - `schemas/` — where your content type definitions live
 - `migrations/` — where generated migrations are stored
-- `schemful.config.ts` — project configuration
+- `ctkit.config.ts` — project configuration
 
 ## 2. Add your credentials
 
@@ -31,17 +31,17 @@ See the [Configuration](/getting-started/configuration) page for details on wher
 ## 3. Test the connection
 
 ```bash
-schemful test
+ctkit test
 ```
 
-This verifies that Schemful can reach your Contentful space. You should see a success message with your space name and environment.
+This verifies that CTKit can reach your Contentful space. You should see a success message with your space name and environment.
 
 ## 4. Define a content type
 
 Create a schema file at `schemas/blogPost.ts`:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from 'schemful';
+import { contentType, fields } from '@ctkit/cli';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',
@@ -63,15 +63,15 @@ export const blogPost = contentType('blogPost', {
 ## 5. Push to Contentful
 
 ```bash
-schemful push
+ctkit push
 ```
 
-Schemful diffs your local schemas against the remote content model, generates the necessary migration, and applies it to your Contentful environment.
+CTKit diffs your local schemas against the remote content model, generates the necessary migration, and applies it to your Contentful environment.
 
 ## 6. Verify everything is in sync
 
 ```bash
-schemful check
+ctkit check
 ```
 
 If your local schemas match the remote content model, you'll see:

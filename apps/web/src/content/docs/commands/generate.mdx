@@ -6,7 +6,7 @@ description: Auto-generate migrations from schema diffs or scaffold new schema f
 ## Generate a migration
 
 ```bash
-schemful generate
+ctkit generate
 ```
 
 Connects to your Contentful space, compares your local schema definitions against the remote content model, and produces a timestamped migration file containing the diff.
@@ -22,7 +22,7 @@ File names combine a UTC timestamp with a randomly generated human-readable slug
 ### Custom migration name
 
 ```bash
-schemful generate --name add-author-bio
+ctkit generate --name add-author-bio
 ```
 
 Replaces the random slug with your chosen name:
@@ -34,7 +34,7 @@ migrations/20250702T143021_add-author-bio.js
 ### Empty migration (custom template)
 
 ```bash
-schemful generate --custom
+ctkit generate --custom
 ```
 
 Creates a migration file with an empty scaffold instead of auto-generated steps. Use this when you need to write migration logic by hand — for example, transforming existing entry data or running a content backfill.
@@ -50,13 +50,13 @@ export default {
 ## Generate a schema file
 
 ```bash
-schemful generate schema blogPost
+ctkit generate schema blogPost
 ```
 
 Scaffolds a new schema file in your `schemas/` directory with the boilerplate already filled in:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from 'schemful';
+import { contentType, fields } from '@ctkit/cli';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',
@@ -75,9 +75,9 @@ This is a convenience shortcut — you can always create schema files manually.
 
 ## How it works
 
-1. Schemful loads all schema definitions from your `schemas/` directory.
+1. CTKit loads all schema definitions from your `schemas/` directory.
 2. It fetches the current content model from Contentful via the Content Management API.
 3. It diffs the two and produces a migration file with the minimal set of changes needed to bring the remote model in line with your local schemas.
-4. The migration file is written to `migrations/` but **not** executed — run `schemful migrate` to apply it.
+4. The migration file is written to `migrations/` but **not** executed — run `ctkit migrate` to apply it.
 
-If there are no differences between local and remote, Schemful will tell you everything is already in sync and skip file creation.
+If there are no differences between local and remote, CTKit will tell you everything is already in sync and skip file creation.

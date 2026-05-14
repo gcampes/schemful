@@ -1,18 +1,18 @@
-# Schemful
+# CTKit
 
-[![CI](https://github.com/gcampes/schemful/actions/workflows/test.yml/badge.svg)](https://github.com/gcampes/schemful/actions/workflows/test.yml)
-[![npm version](https://img.shields.io/npm/v/schemful.svg)](https://www.npmjs.com/package/schemful)
+[![CI](https://github.com/gcampes/ctkit/actions/workflows/test.yml/badge.svg)](https://github.com/gcampes/ctkit/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/@ctkit/cli.svg)](https://www.npmjs.com/package/@ctkit/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A **Drizzle ORM-style workflow** for managing Contentful content models. Define content types as TypeScript, generate versioned migrations, and keep your schema in source control.
 
 ```
-schemas/blogPost.ts  -->  schemful generate  -->  schemful migrate  -->  Contentful
+schemas/blogPost.ts  -->  ctkit generate  -->  ctkit migrate  -->  Contentful
 ```
 
-## Why Schemful?
+## Why CTKit?
 
-If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schemas, you already know this workflow. Schemful brings the same developer experience to Contentful:
+If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for database schemas, you already know this workflow. CTKit brings the same developer experience to Contentful:
 
 - **Schema-as-code** -- define content types in TypeScript with full type safety
 - **Auto-generated migrations** -- diff local schemas against Contentful and generate migration files
@@ -23,17 +23,17 @@ If you've used [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for dat
 ## Quick Start
 
 ```bash
-npm install -g schemful
-schemful init
-schemful test
-schemful push
+npm install -g @ctkit/cli
+ctkit init
+ctkit test
+ctkit push
 ```
 
 ## Define a Schema
 
 ```typescript
 // schemas/blogPost.ts
-import { ContentTypeSchema } from "schemful";
+import { ContentTypeSchema } from "@ctkit/cli";
 
 const blogPost: ContentTypeSchema = {
   id: "blogPost",
@@ -81,20 +81,20 @@ export default blogPost;
 
 | Command | Description | Drizzle Equivalent |
 |---------|-------------|-------------------|
-| `schemful generate` | Generate migration from schema diff | `drizzle-kit generate` |
-| `schemful migrate` | Apply pending migrations | `drizzle-kit migrate` |
-| `schemful push` | Push schemas directly to Contentful | `drizzle-kit push` |
-| `schemful check` | Show diff between local and remote | `drizzle-kit check` |
-| `schemful pull` | Pull content types into local schemas | `drizzle-kit pull` |
-| `schemful status` | Show migration status summary | -- |
-| `schemful history` | Show migration execution history | -- |
-| `schemful drop` | Delete content types from Contentful | -- |
+| `ctkit generate` | Generate migration from schema diff | `drizzle-kit generate` |
+| `ctkit migrate` | Apply pending migrations | `drizzle-kit migrate` |
+| `ctkit push` | Push schemas directly to Contentful | `drizzle-kit push` |
+| `ctkit check` | Show diff between local and remote | `drizzle-kit check` |
+| `ctkit pull` | Pull content types into local schemas | `drizzle-kit pull` |
+| `ctkit status` | Show migration status summary | -- |
+| `ctkit history` | Show migration execution history | -- |
+| `ctkit drop` | Delete content types from Contentful | -- |
 
 ## Documentation
 
 Full documentation including schema reference, validation helpers, field types, and workflow guides:
 
-**[Read the full docs](packages/schemful/README.md)**
+**[Read the full docs](packages/ctkit/README.md)**
 
 ## Repository Structure
 
@@ -102,8 +102,8 @@ This is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspaces):
 
 | Package | Description |
 |---------|-------------|
-| [`packages/schemful`](packages/schemful/) | CLI tool and core library ([npm](https://www.npmjs.com/package/schemful)) |
-| [`apps/web`](apps/web/) | Marketing site ([gcampes.github.io/schemful](https://gcampes.github.io/schemful)) |
+| [`packages/ctkit`](packages/ctkit/) | CLI tool and core library ([npm](https://www.npmjs.com/package/@ctkit/cli)) |
+| [`apps/web`](apps/web/) | Marketing site ([ctkit.dev](https://ctkit.dev)) |
 
 ## Development
 

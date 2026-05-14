@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Install Schemful and get your environment ready to manage Contentful content models from code.
+description: Install CTKit and get your environment ready to manage Contentful content models from code.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -10,48 +10,48 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 - **Node.js 18** or later
 - A Contentful space with a management token
 
-## Install Schemful
+## Install CTKit
 
-You can install Schemful as a project dependency (recommended) or globally.
+You can install CTKit as a project dependency (recommended) or globally.
 
 ### Project dependency
 
 <Tabs>
   <TabItem label="npm">
     ```bash
-    npm install schemful
+    npm install @ctkit/cli
     ```
   </TabItem>
   <TabItem label="pnpm">
     ```bash
-    pnpm add schemful
+    pnpm add @ctkit/cli
     ```
   </TabItem>
   <TabItem label="yarn">
     ```bash
-    yarn add schemful
+    yarn add @ctkit/cli
     ```
   </TabItem>
 </Tabs>
 
-Then run it with `npx schemful`, `pnpm schemful`, or `yarn schemful`.
+Then run it with `npx ctkit`, `pnpm ctkit`, or `yarn ctkit`.
 
 ### Global install
 
 <Tabs>
   <TabItem label="npm">
     ```bash
-    npm install -g schemful
+    npm install -g @ctkit/cli
     ```
   </TabItem>
   <TabItem label="pnpm">
     ```bash
-    pnpm add -g schemful
+    pnpm add -g @ctkit/cli
     ```
   </TabItem>
   <TabItem label="yarn">
     ```bash
-    yarn global add schemful
+    yarn global add @ctkit/cli
     ```
   </TabItem>
 </Tabs>
@@ -59,7 +59,7 @@ Then run it with `npx schemful`, `pnpm schemful`, or `yarn schemful`.
 ## Verify installation
 
 ```bash
-schemful --version
+ctkit --version
 ```
 
-You should see the installed version printed to stdout. If you installed locally, use `npx schemful --version`.
+You should see the installed version printed to stdout. If you installed locally, use `npx ctkit --version`.

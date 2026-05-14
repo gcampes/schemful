@@ -12,7 +12,7 @@ edit schema → push
 ```
 
 1. **Edit your schema** — modify or create files in `schemas/`.
-2. **Push** — Schemful diffs local vs. remote and applies changes directly.
+2. **Push** — CTKit diffs local vs. remote and applies changes directly.
 
 That's it. Two steps.
 
@@ -23,7 +23,7 @@ That's it. Two steps.
 Create or modify a schema file:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from 'schemful';
+import { contentType, fields } from '@ctkit/cli';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',
@@ -42,10 +42,10 @@ export const blogPost = contentType('blogPost', {
 ### 2. Push to Contentful
 
 ```bash
-schemful push
+ctkit push
 ```
 
-Schemful shows a summary of what will change and asks for confirmation:
+CTKit shows a summary of what will change and asks for confirmation:
 
 ```
 + blogPost         (new content type)
@@ -58,19 +58,19 @@ Apply these changes? (y/n)
 To skip the confirmation prompt:
 
 ```bash
-schemful push --force
+ctkit push --force
 ```
 
 To preview without applying:
 
 ```bash
-schemful push --dry-run
+ctkit push --dry-run
 ```
 
 ## What push does NOT do
 
 - **No migration files** — nothing is written to `migrations/`.
-- **No execution history** — Schemful doesn't record what changed or when.
+- **No execution history** — CTKit doesn't record what changed or when.
 - **No reproducibility** — you can't replay the same changes against another environment.
 
 This is intentional. Push trades traceability for speed.
@@ -92,8 +92,8 @@ You can start with push and switch to the migration workflow at any point. There
 
 When you're ready:
 
-1. Stop using `schemful push`.
-2. Start using `schemful generate` + `schemful migrate`.
+1. Stop using `ctkit push`.
+2. Start using `ctkit generate` + `ctkit migrate`.
 3. Your first generated migration will capture whatever differs between your local schemas and the current remote state.
 
-The `migrations/` directory starts fresh — Schemful doesn't need prior migration history to begin tracking changes.
+The `migrations/` directory starts fresh — CTKit doesn't need prior migration history to begin tracking changes.

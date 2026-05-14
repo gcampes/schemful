@@ -3,10 +3,10 @@ title: Validation Helpers
 description: Pre-built validation helper functions that generate common validation objects, so you don't have to write regex patterns or node-type arrays by hand.
 ---
 
-Schemful ships two sets of helper functions that return validation objects. Use them instead of writing raw validation objects to keep your schemas readable and typo-free.
+CTKit ships two sets of helper functions that return validation objects. Use them instead of writing raw validation objects to keep your schemas readable and typo-free.
 
 ```ts
-import { validators, richTextValidators } from "schemful";
+import { validators, richTextValidators } from "@ctkit/cli";
 ```
 
 ## Text validators
@@ -248,7 +248,7 @@ validators.arraySize(1, 10)
 All rich text validators return a `RichTextValidation` object.
 
 ```ts
-import { richTextValidators } from "schemful";
+import { richTextValidators } from "@ctkit/cli";
 ```
 
 ### `basicFormatting()`
@@ -387,8 +387,8 @@ richTextValidators.allowedNodeTypes([
 Validators compose naturally — just spread them into the `validations` array:
 
 ```ts
-import { validators, richTextValidators } from "schemful";
-import type { ContentTypeSchema } from "schemful";
+import { validators, richTextValidators } from "@ctkit/cli";
+import type { ContentTypeSchema } from "@ctkit/cli";
 
 const article: ContentTypeSchema = {
   id: "article",

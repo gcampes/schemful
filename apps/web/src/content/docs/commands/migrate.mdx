@@ -6,10 +6,10 @@ description: Apply pending migrations to your Contentful space in order.
 ## Apply all pending migrations
 
 ```bash
-schemful migrate
+ctkit migrate
 ```
 
-Runs every migration that hasn't been executed yet, in chronological order. Before applying, Schemful displays a summary of pending migrations and asks for confirmation.
+Runs every migration that hasn't been executed yet, in chronological order. Before applying, CTKit displays a summary of pending migrations and asks for confirmation.
 
 ```
 Pending migrations:
@@ -19,12 +19,12 @@ Pending migrations:
 Apply 2 migrations? (y/N)
 ```
 
-Each migration is tracked in your Contentful space. After execution, Schemful records the migration ID, timestamp, and result (success or failed) so it knows which migrations have already run.
+Each migration is tracked in your Contentful space. After execution, CTKit records the migration ID, timestamp, and result (success or failed) so it knows which migrations have already run.
 
 ## Target a specific migration
 
 ```bash
-schemful migrate --target 20250702T143021_crystal_lion_hammer
+ctkit migrate --target 20250702T143021_crystal_lion_hammer
 ```
 
 Applies all pending migrations **up to but not including** the specified migration. This is useful when you want to partially catch up without applying everything.
@@ -32,7 +32,7 @@ Applies all pending migrations **up to but not including** the specified migrati
 ## Preview changes
 
 ```bash
-schemful migrate --dry-run
+ctkit migrate --dry-run
 ```
 
 Shows which migrations would be applied and what changes they contain, without actually executing anything. Nothing is written to Contentful.
@@ -40,7 +40,7 @@ Shows which migrations would be applied and what changes they contain, without a
 ## Re-run migrations
 
 ```bash
-schemful migrate --force
+ctkit migrate --force
 ```
 
 Executes migrations even if they have already been marked as executed. Use this to retry a failed migration after fixing the underlying issue, or to re-apply a migration in a fresh environment.
@@ -48,14 +48,14 @@ Executes migrations even if they have already been marked as executed. Use this 
 ## Skip confirmation
 
 ```bash
-schemful migrate --yes
+ctkit migrate --yes
 ```
 
 Skips the interactive confirmation prompt and applies migrations immediately. Useful in CI/CD pipelines where there is no terminal to confirm.
 
 ```bash
 # Typical CI usage
-schemful migrate --yes
+ctkit migrate --yes
 ```
 
 ## Flags
@@ -69,7 +69,7 @@ schemful migrate --yes
 
 ## Migration tracking
 
-Schemful stores migration state directly in your Contentful space. Each executed migration is recorded with:
+CTKit stores migration state directly in your Contentful space. Each executed migration is recorded with:
 
 - **Migration ID** — the filename without extension
 - **Status** — `success` or `failed`
@@ -77,4 +77,4 @@ Schemful stores migration state directly in your Contentful space. Each executed
 
 This means migration history follows the environment. If you clone a Contentful environment, the migration history comes with it.
 
-Use `schemful status` to see a summary of migration state, or `schemful history` for the full execution log.
+Use `ctkit status` to see a summary of migration state, or `ctkit history` for the full execution log.

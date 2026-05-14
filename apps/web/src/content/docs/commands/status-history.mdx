@@ -6,7 +6,7 @@ description: Inspect migration state, execution history, and test your Contentfu
 ## Status
 
 ```bash
-schemful status
+ctkit status
 ```
 
 Prints a summary of migration state for the current Contentful environment:
@@ -26,12 +26,12 @@ Migration status:
 | **Pending** | Migrations that have not been run yet. |
 | **Failed** | Migrations that were attempted but did not complete successfully. |
 
-If there are failed migrations, `status` also shows which ones failed so you can investigate and re-run them with `schemful migrate --force`.
+If there are failed migrations, `status` also shows which ones failed so you can investigate and re-run them with `ctkit migrate --force`.
 
 ## History
 
 ```bash
-schemful history
+ctkit history
 ```
 
 Displays the full execution log — every migration that has been run against the current environment, including timing information.
@@ -54,10 +54,10 @@ Each entry shows:
 ## Test connection
 
 ```bash
-schemful test
+ctkit test
 ```
 
-Verifies that Schemful can connect to your Contentful space using the configured credentials. On success:
+Verifies that CTKit can connect to your Contentful space using the configured credentials. On success:
 
 ```
 ✓ Connected to space "My Website" (environment: master)

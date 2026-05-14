@@ -6,7 +6,7 @@ description: Pull content types from Contentful and generate local TypeScript sc
 ## Pull all content types
 
 ```bash
-schemful pull
+ctkit pull
 ```
 
 Fetches every content type from your Contentful space and generates a TypeScript schema file for each one in your `schemas/` directory. Files are automatically formatted with Prettier if a configuration is detected in your project.
@@ -20,12 +20,12 @@ Pulled 5 content types:
   schemas/navigation.ts
 ```
 
-By default, Schemful will **not** overwrite existing schema files. If a file already exists for a content type, it is skipped and a warning is shown.
+By default, CTKit will **not** overwrite existing schema files. If a file already exists for a content type, it is skipped and a warning is shown.
 
 ## Pull a specific content type
 
 ```bash
-schemful pull --content-type blogPost
+ctkit pull --content-type blogPost
 ```
 
 Pulls only the specified content type instead of everything in the space. Useful when you want to add a single existing type to your local schemas without touching the rest.
@@ -33,7 +33,7 @@ Pulls only the specified content type instead of everything in the space. Useful
 ## Overwrite existing files
 
 ```bash
-schemful pull --force
+ctkit pull --force
 ```
 
 Overwrites existing schema files instead of skipping them. Use this to reset a local schema to match exactly what's in Contentful.
@@ -47,10 +47,10 @@ Overwrites existing schema files instead of skipping them. Use this to reset a l
 
 ## Generated file format
 
-Each pulled content type produces a TypeScript file using the Schemful schema API:
+Each pulled content type produces a TypeScript file using the CTKit schema API:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from 'schemful';
+import { contentType, fields } from '@ctkit/cli';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',
@@ -77,9 +77,9 @@ All field options, validations, and appearances are preserved in the generated s
 
 ## When to use pull
 
-`pull` is the recommended way to **adopt Schemful on an existing Contentful space**. Instead of rewriting your content model from scratch:
+`pull` is the recommended way to **adopt CTKit on an existing Contentful space**. Instead of rewriting your content model from scratch:
 
-1. Run `schemful pull` to generate schema files for your current content types.
+1. Run `ctkit pull` to generate schema files for your current content types.
 2. Review the generated files — adjust naming or organization as needed.
-3. Run `schemful check` to confirm local and remote are in sync.
+3. Run `ctkit check` to confirm local and remote are in sync.
 4. From here on, use `generate` + `migrate` (or `push`) to manage changes in code.

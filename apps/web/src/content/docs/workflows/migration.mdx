@@ -12,7 +12,7 @@ edit schema → generate → review migration → migrate → check
 ```
 
 1. **Edit your schema** — modify or create files in `schemas/`.
-2. **Generate a migration** — Schemful diffs local vs. remote and produces a timestamped migration file.
+2. **Generate a migration** — CTKit diffs local vs. remote and produces a timestamped migration file.
 3. **Review the migration** — inspect the generated file, commit it, open a PR.
 4. **Migrate** — apply pending migrations to Contentful.
 5. **Check** — verify local and remote are in sync.
@@ -24,7 +24,7 @@ edit schema → generate → review migration → migrate → check
 Say you have an existing `blogPost` schema and want to add a `subtitle` field:
 
 ```ts title="schemas/blogPost.ts"
-import { contentType, fields } from 'schemful';
+import { contentType, fields } from '@ctkit/cli';
 
 export const blogPost = contentType('blogPost', {
   name: 'Blog Post',
@@ -50,10 +50,10 @@ export const blogPost = contentType('blogPost', {
 ### 2. Generate a migration
 
 ```bash
-schemful generate
+ctkit generate
 ```
 
-Schemful connects to Contentful, compares your local schemas against the remote content model, and writes a migration file:
+CTKit connects to Contentful, compares your local schemas against the remote content model, and writes a migration file:
 
 ```
 migrations/20250702T143021_crystal_lion_hammer.js
@@ -62,7 +62,7 @@ migrations/20250702T143021_crystal_lion_hammer.js
 You can also provide a custom name:
 
 ```bash
-schemful generate --name add-blogpost-subtitle
+ctkit generate --name add-blogpost-subtitle
 ```
 
 ```
@@ -84,19 +84,19 @@ git push
 After the PR is merged (or locally during development):
 
 ```bash
-schemful migrate
+ctkit migrate
 ```
 
 This applies all pending migrations in order. You can also preview first:
 
 ```bash
-schemful migrate --dry-run
+ctkit migrate --dry-run
 ```
 
 ### 5. Verify everything is in sync
 
 ```bash
-schemful check
+ctkit check
 ```
 
 ```
@@ -119,8 +119,8 @@ If there's drift between local schemas and the remote model, `check` will show y
 
 - **Reviewable** — migration files are plain JavaScript. Teammates can review the exact changes in a PR before they hit Contentful.
 - **Reproducible** — run the same migrations against staging, then production. Every environment gets the same changes in the same order.
-- **Trackable** — Schemful records which migrations have run, when, and whether they succeeded. See [Migration Tracking](/advanced/migration-tracking) for details.
-- **Rollback-safe** — if a migration fails, Schemful records the failure. You can fix the issue and retry with `--force`.
+- **Trackable** — CTKit records which migrations have run, when, and whether they succeeded. See [Migration Tracking](/advanced/migration-tracking) for details.
+- **Rollback-safe** — if a migration fails, CTKit records the failure. You can fix the issue and retry with `--force`.
 
 ## CI/CD integration
 
@@ -128,8 +128,8 @@ A typical CI pipeline looks like:
 
 ```bash
 # In your CI script
-schemful migrate          # Apply pending migrations
-schemful check            # Fail the build if anything is out of sync
+ctkit migrate          # Apply pending migrations
+ctkit check            # Fail the build if anything is out of sync
 ```
 
 If `check` exits with a non-zero code, your schemas and Contentful have diverged — the build fails and you know something needs attention.

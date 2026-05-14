@@ -1,13 +1,13 @@
 ---
 title: Field Types
-description: Complete reference of all 14 Contentful field types and how to define them in Schemful schemas.
+description: Complete reference of all 14 Contentful field types and how to define them in CTKit schemas.
 ---
 
-Schemful supports all 14 Contentful field types. Each field is a TypeScript object with at minimum an `id`, `name`, `type`, and `required` property.
+CTKit supports all 14 Contentful field types. Each field is a TypeScript object with at minimum an `id`, `name`, `type`, and `required` property.
 
 ## Type overview
 
-| Contentful type | Schemful `type` | Description |
+| Contentful type | CTKit `type` | Description |
 |---|---|---|
 | Short text | `"Symbol"` | Single-line string, max 256 chars |
 | Long text | `"Text"` | Multi-line string, no char limit |
@@ -258,7 +258,7 @@ An array of links to media assets. Add `linkMimetypeGroup` inside `items.validat
 Here's a complete `ContentTypeSchema` using many of the field types above:
 
 ```ts
-import type { ContentTypeSchema } from "schemful";
+import type { ContentTypeSchema } from "@ctkit/cli";
 
 const blogPost: ContentTypeSchema = {
   id: "blogPost",

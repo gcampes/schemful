@@ -6,17 +6,17 @@ description: Push local schema definitions directly to Contentful, bypassing the
 ## Push all schemas
 
 ```bash
-schemful push
+ctkit push
 ```
 
-Reads every schema definition from your `schemas/` directory, diffs them against the remote content model, and applies the changes directly to your Contentful space. Before applying, Schemful shows a summary of changes and asks for confirmation.
+Reads every schema definition from your `schemas/` directory, diffs them against the remote content model, and applies the changes directly to your Contentful space. Before applying, CTKit shows a summary of changes and asks for confirmation.
 
 This command **bypasses the migration system entirely** — no migration files are generated or recorded.
 
 ## Preview changes
 
 ```bash
-schemful push --dry-run
+ctkit push --dry-run
 ```
 
 Shows what would change without applying anything to Contentful. Useful for reviewing the diff before committing to it.
@@ -30,7 +30,7 @@ Shows what would change without applying anything to Contentful. Useful for revi
 ## Skip confirmation
 
 ```bash
-schemful push --force
+ctkit push --force
 ```
 
 Skips the interactive confirmation prompt and applies changes immediately.
@@ -38,10 +38,10 @@ Skips the interactive confirmation prompt and applies changes immediately.
 ## Custom schemas directory
 
 ```bash
-schemful push schemas-v2/
+ctkit push schemas-v2/
 ```
 
-Points Schemful at a different directory instead of the default `schemas/`.
+Points CTKit at a different directory instead of the default `schemas/`.
 
 ## Flags
 
@@ -57,8 +57,8 @@ Points Schemful at a different directory instead of the default `schemas/`.
 
 | Scenario | Recommended command |
 |---|---|
-| Early development, solo work, throwaway environments | `schemful push` |
-| Team collaboration, production deployments, auditable history | `schemful generate` + `schemful migrate` |
+| Early development, solo work, throwaway environments | `ctkit push` |
+| Team collaboration, production deployments, auditable history | `ctkit generate` + `ctkit migrate` |
 
 Once your content model stabilizes and you start working with a team or deploying to production, switch to the `generate` → `migrate` workflow so changes are tracked, reviewable, and reproducible.
 

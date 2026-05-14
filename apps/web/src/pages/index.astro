@@ -5,7 +5,7 @@ import TerminalBlock from "../components/TerminalBlock.astro";
 import FeatureCard from "../components/FeatureCard.astro";
 import "../styles/global.css";
 
-const schemaExample = `import { ContentTypeSchema } from 'schemful';
+const schemaExample = `import { ContentTypeSchema } from '@ctkit/cli';
 
 const blogPost: ContentTypeSchema = {
   id: 'blogPost',
@@ -61,7 +61,7 @@ const blogPost: ContentTypeSchema = {
 
 export default blogPost;`;
 
-const productExample = `import { ContentTypeSchema } from 'schemful';
+const productExample = `import { ContentTypeSchema } from '@ctkit/cli';
 
 const product: ContentTypeSchema = {
   id: 'product',
@@ -119,7 +119,7 @@ const product: ContentTypeSchema = {
 export default product;`;
 ---
 
-<Layout title="Schemful - Schema-as-code for Contentful">
+<Layout title="CTKit - Schema-as-code for Contentful">
   <!-- Nav -->
   <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border-subtle)] bg-[var(--color-bg)]/80 backdrop-blur-xl">
     <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
@@ -136,7 +136,7 @@ export default product;`;
           <path d="M21 8 L25 16 L21 24" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.5"/>
           <text x="16" y="22" text-anchor="middle" font-family="ui-monospace, monospace" font-weight="700" font-size="16" fill="white">S</text>
         </svg>
-        schemful
+        ctkit
       </a>
       <div class="flex items-center gap-6">
         <a href={`${import.meta.env.BASE_URL}/getting-started/installation/`} class="text-sm font-medium text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]">Docs</a>
@@ -181,7 +181,7 @@ export default product;`;
           <div class="gradient-border w-full sm:w-auto">
             <div class="flex items-center gap-2 sm:gap-3 rounded-[11px] bg-[var(--color-bg-subtle)] px-3 sm:px-5 py-3 font-mono text-xs sm:text-sm">
               <span class="text-[var(--color-text-subtle)]">$</span>
-              <span class="truncate">npm install -g schemful</span>
+              <span class="truncate">npm install -g @ctkit/cli</span>
               <button id="copy-btn" class="ml-2 text-[var(--color-text-subtle)] transition-colors hover:text-[var(--color-text)]" aria-label="Copy to clipboard">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
@@ -201,17 +201,17 @@ export default product;`;
         <CodeBlock code={schemaExample} lang="typescript" filename="schemas/blogPost.ts" />
         <TerminalBlock title="Terminal">
           <div class="space-y-1">
-            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful generate</span></div>
+            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit generate</span></div>
             <div><span class="terminal-line-info">&#128269;</span> <span class="terminal-line-muted">Analyzing schema changes...</span></div>
             <div><span class="terminal-line-success">&#10003;</span> Generated migration:</div>
             <div class="terminal-line-muted pl-4">20250702T143021_crystal_lion_hammer.js</div>
             <div class="mt-2"></div>
-            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful migrate</span></div>
+            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit migrate</span></div>
             <div><span class="terminal-line-info">&#128269;</span> <span class="terminal-line-muted">Found 1 pending migration</span></div>
             <div><span class="terminal-line-success">&#10003;</span> Applied crystal_lion_hammer <span class="terminal-line-muted">(342ms)</span></div>
             <div><span class="terminal-line-success">&#10003;</span> All migrations applied</div>
             <div class="mt-2"></div>
-            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful check</span></div>
+            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit check</span></div>
             <div><span class="terminal-line-success">&#10003;</span> All schemas are up to date</div>
           </div>
         </TerminalBlock>
@@ -284,8 +284,8 @@ export default product;`;
             </div>
             <div class="pb-2 pt-1.5">
               <h3 class="font-semibold text-lg">Generate a migration</h3>
-              <p class="mt-1 text-sm text-[var(--color-text-muted)]">Schemful diffs your local schemas against Contentful and produces a timestamped migration file.</p>
-              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-accent)]">$ schemful generate</code>
+              <p class="mt-1 text-sm text-[var(--color-text-muted)]">CTKit diffs your local schemas against Contentful and produces a timestamped migration file.</p>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-accent)]">$ ctkit generate</code>
             </div>
           </div>
 
@@ -297,7 +297,7 @@ export default product;`;
             <div class="pb-2 pt-1.5">
               <h3 class="font-semibold text-lg">Review and apply</h3>
               <p class="mt-1 text-sm text-[var(--color-text-muted)]">Check the generated migration, then apply it. Migration history is tracked automatically.</p>
-              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-accent)]">$ schemful migrate</code>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-accent)]">$ ctkit migrate</code>
             </div>
           </div>
 
@@ -308,7 +308,7 @@ export default product;`;
             <div class="pt-1.5">
               <h3 class="font-semibold text-lg">Verify</h3>
               <p class="mt-1 text-sm text-[var(--color-text-muted)]">Confirm your local schemas match Contentful. Done.</p>
-              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-green)]">$ schemful check &mdash; All schemas are up to date</code>
+              <code class="mt-3 inline-block rounded-lg bg-[var(--color-bg-muted)] px-3 py-1.5 font-mono text-xs text-[var(--color-green)]">$ ctkit check &mdash; All schemas are up to date</code>
             </div>
           </div>
         </div>
@@ -349,13 +349,13 @@ export default product;`;
               </tr>
             </thead>
             <tbody class="divide-y divide-[var(--color-border-subtle)]">
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful generate</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Generate migration from schema diff</td></tr>
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful migrate</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Apply pending migrations</td></tr>
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful push</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Push schemas directly to Contentful</td></tr>
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful check</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Diff local schemas vs Contentful</td></tr>
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful pull</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Pull content types into local schemas</td></tr>
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful status</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Show migration status</td></tr>
-              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">schemful drop</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Delete content types</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit generate</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Generate migration from schema diff</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit migrate</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Apply pending migrations</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit push</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Push schemas directly to Contentful</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit check</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Diff local schemas vs Contentful</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit pull</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Pull content types into local schemas</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit status</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Show migration status</td></tr>
+              <tr class="transition-colors"><td class="px-6 py-3 font-mono text-[var(--color-accent)]">ctkit drop</td><td class="px-6 py-3 text-[var(--color-text-muted)]">Delete content types</td></tr>
             </tbody>
           </table>
         </div>
@@ -375,11 +375,11 @@ export default product;`;
         <div class="fade-in mt-10">
           <TerminalBlock title="Getting started">
             <div class="space-y-1">
-              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">npm install -g schemful</span></div>
-              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful init</span></div>
-              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful test</span></div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">npm install -g @ctkit/cli</span></div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit init</span></div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit test</span></div>
               <div><span class="terminal-line-success">&#10003;</span> Connected to Contentful</div>
-              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">schemful push</span></div>
+              <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit push</span></div>
               <div><span class="terminal-line-success">&#10003;</span> All schemas pushed successfully</div>
             </div>
           </TerminalBlock>
@@ -404,7 +404,7 @@ export default product;`;
   <script>
     // Copy to clipboard
     document.getElementById('copy-btn')?.addEventListener('click', () => {
-      navigator.clipboard.writeText('npm install -g schemful');
+      navigator.clipboard.writeText('npm install -g @ctkit/cli');
       const btn = document.getElementById('copy-btn');
       if (btn) {
         btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';

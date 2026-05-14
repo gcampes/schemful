@@ -7,7 +7,7 @@ export default defineConfig({
   base: "/schemful",
   integrations: [
     starlight({
-      title: "Schemful",
+      title: "CTKit",
       description:
         "A Drizzle ORM-style workflow for managing Contentful content models.",
       logo: {

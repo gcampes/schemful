@@ -1,11 +1,11 @@
 {
-  "name": "schemful-monorepo",
+  "name": "ctkit-monorepo",
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm -r --parallel dev",
-    "test": "pnpm --filter schemful test:run",
-    "test:integration": "pnpm --filter schemful test:integration",
+    "test": "pnpm --filter @ctkit/cli test:run",
+    "test:integration": "pnpm --filter @ctkit/cli test:integration",
     "type-check": "pnpm -r type-check",
     "clean": "pnpm -r clean"
   },
