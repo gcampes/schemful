@@ -7,7 +7,7 @@ import { COLORS, FONT_SANS, SCHEMA_CODE, VIDEO_WIDTH, VIDEO_HEIGHT } from "./con
 
 // Timing (in frames at 30fps)
 const SCHEMA_START = 0;
-const SCHEMA_DURATION = 240; // ~8 sec — typing + pause at end
+const SCHEMA_DURATION = 210; // ~7 sec — typing + brief pause
 const TRANSITION_START = SCHEMA_DURATION;
 const TRANSITION_DURATION = 15; // 0.5 sec crossfade
 const TERMINAL_START = TRANSITION_START + TRANSITION_DURATION;
