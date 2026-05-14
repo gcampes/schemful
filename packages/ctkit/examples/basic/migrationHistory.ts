@@ -2,7 +2,7 @@
  * Migration history content type schema
  * This tracks which migrations have been executed in Contentful
  * 
- * Note: This is a system schema used internally by Conform.
+ * Note: This is a system schema used internally by ctkit.
  * It will be automatically created when needed.
  */
 
@@ -10,8 +10,8 @@ import { ContentTypeSchema, FieldType } from "@ctkit/core";
 
 export const migrationHistorySchema: ContentTypeSchema = {
   id: "conform_migration_history",
-  name: "🔄 Conform Migration History",
-  description: "Tracks executed Conform migrations - managed automatically by Conform CLI",
+  name: "🔄 ctkit Migration History",
+  description: "Tracks executed ctkit migrations - managed automatically by ctkit CLI",
   displayField: "migrationId",
   fields: [
     {
@@ -94,7 +94,7 @@ export const migrationHistorySchema: ContentTypeSchema = {
     },
     {
       id: "conformVersion",
-      name: "Conform Version",
+      name: "ctkit Version",
       type: FieldType.Symbol,
       required: true,
     },

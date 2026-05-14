@@ -9,7 +9,7 @@ import {
 
 export const exampleSchema: ContentTypeSchema = {
   id: "example",
-  name: "Example Content Type",
+  name: "📄 Example Content Type",
   description: "An example content type to demonstrate Conform",
   displayField: "title",
   fields: [
