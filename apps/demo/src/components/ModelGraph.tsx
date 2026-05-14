@@ -1,46 +1,18 @@
-import React from "react";
-import { useCurrentFrame, spring, useVideoConfig, interpolate } from "remotion";
+import React, { useMemo } from "react";
+import {
+  ReactFlow,
+  Background,
+  type Node,
+  type Edge,
+  Position,
+  MarkerType,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { COLORS, FONT_MONO, FONT_SANS, VIDEO_WIDTH, VIDEO_HEIGHT } from "../constants";
 
-interface Node {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-}
-
-interface Edge {
-  from: string;
-  to: string;
-  dashed?: boolean;
-}
-
-const NODES: Node[] = [
-  // Center — Blog Post (appears first)
-  { id: "blogPost", label: "📝 Blog Post", x: 640, y: 220 },
-  // Second ring — direct references
-  { id: "author", label: "👤 Author", x: 280, y: 380 },
-  { id: "category", label: "📂 Category", x: 640, y: 380 },
-  { id: "tag", label: "🏷️ Tag", x: 1000, y: 380 },
-  // Third ring — embedded in rich text
-  { id: "codeBlock", label: "💻 Code Block", x: 280, y: 530 },
-  { id: "gallery", label: "📸 Gallery", x: 640, y: 530 },
-  { id: "newsletter", label: "📰 Newsletter", x: 1000, y: 530 },
-];
-
-const EDGES: Edge[] = [
-  // Direct references (solid)
-  { from: "blogPost", to: "author" },
-  { from: "blogPost", to: "category" },
-  { from: "blogPost", to: "tag" },
-  // Embedded in rich text (dashed)
-  { from: "blogPost", to: "codeBlock", dashed: true },
-  { from: "blogPost", to: "gallery", dashed: true },
-  { from: "blogPost", to: "newsletter", dashed: true },
-];
-
-// Which bloom wave each node belongs to
-const BLOOM_WAVE: Record<string, number> = {
+// Bloom wave assignment
+const WAVE: Record<string, number> = {
   blogPost: 0,
   author: 1,
   category: 1,
@@ -50,9 +22,59 @@ const BLOOM_WAVE: Record<string, number> = {
   newsletter: 2,
 };
 
-const NODE_WIDTH = 170;
-const NODE_HEIGHT = 44;
 const BLOOM_STAGGER = 12; // frames between waves
+
+// Custom node component
+function ContentTypeNode({ data }: { data: { label: string; fields: number; wave: number; startFrame: number } }) {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const elapsed = Math.max(0, frame - data.startFrame);
+  const nodeStart = data.wave * BLOOM_STAGGER + 5;
+
+  const scale = spring({
+    frame: elapsed - nodeStart,
+    fps,
+    config: { damping: 14, stiffness: 100, mass: 0.8 },
+  });
+
+  const opacity = interpolate(
+    elapsed,
+    [nodeStart, nodeStart + 10],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  return (
+    <div
+      style={{
+        background: COLORS.bgCard,
+        border: `1.5px solid ${COLORS.accent}`,
+        borderRadius: 12,
+        padding: "12px 20px",
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        fontFamily: FONT_MONO,
+        transform: `scale(${scale})`,
+        opacity,
+        boxShadow: `0 0 30px ${COLORS.accentMuted}, 0 4px 20px rgba(0,0,0,0.4)`,
+        minWidth: 180,
+      }}
+    >
+      <span style={{ fontSize: 22 }}>{data.label.split(" ")[0]}</span>
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <span style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>
+          {data.label.split(" ").slice(1).join(" ")}
+        </span>
+        <span style={{ fontSize: 11, color: COLORS.textSubtle }}>
+          {data.fields} fields
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const nodeTypes = { contentType: ContentTypeNode };
 
 interface ModelGraphProps {
   startFrame?: number;
@@ -60,13 +82,132 @@ interface ModelGraphProps {
 
 export const ModelGraph: React.FC<ModelGraphProps> = ({ startFrame = 0 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
   const elapsed = Math.max(0, frame - startFrame);
 
-  const nodeMap = new Map(NODES.map((n) => [n.id, n]));
-
-  // Title fade in
+  // Title
   const titleOpacity = interpolate(elapsed, [0, 20], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const nodes: Node[] = useMemo(
+    () => [
+      {
+        id: "blogPost",
+        type: "contentType",
+        position: { x: 460, y: 20 },
+        data: { label: "📝 Blog Post", fields: 22, wave: 0, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+      {
+        id: "author",
+        type: "contentType",
+        position: { x: 100, y: 200 },
+        data: { label: "👤 Author", fields: 12, wave: 1, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+      {
+        id: "category",
+        type: "contentType",
+        position: { x: 460, y: 200 },
+        data: { label: "📂 Category", fields: 8, wave: 1, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+      {
+        id: "tag",
+        type: "contentType",
+        position: { x: 820, y: 200 },
+        data: { label: "🏷️ Tag", fields: 2, wave: 1, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+      {
+        id: "codeBlock",
+        type: "contentType",
+        position: { x: 100, y: 400 },
+        data: { label: "💻 Code Block", fields: 6, wave: 2, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+      {
+        id: "gallery",
+        type: "contentType",
+        position: { x: 460, y: 400 },
+        data: { label: "📸 Gallery", fields: 4, wave: 2, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+      {
+        id: "newsletter",
+        type: "contentType",
+        position: { x: 820, y: 400 },
+        data: { label: "📰 Newsletter", fields: 4, wave: 2, startFrame },
+        sourcePosition: Position.Bottom,
+        targetPosition: Position.Top,
+      },
+    ],
+    [startFrame]
+  );
+
+  const edges: Edge[] = useMemo(
+    () => [
+      {
+        id: "e-author",
+        source: "blogPost",
+        target: "author",
+        animated: true,
+        style: { stroke: COLORS.accent, strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 16, height: 16 },
+      },
+      {
+        id: "e-category",
+        source: "blogPost",
+        target: "category",
+        animated: true,
+        style: { stroke: COLORS.accent, strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 16, height: 16 },
+      },
+      {
+        id: "e-tag",
+        source: "blogPost",
+        target: "tag",
+        animated: true,
+        style: { stroke: COLORS.accent, strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 16, height: 16 },
+      },
+      {
+        id: "e-code",
+        source: "blogPost",
+        target: "codeBlock",
+        animated: true,
+        style: { stroke: COLORS.accent, strokeWidth: 1, strokeDasharray: "6 4", opacity: 0.6 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 14, height: 14 },
+      },
+      {
+        id: "e-gallery",
+        source: "blogPost",
+        target: "gallery",
+        animated: true,
+        style: { stroke: COLORS.accent, strokeWidth: 1, strokeDasharray: "6 4", opacity: 0.6 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 14, height: 14 },
+      },
+      {
+        id: "e-newsletter",
+        source: "blogPost",
+        target: "newsletter",
+        animated: true,
+        style: { stroke: COLORS.accent, strokeWidth: 1, strokeDasharray: "6 4", opacity: 0.6 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 14, height: 14 },
+      },
+    ],
+    []
+  );
+
+  // Edge visibility — fade in after nodes
+  const edgeOpacity = interpolate(elapsed, [25, 40], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -78,157 +219,57 @@ export const ModelGraph: React.FC<ModelGraphProps> = ({ startFrame = 0 }) => {
         height: VIDEO_HEIGHT,
         background: COLORS.bg,
         position: "relative",
-        overflow: "hidden",
       }}
     >
       {/* Title */}
       <div
         style={{
           position: "absolute",
-          top: 60,
+          top: 40,
           left: 0,
           right: 0,
           textAlign: "center",
           fontFamily: FONT_SANS,
-          fontSize: 22,
+          fontSize: 24,
           color: COLORS.textMuted,
           opacity: titleOpacity,
           fontWeight: 500,
+          zIndex: 10,
         }}
       >
         Your content model, fully managed
       </div>
 
-      {/* Edges SVG layer */}
-      <svg
+      {/* React Flow graph */}
+      <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: VIDEO_WIDTH,
-          height: VIDEO_HEIGHT,
-          pointerEvents: "none",
+          top: 80,
+          left: 80,
+          width: VIDEO_WIDTH - 160,
+          height: VIDEO_HEIGHT - 120,
         }}
       >
-        {EDGES.map((edge, i) => {
-          const from = nodeMap.get(edge.from)!;
-          const to = nodeMap.get(edge.to)!;
-          const toWave = BLOOM_WAVE[edge.to];
-
-          // Edge appears after the target node's wave
-          const edgeStart = (toWave + 0.5) * BLOOM_STAGGER + 10;
-          const lineProgress = interpolate(
-            elapsed,
-            [edgeStart, edgeStart + 15],
-            [0, 1],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-          );
-
-          if (lineProgress <= 0) return null;
-
-          const x1 = from.x;
-          const y1 = from.y + NODE_HEIGHT / 2;
-          const x2 = to.x;
-          const y2 = to.y - NODE_HEIGHT / 2;
-
-          const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-          const dashOffset = length * (1 - lineProgress);
-
-          return (
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={COLORS.accent}
-              strokeWidth={1.5}
-              strokeOpacity={0.4}
-              strokeDasharray={edge.dashed ? "6 4" : `${length}`}
-              strokeDashoffset={edge.dashed ? 0 : dashOffset}
-              opacity={lineProgress}
-            />
-          );
-        })}
-
-        {/* Category self-reference arc */}
-        {(() => {
-          const cat = nodeMap.get("category")!;
-          const arcStart = (1 + 0.5) * BLOOM_STAGGER + 10;
-          const arcProgress = interpolate(
-            elapsed,
-            [arcStart + 10, arcStart + 25],
-            [0, 1],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-          );
-          if (arcProgress <= 0) return null;
-
-          const cx = cat.x + NODE_WIDTH / 2 + 10;
-          const cy = cat.y;
-
-          return (
-            <path
-              d={`M ${cx} ${cy - 10} C ${cx + 35} ${cy - 35}, ${cx + 35} ${cy + 35}, ${cx} ${cy + 10}`}
-              fill="none"
-              stroke={COLORS.accent}
-              strokeWidth={1.5}
-              strokeOpacity={0.4 * arcProgress}
-              strokeDasharray="4 3"
-            />
-          );
-        })()}
-      </svg>
-
-      {/* Nodes */}
-      {NODES.map((node) => {
-        const wave = BLOOM_WAVE[node.id];
-        const nodeStart = wave * BLOOM_STAGGER + 5;
-
-        const scale = spring({
-          frame: elapsed - nodeStart,
-          fps,
-          config: {
-            damping: 15,
-            stiffness: 120,
-            mass: 0.8,
-          },
-        });
-
-        const opacity = interpolate(
-          elapsed,
-          [nodeStart, nodeStart + 8],
-          [0, 1],
-          { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-        );
-
-        return (
-          <div
-            key={node.id}
-            style={{
-              position: "absolute",
-              left: node.x - NODE_WIDTH / 2,
-              top: node.y - NODE_HEIGHT / 2,
-              width: NODE_WIDTH,
-              height: NODE_HEIGHT,
-              background: COLORS.bgCard,
-              border: `1px solid ${COLORS.accent}`,
-              borderRadius: 10,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: FONT_MONO,
-              fontSize: 13,
-              fontWeight: 500,
-              color: COLORS.text,
-              transform: `scale(${scale})`,
-              opacity,
-              boxShadow: `0 0 20px ${COLORS.accentMuted}`,
-            }}
+        <div style={{ width: "100%", height: "100%", opacity: edgeOpacity > 0 ? 1 : 0 }}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            fitView
+            panOnDrag={false}
+            zoomOnScroll={false}
+            zoomOnPinch={false}
+            zoomOnDoubleClick={false}
+            nodesDraggable={false}
+            nodesConnectable={false}
+            elementsSelectable={false}
+            proOptions={{ hideAttribution: true }}
+            style={{ background: "transparent" }}
           >
-            {node.label}
-          </div>
-        );
-      })}
+            <Background gap={40} size={1} color="rgba(34, 197, 94, 0.04)" />
+          </ReactFlow>
+        </div>
+      </div>
     </div>
   );
 };
