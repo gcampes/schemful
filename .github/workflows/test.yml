@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [18, 20, 22]
 
     steps:
       - name: Checkout code
@@ -32,14 +32,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build core (required by CLI)
+        run: pnpm --filter @ctkit/core build
+
       - name: Type check
-        run: pnpm run type-check
+        run: |
+          pnpm --filter @ctkit/core type-check
+          pnpm --filter @ctkit/cli type-check
+
+      - name: Build CLI
+        run: pnpm --filter @ctkit/cli build
 
       - name: Run tests
-        run: pnpm run test:run
+        run: pnpm --filter @ctkit/cli test:run
 
       - name: Upload coverage reports
-        if: matrix.node-version == 20
+        if: matrix.node-version == 22
         uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false
