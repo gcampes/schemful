@@ -1,11 +1,24 @@
 ---
+import { createHighlighter } from "shiki";
+
 interface Props {
   code: string;
+  lang?: string;
   filename?: string;
   showDots?: boolean;
 }
 
-const { code, filename, showDots = true } = Astro.props;
+const { code, lang = "typescript", filename, showDots = true } = Astro.props;
+
+const highlighter = await createHighlighter({
+  themes: ["dracula"],
+  langs: [lang],
+});
+
+const html = highlighter.codeToHtml(code, {
+  lang,
+  theme: "dracula",
+});
 ---
 
 <div class="code-block group relative overflow-hidden rounded-2xl border border-[var(--color-border)]">
@@ -23,20 +36,26 @@ const { code, filename, showDots = true } = Astro.props;
       )}
     </div>
   )}
-  <pre class="code-pre"><code set:html={code} /></pre>
+  <div class="code-content overflow-hidden" set:html={html} />
 </div>
 
 <style>
-  .code-pre {
+  .code-content :global(pre) {
     margin: 0 !important;
     border: none !important;
     border-radius: 0 !important;
-    background-color: var(--color-bg-subtle) !important;
     padding: 1.25rem !important;
     font-size: 0.8125rem !important;
     line-height: 1.75 !important;
     overflow-x: auto !important;
+  }
+
+  .code-content :global(code) {
     font-family: var(--font-mono) !important;
-    color: var(--color-text) !important;
+  }
+
+  .code-content :global(.shiki) {
+    max-width: 100% !important;
+    overflow-x: auto !important;
   }
 </style>

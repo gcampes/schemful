@@ -1,12 +1,15 @@
-/* Override Starlight theme to match schemful's dark aesthetic */
-/* Force dark mode only — no light theme */
+/* Schemful docs theme — matches the marketing homepage aesthetic */
+/* Dark mode only, rounded borders, card-style panels */
 
 :root,
 :root[data-theme="light"],
 :root[data-theme="dark"] {
+  /* Brand colors */
   --sl-color-accent-low: rgba(99, 102, 241, 0.15);
   --sl-color-accent: #6366f1;
   --sl-color-accent-high: #c7d2fe;
+
+  /* Gray scale */
   --sl-color-white: #fafafa;
   --sl-color-gray-1: #e4e4e7;
   --sl-color-gray-2: #a1a1aa;
@@ -15,13 +18,155 @@
   --sl-color-gray-5: #27272a;
   --sl-color-gray-6: #18181b;
   --sl-color-black: #09090b;
+
+  /* Typography */
   --sl-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --sl-font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Menlo, monospace;
+
+  /* Layout */
+  --sl-content-width: 48rem;
+  --sl-content-pad-x: 1.5rem;
+
+  /* Force dark */
   color-scheme: dark;
 }
 
-/* Hide the theme toggle — dark only */
-starlight-theme-select,
-[data-select-theme] {
+/* Hide theme toggle — dark only */
+starlight-theme-select {
   display: none !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sidebar                                                             */
+/* ------------------------------------------------------------------ */
+
+/* Sidebar background */
+.sidebar-pane {
+  background-color: var(--sl-color-black) !important;
+}
+
+/* Sidebar group labels */
+.sl-sidebar summary,
+nav.sidebar .top-level > li > details > summary {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--sl-color-gray-3);
+}
+
+/* Sidebar link hover */
+nav.sidebar a:hover {
+  color: var(--sl-color-accent) !important;
+}
+
+/* Active sidebar link */
+nav.sidebar a[aria-current="page"] {
+  color: var(--sl-color-accent) !important;
+  font-weight: 600;
+  background: var(--sl-color-accent-low) !important;
+  border-radius: 0.5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Content area                                                        */
+/* ------------------------------------------------------------------ */
+
+/* Rounded cards for asides/callouts */
+.starlight-aside,
+aside {
+  border-radius: 0.75rem !important;
+  border-color: var(--sl-color-gray-5) !important;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: var(--sl-color-accent-high) !important;
+  border-radius: 0.375rem !important;
+  padding: 0.15em 0.4em !important;
+  font-size: 0.875em !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Code blocks — rounded with border */
+.expressive-code {
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+  border: 1px solid var(--sl-color-gray-5) !important;
+}
+
+.expressive-code pre {
+  border-radius: 0 !important;
+}
+
+/* Tables */
+table {
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+  border: 1px solid var(--sl-color-gray-5) !important;
+}
+
+th {
+  background: var(--sl-color-gray-6) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Header                                                              */
+/* ------------------------------------------------------------------ */
+
+/* Header background */
+header.header {
+  background-color: rgba(9, 9, 11, 0.8) !important;
+  backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid var(--sl-color-gray-5) !important;
+}
+
+/* Search button */
+site-search button {
+  border-radius: 0.5rem !important;
+  border-color: var(--sl-color-gray-5) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Links                                                               */
+/* ------------------------------------------------------------------ */
+
+.sl-markdown-content a {
+  color: var(--sl-color-accent) !important;
+  text-decoration: none !important;
+}
+
+.sl-markdown-content a:hover {
+  text-decoration: underline !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Headings                                                            */
+/* ------------------------------------------------------------------ */
+
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+  color: var(--sl-color-white) !important;
+}
+
+.sl-markdown-content h2 {
+  border-bottom: 1px solid var(--sl-color-gray-5);
+  padding-bottom: 0.5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pagination (prev/next links)                                        */
+/* ------------------------------------------------------------------ */
+
+.pagination-links a {
+  border-radius: 0.75rem !important;
+  border-color: var(--sl-color-gray-5) !important;
+  transition: border-color 0.2s, background-color 0.2s !important;
+}
+
+.pagination-links a:hover {
+  border-color: var(--sl-color-accent) !important;
+  background-color: var(--sl-color-accent-low) !important;
 }
