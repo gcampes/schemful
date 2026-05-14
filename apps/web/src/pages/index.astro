@@ -124,13 +124,7 @@ export default product;`;
   <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border-subtle)] bg-[var(--color-bg)]/80 backdrop-blur-xl">
     <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
       <a href={import.meta.env.BASE_URL} class="flex items-center gap-2.5 font-semibold tracking-tight">
-        <svg viewBox="0 0 32 32" fill="none" class="h-7 w-7" xmlns="http://www.w3.org/2000/svg">
-          <rect x="1" y="1" width="30" height="30" rx="7" fill="#0a0a0b" stroke="#22c55e" stroke-width="1.5"/>
-          <path d="M6 16 L10 12 L6 8" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(0, 4)"/>
-          <text x="14" y="20.5" font-family="ui-monospace, monospace" font-weight="600" font-size="12" fill="white">ct</text>
-          <rect x="25" y="18" width="3" height="1.5" rx="0.5" fill="#22c55e"/>
-        </svg>
-        ctkit
+        <span class="font-mono text-lg text-[var(--color-accent)]">$ct</span>
       </a>
       <div class="flex items-center gap-6">
         <a href={`${import.meta.env.BASE_URL}/getting-started/installation/`} class="text-sm font-medium text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]">Docs</a>
