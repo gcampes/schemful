@@ -219,10 +219,10 @@ Delete content types from Contentful. Destructive -- requires typing "DELETE" to
 
 ```bash
 ctkit drop                                   # Delete ctkit-managed types
-ctkit drop --all                              # Delete ALL content types
-ctkit drop --content-type blogPost            # Delete specific type
-ctkit drop --include-migration-history        # Also clear migration tracking
-ctkit drop --force                            # Skip confirmation
+ctkit drop --all-content-types               # Delete ALL content types
+ctkit drop --content-type blogPost           # Delete specific type
+ctkit drop --include-history                 # Also clear migration tracking
+ctkit drop --yes-delete-everything           # Skip confirmation
 ```
 
 ## Schema Reference

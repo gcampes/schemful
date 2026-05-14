@@ -28,10 +28,10 @@ Type DELETE to confirm:
 ## Drop all content types
 
 ```bash
-ctkit drop --all
+ctkit drop --all-content-types
 ```
 
-Deletes **every** content type in the space — not just the ones ctkit manages. Use this to completely reset a space.
+Deletes **every** content type in the space — not just the ones ctkit manages. Use this to completely reset a space. The flag is intentionally long to prevent accidental use.
 
 ## Drop a specific content type
 
@@ -44,7 +44,7 @@ Deletes only the specified content type and its entries.
 ## Clear migration history
 
 ```bash
-ctkit drop --include-migration-history
+ctkit drop --include-history
 ```
 
 Also removes the migration tracking data that ctkit stores in Contentful. This effectively resets the migration state so that `ctkit migrate` treats all migrations as pending.
@@ -52,30 +52,30 @@ Also removes the migration tracking data that ctkit stores in Contentful. This e
 Can be combined with other flags:
 
 ```bash
-ctkit drop --all --include-migration-history
+ctkit drop --all-content-types --include-history
 ```
 
 ## Skip confirmation
 
 ```bash
-ctkit drop --force
+ctkit drop --yes-delete-everything
 ```
 
-Skips the interactive `DELETE` confirmation prompt. Useful in scripts or CI teardown steps, but handle with extreme care.
+Skips the interactive `DELETE` confirmation prompt. The flag is intentionally verbose — you shouldn't be able to type this by accident.
 
 ## Flags
 
 | Flag | Description |
 |---|---|
-| `--all` | Delete all content types in the space, not just ctkit-managed ones. |
+| `--all-content-types` | Delete all content types in the space, not just ctkit-managed ones. |
 | `--content-type <name>` | Delete only the specified content type. |
-| `--include-migration-history` | Also clear migration tracking data from Contentful. |
-| `--force` | Skip the confirmation prompt. |
+| `--include-history` | Also clear migration tracking data from Contentful. |
+| `--yes-delete-everything` | Skip the confirmation prompt. |
 
 ## Typical use cases
 
 | Scenario | Command |
 |---|---|
-| Tear down a dev/test environment | `ctkit drop --all --include-migration-history --force` |
+| Tear down a dev/test environment | `ctkit drop --all-content-types --include-history --yes-delete-everything` |
 | Remove a single deprecated content type | `ctkit drop --content-type legacyPage` |
-| Reset migration state without deleting content types | `ctkit drop --include-migration-history` (with no content types selected) |
+| Reset migration state without deleting content types | `ctkit drop --include-history` (with no content types selected) |

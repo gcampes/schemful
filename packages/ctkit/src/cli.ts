@@ -209,21 +209,18 @@ program
 program
   .command("drop")
   .description("🚨 DANGEROUS: Delete content types from Contentful")
-  .option("--force", "Skip confirmation prompt")
-  .option("--content-type <name>", "Only delete specific content type")
-  .option(
-    "--include-migration-history",
-    "Also delete migration history content types"
-  )
-  .option("--all", "Delete ALL content types, not just ctkit-managed ones")
+  .option("--yes-delete-everything", "Skip the DELETE confirmation prompt")
+  .option("--content-type <name>", "Only delete a specific content type")
+  .option("--include-history", "Also delete migration history content types")
+  .option("--all-content-types", "Delete ALL content types, not just ctkit-managed ones")
   .action(async (options) => {
     try {
       const { cleanContentful } = await import("./commands/clean");
       await cleanContentful({
-        force: options.force,
+        force: options.yesDeleteEverything,
         contentType: options.contentType,
-        includeMigrationHistory: options.includeMigrationHistory,
-        all: options.all,
+        includeMigrationHistory: options.includeHistory,
+        all: options.allContentTypes,
       });
     } catch (error) {
       handleError(error, "Drop operation failed");
