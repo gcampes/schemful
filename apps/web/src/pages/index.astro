@@ -193,26 +193,19 @@ export default product;`;
       </div>
     </section>
 
-    <!-- ═══════════════ CODE PREVIEW ═══════════════ -->
-    <section class="mx-auto max-w-6xl px-6 pb-24">
-      <div class="fade-in grid items-start gap-4 md:grid-cols-[3fr_2fr]">
-        <CodeBlock code={schemaExample} lang="typescript" filename="schemas/blogPost.ts" />
-        <TerminalBlock title="Terminal">
-          <div class="space-y-1">
-            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit generate</span></div>
-            <div><span class="terminal-line-info">&#128269;</span> <span class="terminal-line-muted">Analyzing schema changes...</span></div>
-            <div><span class="terminal-line-success">&#10003;</span> Generated migration:</div>
-            <div class="terminal-line-muted pl-4">20250702T143021_crystal_lion_hammer.js</div>
-            <div class="mt-2"></div>
-            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit migrate</span></div>
-            <div><span class="terminal-line-info">&#128269;</span> <span class="terminal-line-muted">Found 1 pending migration</span></div>
-            <div><span class="terminal-line-success">&#10003;</span> Applied crystal_lion_hammer <span class="terminal-line-muted">(342ms)</span></div>
-            <div><span class="terminal-line-success">&#10003;</span> All migrations applied</div>
-            <div class="mt-2"></div>
-            <div><span class="terminal-line-prompt">$</span> <span class="terminal-line-cmd">ctkit check</span></div>
-            <div><span class="terminal-line-success">&#10003;</span> All schemas are up to date</div>
-          </div>
-        </TerminalBlock>
+    <!-- ═══════════════ DEMO VIDEO ═══════════════ -->
+    <section class="mx-auto max-w-5xl px-6 pb-24">
+      <div class="fade-in overflow-hidden rounded-2xl border border-[var(--color-border)]">
+        <video
+          autoplay
+          loop
+          muted
+          playsinline
+          class="w-full"
+          poster=""
+        >
+          <source src={`${import.meta.env.BASE_URL}/demo.mp4`} type="video/mp4" />
+        </video>
       </div>
     </section>
 
