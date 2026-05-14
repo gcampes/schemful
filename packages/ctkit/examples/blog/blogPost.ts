@@ -1,57 +1,44 @@
-/**
- * Blog Post Content Type
- * A comprehensive blog post with rich text content, SEO, and social features
- */
-
 import {
   ContentTypeSchema,
   FieldType,
   LinkType,
   Mark,
+  NodeType,
   MimeType,
   validators,
   richTextValidators,
 } from "@ctkit/core";
 
-export const blogPostSchema: ContentTypeSchema = {
+const blogPost: ContentTypeSchema = {
   id: "blogPost",
   name: "📝 Blog Post",
-  description: "Blog post with rich content, SEO optimization, and social features",
+  description:
+    "A full-featured blog post with rich content, SEO, authors, categories, tags, and embedded blocks",
   displayField: "title",
   fields: [
-    // Basic Information
+    // ── Core content ──────────────────────────────────────────────
+
     {
       id: "title",
       name: "Title",
       type: FieldType.Symbol,
       required: true,
-      helpText: "The main title of your blog post. Keep it engaging and under 100 characters for best SEO performance.",
-      validations: [
-        validators.textLength(5, 100),
-        validators.unique(),
-      ],
+      validations: [validators.textLength(1, 160)],
     },
     {
       id: "slug",
-      name: "URL Slug",
+      name: "Slug",
       type: FieldType.Symbol,
       required: true,
-      helpText: "URL-friendly version of the title. Use lowercase letters, numbers, and hyphens only.",
-      validations: [
-        validators.slug(),
-        validators.unique(),
-        validators.textLength(3, 100),
-      ],
+      validations: [validators.unique(), validators.slug()],
     },
     {
       id: "excerpt",
       name: "Excerpt",
-      type: FieldType.RichText,
+      type: FieldType.Text,
       required: true,
-      validations: [
-        richTextValidators.paragraphsOnly(),
-        // Only allow basic formatting, no headings
-      ],
+      validations: [validators.textLength(10, 300)],
+      helpText: "Shown on listing pages and in social share previews.",
     },
     {
       id: "content",
@@ -59,75 +46,100 @@ export const blogPostSchema: ContentTypeSchema = {
       type: FieldType.RichText,
       required: true,
       validations: [
-        richTextValidators.headingLevels([2, 3, 4]), // H2, H3, H4 only
-        richTextValidators.allowedMarks([Mark.Bold, Mark.Italic, Mark.Code, Mark.Strikethrough]),
-        richTextValidators.embeddedEntries(["codeBlock", "imageGallery", "quote"]),
-      ],
-    },
-    {
-      id: "dataTable",
-      name: "Data Table",
-      type: FieldType.RichText,
-      required: false,
-      helpText: "Add data tables with formatted content. Supports basic text formatting within table cells.",
-      validations: [
-        richTextValidators.tablesWithContent(),
-      ],
-    },
-    
-    // Publishing Information
-    {
-      id: "publishedAt",
-      name: "Published Date",
-      type: FieldType.Date,
-      required: false,
-    },
-    {
-      id: "status",
-      name: "Status",
-      type: FieldType.Symbol,
-      required: true,
-      validations: [
-        validators.textIn(["draft", "published", "archived"]),
-      ],
-    },
-    {
-      id: "featured",
-      name: "Featured Post",
-      type: FieldType.Boolean,
-      required: false,
-    },
-
-    // Relationships
-    {
-      id: "author",
-      name: "Author",
-      type: FieldType.Link,
-      linkType: LinkType.Entry,
-      required: true,
-      validations: [
+        richTextValidators.allowedMarks([
+          Mark.Bold,
+          Mark.Italic,
+          Mark.Underline,
+          Mark.Code,
+          Mark.Superscript,
+          Mark.Subscript,
+          Mark.Strikethrough,
+        ]),
+        richTextValidators.allowedNodeTypes([
+          NodeType.Heading2,
+          NodeType.Heading3,
+          NodeType.Heading4,
+          NodeType.Paragraph,
+          NodeType.OrderedList,
+          NodeType.UnorderedList,
+          NodeType.Blockquote,
+          NodeType.HR,
+          NodeType.Hyperlink,
+          NodeType.EmbeddedEntryBlock,
+          NodeType.EmbeddedEntryInline,
+          NodeType.EmbeddedAssetBlock,
+          NodeType.Table,
+          NodeType.TableRow,
+          NodeType.TableCell,
+          NodeType.TableHeaderCell,
+        ]),
         {
-          linkContentType: ["author"],
+          nodes: {
+            "embedded-entry-block": [
+              {
+                linkContentType: [
+                  "codeBlock",
+                  "imageGallery",
+                  "newsletterCta",
+                ],
+              },
+            ],
+            "embedded-entry-inline": [
+              {
+                linkContentType: ["author"],
+              },
+            ],
+          },
         },
       ],
+    },
+
+    // ── Media ─────────────────────────────────────────────────────
+
+    {
+      id: "featuredImage",
+      name: "Featured Image",
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
+      required: true,
+      validations: [
+        { linkMimetypeGroup: [MimeType.Image] },
+        {
+          assetImageDimensions: {
+            width: { min: 800, max: 2400 },
+            height: { min: 400, max: 1600 },
+          },
+        },
+        { assetFileSize: { max: 5242880 } }, // 5MB
+      ],
+    },
+
+    // ── Taxonomy ──────────────────────────────────────────────────
+
+    {
+      id: "authors",
+      name: "Authors",
+      type: FieldType.Array,
+      required: true,
+      items: {
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
+        validations: [{ linkContentType: ["author"] }],
+      },
+      validations: [validators.arraySize(1, 5)],
+      helpText: "First author is the primary byline.",
     },
     {
       id: "categories",
       name: "Categories",
       type: FieldType.Array,
-      required: false,
+      required: true,
       items: {
         type: FieldType.Link,
         linkType: LinkType.Entry,
-        validations: [
-          {
-            linkContentType: ["category"],
-          },
-        ],
+        validations: [{ linkContentType: ["category"] }],
       },
-      validations: [
-        validators.arraySize(1, 5),
-      ],
+      validations: [validators.arraySize(1, 3)],
     },
     {
       id: "tags",
@@ -135,64 +147,72 @@ export const blogPostSchema: ContentTypeSchema = {
       type: FieldType.Array,
       required: false,
       items: {
-        type: FieldType.Symbol,
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
+        validations: [{ linkContentType: ["tag"] }],
       },
-      validations: [
-        validators.arraySize(0, 10),
-      ],
+      validations: [validators.arraySize(0, 10)],
     },
 
-    // Media
+    // ── Publishing ────────────────────────────────────────────────
+
     {
-      id: "featuredImage",
-      name: "Featured Image",
-      type: FieldType.Link,
-      linkType: LinkType.Asset,
-      required: false,
+      id: "status",
+      name: "Status",
+      type: FieldType.Symbol,
+      required: true,
       validations: [
-        {
-          linkMimetypeGroup: [MimeType.Image],
-        },
-        {
-          assetImageDimensions: {
-            width: { min: 800, max: 2400 },
-            height: { min: 400, max: 1600 },
-          },
-        },
+        validators.textIn(["draft", "in-review", "published", "archived"]),
       ],
     },
+    {
+      id: "publishedAt",
+      name: "Published At",
+      type: FieldType.Date,
+      required: false,
+      helpText: "When set, the post becomes visible on this date.",
+    },
+    {
+      id: "featured",
+      name: "Featured",
+      type: FieldType.Boolean,
+      required: false,
+      helpText: "Featured posts appear on the homepage hero.",
+    },
+    {
+      id: "readingTime",
+      name: "Reading Time (minutes)",
+      type: FieldType.Integer,
+      required: false,
+      validations: [validators.numberRange(1, 120)],
+    },
 
-    // SEO & Social
+    // ── SEO ───────────────────────────────────────────────────────
+
     {
       id: "seoTitle",
       name: "SEO Title",
       type: FieldType.Symbol,
       required: false,
-      helpText: "Custom title for search engines. If left blank, the main title will be used. Aim for 50-60 characters.",
-      validations: [
-        validators.textLength(10, 60),
-      ],
+      validations: [validators.textLength(0, 70)],
+      helpText: "Overrides the post title in <title> and og:title. Max 70 chars.",
     },
     {
       id: "seoDescription",
       name: "SEO Description",
       type: FieldType.Text,
       required: false,
-      helpText: "Brief description that appears in search results. Should be compelling and 150-160 characters long.",
-      validations: [
-        validators.textLength(50, 160),
-      ],
+      validations: [validators.textLength(0, 160)],
+      helpText: "Shown in search results. Max 160 chars.",
     },
     {
       id: "socialImage",
-      name: "Social Media Image",
+      name: "Social Image",
       type: FieldType.Link,
       linkType: LinkType.Asset,
       required: false,
       validations: [
-        {
-          linkMimetypeGroup: [MimeType.Image],
-        },
+        { linkMimetypeGroup: [MimeType.Image] },
         {
           assetImageDimensions: {
             width: { min: 1200, max: 1200 },
@@ -200,19 +220,49 @@ export const blogPostSchema: ContentTypeSchema = {
           },
         },
       ],
+      helpText: "og:image for social sharing. Exactly 1200x630.",
+    },
+    {
+      id: "canonicalUrl",
+      name: "Canonical URL",
+      type: FieldType.Symbol,
+      required: false,
+      validations: [validators.url()],
+      helpText: "Set if this post is syndicated from another source.",
     },
 
-    // Analytics
+    // ── Related content ───────────────────────────────────────────
+
     {
-      id: "readingTime",
-      name: "Reading Time (minutes)",
+      id: "relatedPosts",
+      name: "Related Posts",
+      type: FieldType.Array,
+      required: false,
+      items: {
+        type: FieldType.Link,
+        linkType: LinkType.Entry,
+        validations: [{ linkContentType: ["blogPost"] }],
+      },
+      validations: [validators.arraySize(0, 6)],
+      helpText: "Hand-picked related posts shown at the bottom.",
+    },
+    {
+      id: "series",
+      name: "Series",
+      type: FieldType.Symbol,
+      required: false,
+      validations: [validators.textLength(0, 100)],
+      helpText: "Group posts into a series, e.g. 'Building a CLI in Rust'.",
+    },
+    {
+      id: "seriesOrder",
+      name: "Series Order",
       type: FieldType.Integer,
       required: false,
-      validations: [
-        validators.numberRange(1, 120),
-      ],
+      validations: [validators.numberRange(1, 100)],
+      helpText: "Position within the series (1 = first part).",
     },
   ],
 };
 
-export default blogPostSchema;
+export default blogPost;

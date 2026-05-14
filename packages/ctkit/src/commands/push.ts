@@ -4,6 +4,14 @@ import { loadSchemas } from "../utils/schemaLoader";
 import chalk from "chalk";
 import ora from "ora";
 
+/**
+ * Strip properties that are not part of the Contentful Management API
+ * field definition (e.g., helpText is an editor interface setting).
+ */
+function sanitizeFieldsForApi(fields: any[]): any[] {
+  return fields.map(({ helpText, ...field }) => field);
+}
+
 export interface PushOptions {
   dryRun?: boolean;
   force?: boolean;
@@ -66,7 +74,7 @@ export async function pushSchemas(options: PushOptions = {}): Promise<void> {
               name: schema.name,
               description: schema.description || "",
               displayField: schema.displayField || "",
-              fields: schema.fields as any,
+              fields: sanitizeFieldsForApi(schema.fields as any),
             });
           } else {
             throw error;
@@ -78,7 +86,7 @@ export async function pushSchemas(options: PushOptions = {}): Promise<void> {
           contentType.name = schema.name;
           contentType.description = schema.description || "";
           contentType.displayField = schema.displayField || "";
-          contentType.fields = schema.fields as any;
+          contentType.fields = sanitizeFieldsForApi(schema.fields as any);
 
           contentType = await contentType.update();
         }

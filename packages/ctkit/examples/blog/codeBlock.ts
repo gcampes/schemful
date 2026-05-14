@@ -1,18 +1,13 @@
-/**
- * Code Block Content Type
- * Embeddable code snippets for blog posts
- */
-
 import {
   ContentTypeSchema,
   FieldType,
   validators,
 } from "@ctkit/core";
 
-export const codeBlockSchema: ContentTypeSchema = {
+const codeBlock: ContentTypeSchema = {
   id: "codeBlock",
   name: "💻 Code Block",
-  description: "Code snippet that can be embedded in blog posts",
+  description: "An embeddable code snippet for use in blog post rich text",
   displayField: "title",
   fields: [
     {
@@ -20,8 +15,37 @@ export const codeBlockSchema: ContentTypeSchema = {
       name: "Title",
       type: FieldType.Symbol,
       required: true,
+      validations: [validators.textLength(1, 120)],
+    },
+    {
+      id: "language",
+      name: "Language",
+      type: FieldType.Symbol,
+      required: true,
       validations: [
-        validators.textLength(1, 100),
+        validators.textIn([
+          "javascript",
+          "typescript",
+          "python",
+          "go",
+          "rust",
+          "java",
+          "ruby",
+          "php",
+          "swift",
+          "kotlin",
+          "html",
+          "css",
+          "scss",
+          "json",
+          "yaml",
+          "graphql",
+          "sql",
+          "bash",
+          "markdown",
+          "diff",
+          "plaintext",
+        ]),
       ],
     },
     {
@@ -31,61 +55,11 @@ export const codeBlockSchema: ContentTypeSchema = {
       required: true,
     },
     {
-      id: "language",
-      name: "Programming Language",
-      type: FieldType.Symbol,
-      required: true,
-      validations: [
-        validators.textIn([
-          "javascript",
-          "typescript",
-          "python",
-          "java",
-          "csharp",
-          "php",
-          "ruby",
-          "go",
-          "rust",
-          "swift",
-          "kotlin",
-          "html",
-          "css",
-          "scss",
-          "json",
-          "yaml",
-          "xml",
-          "sql",
-          "bash",
-          "powershell",
-          "dockerfile",
-          "markdown",
-          "plaintext",
-        ]),
-      ],
-    },
-    {
       id: "filename",
       name: "Filename",
       type: FieldType.Symbol,
       required: false,
-      validations: [
-        validators.textLength(1, 255),
-      ],
-    },
-    {
-      id: "description",
-      name: "Description",
-      type: FieldType.Text,
-      required: false,
-      validations: [
-        validators.textLength(1, 500),
-      ],
-    },
-    {
-      id: "showLineNumbers",
-      name: "Show Line Numbers",
-      type: FieldType.Boolean,
-      required: false,
+      helpText: "Displayed as a tab label, e.g. index.ts",
     },
     {
       id: "highlightLines",
@@ -93,10 +67,17 @@ export const codeBlockSchema: ContentTypeSchema = {
       type: FieldType.Symbol,
       required: false,
       validations: [
-        validators.customRegex("^[0-9,-\\s]+$"), // e.g., "1,3-5,8"
+        validators.customRegex("^[0-9,-]+$"),
       ],
+      helpText: "Lines to highlight, e.g. 1,3-5,8",
+    },
+    {
+      id: "showLineNumbers",
+      name: "Show Line Numbers",
+      type: FieldType.Boolean,
+      required: false,
     },
   ],
 };
 
-export default codeBlockSchema;
+export default codeBlock;

@@ -1,141 +1,135 @@
-/**
- * Author Content Type
- * Blog author with profile information and social links
- */
-
 import {
   ContentTypeSchema,
   FieldType,
   LinkType,
+  Mark,
+  NodeType,
   MimeType,
   validators,
   richTextValidators,
 } from "@ctkit/core";
 
-export const authorSchema: ContentTypeSchema = {
+const author: ContentTypeSchema = {
   id: "author",
   name: "👤 Author",
-  description: "Blog author with profile and social information",
+  description: "A blog author with profile, bio, and social links",
   displayField: "name",
   fields: [
-    // Basic Information
     {
       id: "name",
       name: "Full Name",
       type: FieldType.Symbol,
       required: true,
-      validations: [
-        validators.textLength(2, 100),
-      ],
+      validations: [validators.textLength(2, 100)],
     },
     {
       id: "slug",
       name: "URL Slug",
       type: FieldType.Symbol,
       required: true,
-      validations: [
-        validators.slug(),
-        validators.unique(),
-        validators.textLength(2, 50),
-      ],
+      validations: [validators.unique(), validators.slug()],
     },
     {
       id: "email",
       name: "Email",
       type: FieldType.Symbol,
       required: true,
-      validations: [
-        validators.email(),
-        validators.unique(),
-      ],
+      validations: [validators.unique(), validators.email()],
     },
     {
-      id: "jobTitle",
-      name: "Job Title",
+      id: "role",
+      name: "Role",
       type: FieldType.Symbol,
-      required: false,
+      required: true,
       validations: [
-        validators.textLength(2, 100),
+        validators.textIn([
+          "Editor in Chief",
+          "Senior Writer",
+          "Staff Writer",
+          "Guest Author",
+          "Contributor",
+        ]),
       ],
     },
     {
       id: "bio",
-      name: "Biography",
+      name: "Bio",
       type: FieldType.RichText,
-      required: false,
+      required: true,
       validations: [
-        richTextValidators.basicFormatting(),
-        richTextValidators.noHeadings(),
+        richTextValidators.allowedMarks([Mark.Bold, Mark.Italic, Mark.Code]),
+        richTextValidators.allowedNodeTypes([
+          NodeType.Paragraph,
+          NodeType.Hyperlink,
+        ]),
       ],
     },
-
-    // Profile Media
     {
-      id: "profileImage",
-      name: "Profile Image",
+      id: "shortBio",
+      name: "Short Bio",
+      type: FieldType.Text,
+      required: false,
+      validations: [validators.textLength(0, 200)],
+      helpText: "One-liner for post bylines. Max 200 characters.",
+    },
+    {
+      id: "avatar",
+      name: "Avatar",
       type: FieldType.Link,
       linkType: LinkType.Asset,
-      required: false,
+      required: true,
       validations: [
-        {
-          linkMimetypeGroup: [MimeType.Image],
-        },
+        { linkMimetypeGroup: [MimeType.Image] },
         {
           assetImageDimensions: {
-            width: { min: 200, max: 800 },
-            height: { min: 200, max: 800 },
+            width: { min: 200, max: 1000 },
+            height: { min: 200, max: 1000 },
           },
         },
+        { assetFileSize: { max: 2097152 } }, // 2MB
       ],
     },
-
-    // Social Links
     {
       id: "website",
       name: "Website",
       type: FieldType.Symbol,
       required: false,
-      validations: [
-        validators.url(),
-      ],
+      validations: [validators.url()],
     },
     {
       id: "twitter",
-      name: "Twitter Handle",
+      name: "Twitter / X",
       type: FieldType.Symbol,
       required: false,
       validations: [
-        validators.customRegex("^@?[A-Za-z0-9_]+$"),
-        validators.textLength(1, 15),
+        validators.customRegex("^@?[a-zA-Z0-9_]{1,15}$"),
+      ],
+      helpText: "Handle with or without @",
+    },
+    {
+      id: "github",
+      name: "GitHub",
+      type: FieldType.Symbol,
+      required: false,
+      validations: [
+        validators.customRegex("^[a-zA-Z0-9-]{1,39}$"),
       ],
     },
     {
       id: "linkedin",
-      name: "LinkedIn URL",
+      name: "LinkedIn",
       type: FieldType.Symbol,
       required: false,
-      validations: [
-        validators.customRegex("^https://www\\.linkedin\\.com/in/.+$"),
-      ],
+      validations: [validators.url()],
     },
-    {
-      id: "github",
-      name: "GitHub Username",
-      type: FieldType.Symbol,
-      required: false,
-      validations: [
-        validators.customRegex("^[A-Za-z0-9-]+$"),
-      ],
-    },
-
-    // Status
     {
       id: "isActive",
-      name: "Active Author",
+      name: "Active",
       type: FieldType.Boolean,
       required: true,
+      helpText: "Inactive authors are hidden from the site but their posts remain.",
     },
   ],
 };
 
-export default authorSchema;
+export default author;
