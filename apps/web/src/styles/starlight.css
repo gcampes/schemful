@@ -189,13 +189,28 @@ nav.sidebar a[aria-current="page"] {
 
 /* Tables */
 table {
+  display: table !important;
+  width: 100% !important;
+  table-layout: auto !important;
   border-radius: 0.75rem !important;
   overflow: hidden !important;
   border: 1px solid var(--sl-color-gray-5) !important;
+  border-collapse: collapse !important;
+}
+
+th,
+td {
+  padding: 0.625rem 1rem !important;
+  border-bottom: 1px solid var(--sl-color-gray-5) !important;
 }
 
 th {
   background: var(--sl-color-gray-6) !important;
+  font-weight: 500 !important;
+}
+
+tbody tr:last-child td {
+  border-bottom: none !important;
 }
 
 /* ------------------------------------------------------------------ */
