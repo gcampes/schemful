@@ -76,7 +76,7 @@ export const Terminal: React.FC<TerminalProps> = ({ startFrame = 0 }) => {
       style={{
         padding: 20,
         fontFamily: FONT_MONO,
-        fontSize: 14,
+        fontSize: 17,
         lineHeight: 1.8,
         height: "100%",
       }}

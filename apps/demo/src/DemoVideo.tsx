@@ -7,11 +7,11 @@ import { COLORS, FONT_SANS, SCHEMA_CODE, VIDEO_WIDTH, VIDEO_HEIGHT } from "./con
 
 // Timing (in frames at 30fps)
 const SCHEMA_START = 0;
-const SCHEMA_DURATION = 240; // 8 sec — code typing
+const SCHEMA_DURATION = 180; // 6 sec — shorter code
 const TRANSITION_START = SCHEMA_DURATION;
 const TRANSITION_DURATION = 20; // ~0.67 sec
 const TERMINAL_START = TRANSITION_START + TRANSITION_DURATION;
-const TERMINAL_DURATION = 300; // 10 sec — commands + hold
+const TERMINAL_DURATION = 270; // 9 sec — commands + hold
 
 export const TOTAL_FRAMES =
   SCHEMA_DURATION + TRANSITION_DURATION + TERMINAL_DURATION;

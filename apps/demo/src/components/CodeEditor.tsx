@@ -107,9 +107,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   return (
     <div
       style={{
-        padding: "16px 0",
+        padding: "20px 0",
         fontFamily: FONT_MONO,
-        fontSize: 14,
+        fontSize: 17,
         lineHeight: 1.7,
         color: COLORS.punctuation,
         height: "100%",

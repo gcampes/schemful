@@ -65,7 +65,7 @@ export const WindowChrome: React.FC<WindowChromeProps> = ({
         <span
           style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: 13,
+            fontSize: 14,
             color: COLORS.textSubtle,
             marginLeft: 8,
           }}

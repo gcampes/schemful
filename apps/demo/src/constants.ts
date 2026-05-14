@@ -30,11 +30,10 @@ export const COLORS = {
 export const FONT_MONO = "'JetBrains Mono', 'Fira Code', monospace";
 export const FONT_SANS = "'Inter', -apple-system, sans-serif";
 
-// Schema code to display
+// Schema code to display — kept short to fit large text
 export const SCHEMA_CODE = `import {
-  ContentTypeSchema,
-  FieldType, LinkType, Mark, NodeType,
-  validators, richTextValidators,
+  ContentTypeSchema, FieldType,
+  LinkType, validators,
 } from '@ctkit/core';
 
 const blogPost: ContentTypeSchema = {
@@ -44,44 +43,26 @@ const blogPost: ContentTypeSchema = {
   fields: [
     {
       id: 'title',
-      name: 'Title',
       type: FieldType.Symbol,
       required: true,
-      validations: [
-        validators.unique(),
-        validators.textLength(1, 200),
-      ],
+      validations: [validators.textLength(1, 200)],
     },
     {
       id: 'slug',
-      name: 'Slug',
       type: FieldType.Symbol,
       required: true,
-      validations: [
-        validators.unique(),
-        validators.slug(),
-      ],
+      validations: [validators.unique()],
     },
     {
       id: 'body',
-      name: 'Body',
       type: FieldType.RichText,
       required: true,
-      validations: [
-        richTextValidators.allowedMarks([
-          Mark.Bold, Mark.Italic, Mark.Code,
-        ]),
-      ],
     },
     {
       id: 'author',
-      name: 'Author',
       type: FieldType.Link,
       linkType: LinkType.Entry,
       required: true,
-      validations: [
-        { linkContentType: ['author'] },
-      ],
     },
   ],
 };
