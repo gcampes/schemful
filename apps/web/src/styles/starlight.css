@@ -72,11 +72,44 @@ nav.sidebar a[aria-current="page"] {
 /* Content area                                                        */
 /* ------------------------------------------------------------------ */
 
-/* Rounded cards for asides/callouts */
-.starlight-aside,
-aside {
+/* Asides/callouts — readable in dark mode */
+.starlight-aside {
   border-radius: 0.75rem !important;
+  background-color: var(--sl-color-gray-6) !important;
   border-color: var(--sl-color-gray-5) !important;
+  color: var(--sl-color-gray-1) !important;
+}
+
+.starlight-aside .starlight-aside__title {
+  color: var(--sl-color-white) !important;
+}
+
+/* Tip aside — accent tinted */
+.starlight-aside--tip {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  background-color: rgba(99, 102, 241, 0.08) !important;
+}
+
+.starlight-aside--tip .starlight-aside__title {
+  color: var(--sl-color-accent-high) !important;
+}
+
+/* Note aside */
+.starlight-aside--note {
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  background-color: rgba(56, 189, 248, 0.08) !important;
+}
+
+/* Caution aside */
+.starlight-aside--caution {
+  border-color: rgba(234, 179, 8, 0.4) !important;
+  background-color: rgba(234, 179, 8, 0.08) !important;
+}
+
+/* Danger aside */
+.starlight-aside--danger {
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  background-color: rgba(239, 68, 68, 0.08) !important;
 }
 
 /* Inline code */

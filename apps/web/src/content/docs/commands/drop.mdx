@@ -3,7 +3,11 @@ title: drop
 description: Delete content types and their entries from your Contentful space.
 ---
 
-**Warning:** `drop` is a destructive command. It deletes content types **and all entries of that type** from your Contentful space. This cannot be undone.
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="danger">
+  `drop` is a destructive command. It deletes content types **and all entries of that type** from your Contentful space. This cannot be undone.
+</Aside>
 
 ## Drop schemful-managed content types
 
