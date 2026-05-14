@@ -19,9 +19,14 @@ export default defineConfig({
       customCss: ["./src/styles/starlight.css"],
       expressiveCode: {
         themes: ["dracula"],
+        frames: false,
         styleOverrides: {
-          borderRadius: "0.75rem",
-          borderColor: "var(--color-border, #27272a)",
+          borderRadius: "0",
+          borderColor: "transparent",
+          codePaddingBlock: "1.25rem",
+          codePaddingInline: "1.25rem",
+          codeFontSize: "0.8125rem",
+          codeLineHeight: "1.75",
         },
       },
       sidebar: [
