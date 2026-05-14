@@ -1,0 +1,261 @@
+---
+title: Constants
+description: Typed constants for field types, link types, marks, node types, and MIME types — use them instead of raw strings for autocompletion and compile-time safety.
+sidebar:
+  order: 5
+---
+
+ctkit exports typed constant objects for every value you'd otherwise write as a raw string. Using them gives you autocompletion in your editor and catches typos at compile time.
+
+```ts
+import { FieldType, LinkType, Mark, NodeType, MimeType } from '@ctkit/cli';
+```
+
+Raw strings still work — the constants resolve to the same string literals. They're recommended but not required.
+
+## FieldType
+
+All Contentful field types.
+
+```ts
+import { FieldType } from '@ctkit/cli';
+
+{ type: FieldType.Symbol }    // "Symbol" — short text (max 256 chars)
+{ type: FieldType.Text }      // "Text" — long text
+{ type: FieldType.RichText }  // "RichText" — structured rich text
+{ type: FieldType.Integer }   // "Integer" — whole number
+{ type: FieldType.Number }    // "Number" — decimal number
+{ type: FieldType.Date }      // "Date" — ISO 8601 date/time
+{ type: FieldType.Boolean }   // "Boolean" — true/false
+{ type: FieldType.Location }  // "Location" — lat/lng coordinates
+{ type: FieldType.Object }    // "Object" — arbitrary JSON
+{ type: FieldType.Link }      // "Link" — reference to entry or asset
+{ type: FieldType.Array }     // "Array" — list of values
+```
+
+## LinkType
+
+Link target types. Used with `FieldType.Link` and `FieldType.Array` fields.
+
+```ts
+import { LinkType } from '@ctkit/cli';
+
+// Entry reference
+{
+  type: FieldType.Link,
+  linkType: LinkType.Entry,    // "Entry"
+  validations: [{ linkContentType: ['author'] }],
+}
+
+// Asset reference
+{
+  type: FieldType.Link,
+  linkType: LinkType.Asset,    // "Asset"
+  validations: [{ linkMimetypeGroup: [MimeType.Image] }],
+}
+
+// Array of entry references
+{
+  type: FieldType.Array,
+  items: { type: FieldType.Link, linkType: LinkType.Entry },
+}
+```
+
+## Mark
+
+Inline formatting marks for rich text fields.
+
+```ts
+import { Mark } from '@ctkit/cli';
+
+{
+  type: FieldType.RichText,
+  validations: [
+    {
+      enabledMarks: [
+        Mark.Bold,          // "bold"
+        Mark.Italic,        // "italic"
+        Mark.Underline,     // "underline"
+        Mark.Code,          // "code"
+        Mark.Superscript,   // "superscript"
+        Mark.Subscript,     // "subscript"
+        Mark.Strikethrough, // "strikethrough"
+      ],
+    },
+  ],
+}
+```
+
+## NodeType
+
+Block and inline node types for rich text fields.
+
+```ts
+import { NodeType } from '@ctkit/cli';
+
+{
+  type: FieldType.RichText,
+  validations: [
+    {
+      enabledNodeTypes: [
+        // Text blocks
+        NodeType.Paragraph,        // "paragraph"
+        NodeType.Blockquote,       // "blockquote"
+        NodeType.HR,               // "hr"
+
+        // Headings
+        NodeType.Heading1,         // "heading-1"
+        NodeType.Heading2,         // "heading-2"
+        NodeType.Heading3,         // "heading-3"
+        NodeType.Heading4,         // "heading-4"
+        NodeType.Heading5,         // "heading-5"
+        NodeType.Heading6,         // "heading-6"
+
+        // Lists
+        NodeType.OrderedList,      // "ordered-list"
+        NodeType.UnorderedList,    // "unordered-list"
+
+        // Links
+        NodeType.Hyperlink,        // "hyperlink"
+        NodeType.EntryHyperlink,   // "entry-hyperlink"
+        NodeType.AssetHyperlink,   // "asset-hyperlink"
+
+        // Embedded content
+        NodeType.EmbeddedEntryBlock,   // "embedded-entry-block"
+        NodeType.EmbeddedEntryInline,  // "embedded-entry-inline"
+        NodeType.EmbeddedAssetBlock,   // "embedded-asset-block"
+
+        // Tables
+        NodeType.Table,            // "table"
+        NodeType.TableRow,         // "table-row"
+        NodeType.TableCell,        // "table-cell"
+        NodeType.TableHeaderCell,  // "table-header-cell"
+      ],
+    },
+  ],
+}
+```
+
+## MimeType
+
+Asset MIME type groups for restricting file uploads on `LinkType.Asset` fields.
+
+```ts
+import { MimeType } from '@ctkit/cli';
+
+// Image only
+{ linkMimetypeGroup: [MimeType.Image] }        // "image"
+
+// Image and video
+{ linkMimetypeGroup: [MimeType.Image, MimeType.Video] }
+
+// All available groups
+MimeType.Image         // "image"
+MimeType.Video         // "video"
+MimeType.Audio         // "audio"
+MimeType.RichText      // "richtext"
+MimeType.Presentation  // "presentation"
+MimeType.Spreadsheet   // "spreadsheet"
+MimeType.PDF           // "pdfdocument"
+MimeType.Archive       // "archive"
+MimeType.PlainText     // "plaintext"
+MimeType.Markup        // "markup"
+```
+
+## Full example
+
+A complete schema using constants throughout:
+
+```ts
+import {
+  ContentTypeSchema,
+  FieldType,
+  LinkType,
+  Mark,
+  NodeType,
+  MimeType,
+} from '@ctkit/cli';
+
+const blogPost: ContentTypeSchema = {
+  id: 'blogPost',
+  name: 'Blog Post',
+  displayField: 'title',
+  fields: [
+    {
+      id: 'title',
+      name: 'Title',
+      type: FieldType.Symbol,
+      required: true,
+      validations: [{ size: { min: 1, max: 200 } }],
+    },
+    {
+      id: 'slug',
+      name: 'Slug',
+      type: FieldType.Symbol,
+      required: true,
+      validations: [
+        { unique: true },
+        { regexp: { pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' } },
+      ],
+    },
+    {
+      id: 'body',
+      name: 'Body',
+      type: FieldType.RichText,
+      required: true,
+      validations: [
+        { enabledMarks: [Mark.Bold, Mark.Italic, Mark.Code] },
+        {
+          enabledNodeTypes: [
+            NodeType.Heading2,
+            NodeType.Heading3,
+            NodeType.OrderedList,
+            NodeType.UnorderedList,
+            NodeType.Blockquote,
+            NodeType.Hyperlink,
+            NodeType.EmbeddedAssetBlock,
+          ],
+        },
+      ],
+    },
+    {
+      id: 'author',
+      name: 'Author',
+      type: FieldType.Link,
+      linkType: LinkType.Entry,
+      required: true,
+      validations: [{ linkContentType: ['author'] }],
+    },
+    {
+      id: 'featuredImage',
+      name: 'Featured Image',
+      type: FieldType.Link,
+      linkType: LinkType.Asset,
+      required: false,
+      validations: [{ linkMimetypeGroup: [MimeType.Image] }],
+    },
+    {
+      id: 'tags',
+      name: 'Tags',
+      type: FieldType.Array,
+      required: false,
+      items: { type: FieldType.Symbol },
+      validations: [{ size: { max: 10 } }],
+    },
+    {
+      id: 'publishDate',
+      name: 'Publish Date',
+      type: FieldType.Date,
+      required: false,
+    },
+    {
+      id: 'featured',
+      name: 'Featured',
+      type: FieldType.Boolean,
+      required: false,
+    },
+  ],
+};
+
+export default blogPost;
+```
