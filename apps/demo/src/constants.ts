@@ -30,34 +30,19 @@ export const COLORS = {
 export const FONT_MONO = "'JetBrains Mono', 'Fira Code', monospace";
 export const FONT_SANS = "'Inter', -apple-system, sans-serif";
 
-// Schema code to display — kept short to fit large text
-export const SCHEMA_CODE = `import {
-  ContentTypeSchema, FieldType,
-  LinkType, validators,
-} from '@ctkit/core';
+// Schema code — sized to fill the window without scrolling (~19 lines)
+export const SCHEMA_CODE = `import { ContentTypeSchema, FieldType, LinkType } from '@ctkit/core';
 
 const blogPost: ContentTypeSchema = {
   id: 'blogPost',
-  name: '📝 Blog Post',
+  name: 'Blog Post',
   displayField: 'title',
   fields: [
-    {
-      id: 'title',
-      type: FieldType.Symbol,
-      required: true,
-      validations: [validators.textLength(1, 200)],
-    },
-    {
-      id: 'slug',
-      type: FieldType.Symbol,
-      required: true,
-      validations: [validators.unique()],
-    },
-    {
-      id: 'body',
-      type: FieldType.RichText,
-      required: true,
-    },
+    { id: 'title', type: FieldType.Symbol, required: true },
+    { id: 'slug', type: FieldType.Symbol, required: true },
+    { id: 'body', type: FieldType.RichText, required: true },
+    { id: 'publishedAt', type: FieldType.Date, required: false },
+    { id: 'featured', type: FieldType.Boolean, required: false },
     {
       id: 'author',
       type: FieldType.Link,
@@ -65,9 +50,7 @@ const blogPost: ContentTypeSchema = {
       required: true,
     },
   ],
-};
-
-export default blogPost;`;
+};`;
 
 // Terminal commands and output
 export const TERMINAL_LINES: Array<{

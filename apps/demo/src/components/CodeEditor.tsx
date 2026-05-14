@@ -100,61 +100,41 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const lines = visibleCode.split("\n");
 
-  // Auto-scroll: smooth scroll based on how far through the code we are.
-  // Use the character ratio (not line count) so it moves continuously
-  // instead of jumping when a new line appears.
-  const lineHeight = 17 * 1.7; // fontSize * lineHeight
-  const containerHeight = 580; // approximate visible area
-  const padding = 20;
-  const totalLines = code.split("\n").length;
-  const totalContentHeight = totalLines * lineHeight + padding * 2;
-  const maxScroll = Math.max(0, totalContentHeight - containerHeight);
-  const progress = Math.min(visibleChars / code.length, 1);
-  const scrollY = progress * maxScroll;
+  // No scrolling — code types until it fills the viewport, then we transition.
 
   return (
     <div
       style={{
+        padding: "20px 0",
         fontFamily: FONT_MONO,
         fontSize: 17,
         lineHeight: 1.7,
         color: COLORS.punctuation,
         height: "100%",
         overflow: "hidden",
-        position: "relative",
       }}
     >
-      <div
-        style={{
-          padding: "20px 0",
-          transform: `translateY(${-scrollY}px)`,
-          transition: "transform 0.1s linear",
-        }}
-      >
-        {lines.map((line, i) => (
-          <div key={i} style={{ display: "flex", minHeight: "1.7em" }}>
-            {/* Line number */}
-            <span
-              style={{
-                display: "inline-block",
-                width: 50,
-                textAlign: "right",
-                paddingRight: 16,
-                color: COLORS.textSubtle,
-                userSelect: "none",
-                flexShrink: 0,
-              }}
-            >
-              {i + 1}
-            </span>
-            {/* Code */}
-            <span style={{ whiteSpace: "pre" }}>
-              {highlightLine(line)}
-              {i === lines.length - 1 && isTyping && <Cursor />}
-            </span>
-          </div>
-        ))}
-      </div>
+      {lines.map((line, i) => (
+        <div key={i} style={{ display: "flex", minHeight: "1.7em" }}>
+          <span
+            style={{
+              display: "inline-block",
+              width: 50,
+              textAlign: "right",
+              paddingRight: 16,
+              color: COLORS.textSubtle,
+              userSelect: "none",
+              flexShrink: 0,
+            }}
+          >
+            {i + 1}
+          </span>
+          <span style={{ whiteSpace: "pre" }}>
+            {highlightLine(line)}
+            {i === lines.length - 1 && isTyping && <Cursor />}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };
