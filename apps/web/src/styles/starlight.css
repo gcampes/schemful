@@ -89,15 +89,89 @@ aside {
   border: 1px solid rgba(99, 102, 241, 0.15) !important;
 }
 
-/* Code blocks — rounded with border */
+/* ------------------------------------------------------------------ */
+/* Code blocks — macOS window chrome (matches homepage CodeBlock)      */
+/* ------------------------------------------------------------------ */
+
 .expressive-code {
-  border-radius: 0.75rem !important;
+  border-radius: 1rem !important;
   overflow: hidden !important;
   border: 1px solid var(--sl-color-gray-5) !important;
 }
 
 .expressive-code pre {
   border-radius: 0 !important;
+}
+
+/* Frame header — dark bar with macOS dots */
+.expressive-code .header {
+  background: var(--sl-color-gray-6) !important;
+  border-bottom: 1px solid var(--sl-color-gray-5) !important;
+  padding: 0.75rem 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Replace the default terminal dots with macOS-style colored ones */
+.expressive-code .frame.is-terminal .header::before {
+  content: "" !important;
+  display: inline-flex !important;
+  width: auto !important;
+  height: auto !important;
+  background: none !important;
+  box-shadow: none !important;
+  /* Three colored dots via box-shadow trick */
+  --dot-size: 12px;
+  --dot-gap: 8px;
+  min-width: calc(var(--dot-size) * 3 + var(--dot-gap) * 2) !important;
+  min-height: var(--dot-size) !important;
+  background-image:
+    radial-gradient(circle at calc(var(--dot-size) / 2) 50%, rgba(239, 68, 68, 0.6) calc(var(--dot-size) / 2 - 0.5px), transparent calc(var(--dot-size) / 2)),
+    radial-gradient(circle at calc(var(--dot-size) * 1.5 + var(--dot-gap)) 50%, rgba(234, 179, 8, 0.6) calc(var(--dot-size) / 2 - 0.5px), transparent calc(var(--dot-size) / 2)),
+    radial-gradient(circle at calc(var(--dot-size) * 2.5 + var(--dot-gap) * 2) 50%, rgba(34, 197, 94, 0.6) calc(var(--dot-size) / 2 - 0.5px), transparent calc(var(--dot-size) / 2)) !important;
+  background-repeat: no-repeat !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Code blocks with filenames — add dots before the title */
+.expressive-code .frame.has-title .header {
+  background: var(--sl-color-gray-6) !important;
+  border-bottom: 1px solid var(--sl-color-gray-5) !important;
+  padding: 0.75rem 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.expressive-code .frame.has-title .header::before {
+  content: "" !important;
+  display: inline-flex !important;
+  --dot-size: 12px;
+  --dot-gap: 8px;
+  min-width: calc(var(--dot-size) * 3 + var(--dot-gap) * 2) !important;
+  min-height: var(--dot-size) !important;
+  background-image:
+    radial-gradient(circle at calc(var(--dot-size) / 2) 50%, rgba(239, 68, 68, 0.6) calc(var(--dot-size) / 2 - 0.5px), transparent calc(var(--dot-size) / 2)),
+    radial-gradient(circle at calc(var(--dot-size) * 1.5 + var(--dot-gap)) 50%, rgba(234, 179, 8, 0.6) calc(var(--dot-size) / 2 - 0.5px), transparent calc(var(--dot-size) / 2)),
+    radial-gradient(circle at calc(var(--dot-size) * 2.5 + var(--dot-gap) * 2) 50%, rgba(34, 197, 94, 0.6) calc(var(--dot-size) / 2 - 0.5px), transparent calc(var(--dot-size) / 2)) !important;
+  background-repeat: no-repeat !important;
+  margin-right: 0.25rem !important;
+}
+
+/* Filename text styling */
+.expressive-code .header .title {
+  font-size: 0.75rem !important;
+  color: var(--sl-color-gray-3) !important;
+}
+
+/* Plain code blocks (no title, no terminal) — add header with dots */
+.expressive-code .frame:not(.is-terminal):not(.has-title) {
+  position: relative;
+}
+
+.expressive-code .frame:not(.is-terminal):not(.has-title) pre {
+  padding-top: 1.25rem !important;
 }
 
 /* Tables */
