@@ -136,32 +136,9 @@ nav.sidebar a[aria-current="page"] {
   border-radius: 0 !important;
 }
 
-/* Frame header — match homepage aesthetic */
+/* Hide Expressive Code's built-in frame header — our ::before replaces it */
 .expressive-code .frame .header {
-  background: #0f0f12 !important;
-  border-bottom: 1px solid var(--sl-color-gray-5) !important;
-  padding: 0.75rem 1rem !important;
-}
-
-/* Terminal frame dots — replace with macOS colored dots */
-.expressive-code .frame.is-terminal .header::before {
-  background-image:
-    radial-gradient(circle, rgba(239, 68, 68, 0.6) 45%, transparent 50%),
-    radial-gradient(circle, rgba(234, 179, 8, 0.6) 45%, transparent 50%),
-    radial-gradient(circle, rgba(34, 197, 94, 0.6) 45%, transparent 50%) !important;
-}
-
-/* Editor tab bar — match same bg */
-.expressive-code .frame:not(.is-terminal) .header {
-  background: #0f0f12 !important;
-  border-bottom: 1px solid var(--sl-color-gray-5) !important;
-}
-
-/* Tab text styling */
-.expressive-code .frame .header .title,
-.expressive-code .frame .header tab-bar .tab {
-  font-size: 0.75rem !important;
-  color: var(--sl-color-gray-3) !important;
+  display: none !important;
 }
 
 /* Copy button styling */
