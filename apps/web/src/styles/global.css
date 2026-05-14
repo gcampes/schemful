@@ -10,9 +10,9 @@
   --color-text: #fafafa;
   --color-text-muted: #a1a1aa;
   --color-text-subtle: #63636e;
-  --color-accent: #6366f1;
-  --color-accent-hover: #818cf8;
-  --color-accent-muted: rgba(99, 102, 241, 0.12);
+  --color-accent: #22c55e;
+  --color-accent-hover: #4ade80;
+  --color-accent-muted: rgba(34, 197, 94, 0.12);
   --color-green: #22c55e;
   --color-green-muted: rgba(34, 197, 94, 0.12);
   --color-yellow: #eab308;
@@ -34,7 +34,7 @@ html {
 }
 
 ::selection {
-  background-color: rgba(99, 102, 241, 0.3);
+  background-color: rgba(34, 197, 94, 0.3);
   color: var(--color-text);
 }
 
@@ -44,7 +44,7 @@ code {
 
 /* ---- Animated gradient text ---- */
 .gradient-text {
-  background: linear-gradient(135deg, #6366f1, #a78bfa, #818cf8, #6366f1);
+  background: linear-gradient(135deg, #22c55e, #86efac, #4ade80, #22c55e);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -73,7 +73,7 @@ code {
   background: conic-gradient(
     from var(--border-angle, 0deg),
     transparent 30%,
-    #6366f1 50%,
+    #22c55e 50%,
     transparent 70%
   );
   z-index: -1;
@@ -102,15 +102,15 @@ code {
 /* ---- Hero grid ---- */
 .hero-grid {
   background-image:
-    linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(34, 197, 94, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.04) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
 }
 
 /* ---- Hero glow ---- */
 .hero-glow {
-  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.15), transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.15), transparent 70%);
   animation: glow-pulse 4s ease-in-out infinite alternate;
 }
 
@@ -152,7 +152,7 @@ code {
 
 /* ---- Glowing pill badge ---- */
 .glow-badge {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15), inset 0 0 20px rgba(99, 102, 241, 0.05);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15), inset 0 0 20px rgba(34, 197, 94, 0.05);
 }
 
 /* ---- Step connector line ---- */
