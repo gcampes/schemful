@@ -4,14 +4,14 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://gcampes.github.io",
-  base: "/schemful",
+  base: "/ctkit",
   integrations: [
     starlight({
       title: ">ct",
       description:
         "A Drizzle ORM-style workflow for managing Contentful content models.",
       social: [
-        { icon: "github", label: "GitHub", href: "https://github.com/gcampes/schemful" },
+        { icon: "github", label: "GitHub", href: "https://github.com/gcampes/ctkit" },
       ],
       customCss: ["./src/styles/starlight.css"],
       expressiveCode: {
