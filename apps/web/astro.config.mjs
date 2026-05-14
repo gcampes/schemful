@@ -7,12 +7,9 @@ export default defineConfig({
   base: "/schemful",
   integrations: [
     starlight({
-      title: "ctkit",
+      title: ">ct",
       description:
         "A Drizzle ORM-style workflow for managing Contentful content models.",
-      logo: {
-        src: "./public/favicon.svg",
-      },
       social: [
         { icon: "github", label: "GitHub", href: "https://github.com/gcampes/schemful" },
       ],

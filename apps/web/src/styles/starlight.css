@@ -36,6 +36,17 @@ starlight-theme-select {
   display: none !important;
 }
 
+/* Site title: >ct in mono, green > white ct */
+.site-title {
+  font-family: var(--sl-font-mono) !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}
+
+.site-title::first-letter {
+  color: #22c55e !important;
+}
+
 /* ------------------------------------------------------------------ */
 /* Sidebar                                                             */
 /* ------------------------------------------------------------------ */
