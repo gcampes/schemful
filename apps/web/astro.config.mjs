@@ -33,7 +33,7 @@ export default defineConfig({
             terminalTitlebarBackground: "#0f0f12",
             terminalTitlebarBorderBottom: "#27272a",
             terminalTitlebarDotsForeground: "transparent",
-            tooltipSuccessBackground: "#6366f1",
+            tooltipSuccessBackground: "#22c55e",
           },
         },
       },

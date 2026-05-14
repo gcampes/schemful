@@ -4,10 +4,10 @@
 :root,
 :root[data-theme="light"],
 :root[data-theme="dark"] {
-  /* Brand colors */
-  --sl-color-accent-low: rgba(99, 102, 241, 0.15);
-  --sl-color-accent: #6366f1;
-  --sl-color-accent-high: #c7d2fe;
+  /* Brand colors — green */
+  --sl-color-accent-low: rgba(34, 197, 94, 0.15);
+  --sl-color-accent: #22c55e;
+  --sl-color-accent-high: #bbf7d0;
 
   /* Gray scale */
   --sl-color-white: #fafafa;
@@ -97,8 +97,8 @@ nav.sidebar a[aria-current="page"] {
 
 /* Tip aside — accent tinted */
 .starlight-aside--tip {
-  border-color: rgba(99, 102, 241, 0.4) !important;
-  background-color: rgba(99, 102, 241, 0.08) !important;
+  border-color: rgba(34, 197, 94, 0.4) !important;
+  background-color: rgba(34, 197, 94, 0.08) !important;
 }
 
 .starlight-aside--tip .starlight-aside__title {
@@ -125,12 +125,12 @@ nav.sidebar a[aria-current="page"] {
 
 /* Inline code */
 :not(pre) > code {
-  background: rgba(99, 102, 241, 0.1) !important;
+  background: rgba(34, 197, 94, 0.1) !important;
   color: var(--sl-color-accent-high) !important;
   border-radius: 0.375rem !important;
   padding: 0.15em 0.4em !important;
   font-size: 0.875em !important;
-  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  border: 1px solid rgba(34, 197, 94, 0.15) !important;
 }
 
 /* ------------------------------------------------------------------ */
