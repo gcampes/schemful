@@ -11,20 +11,8 @@ import "@xyflow/react/dist/style.css";
 import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { COLORS, FONT_MONO, FONT_SANS, VIDEO_WIDTH, VIDEO_HEIGHT } from "../constants";
 
-// Bloom wave assignment
-const WAVE: Record<string, number> = {
-  blogPost: 0,
-  author: 1,
-  category: 1,
-  tag: 1,
-  codeBlock: 2,
-  gallery: 2,
-  newsletter: 2,
-};
+const BLOOM_STAGGER = 12;
 
-const BLOOM_STAGGER = 12; // frames between waves
-
-// Custom node component
 function ContentTypeNode({ data }: { data: { label: string; fields: number; wave: number; startFrame: number } }) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -50,23 +38,23 @@ function ContentTypeNode({ data }: { data: { label: string; fields: number; wave
         background: COLORS.bgCard,
         border: `1.5px solid ${COLORS.accent}`,
         borderRadius: 12,
-        padding: "12px 20px",
+        padding: "10px 18px",
         display: "flex",
         alignItems: "center",
-        gap: 12,
+        gap: 10,
         fontFamily: FONT_MONO,
         transform: `scale(${scale})`,
         opacity,
-        boxShadow: `0 0 30px ${COLORS.accentMuted}, 0 4px 20px rgba(0,0,0,0.4)`,
-        minWidth: 180,
+        boxShadow: `0 0 24px ${COLORS.accentMuted}, 0 4px 16px rgba(0,0,0,0.4)`,
+        minWidth: 160,
       }}
     >
-      <span style={{ fontSize: 22 }}>{data.label.split(" ")[0]}</span>
-      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <span style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>
+      <span style={{ fontSize: 20 }}>{data.label.split(" ")[0]}</span>
+      <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.text }}>
           {data.label.split(" ").slice(1).join(" ")}
         </span>
-        <span style={{ fontSize: 11, color: COLORS.textSubtle }}>
+        <span style={{ fontSize: 10, color: COLORS.textSubtle }}>
           {data.fields} fields
         </span>
       </div>
@@ -84,130 +72,112 @@ export const ModelGraph: React.FC<ModelGraphProps> = ({ startFrame = 0 }) => {
   const frame = useCurrentFrame();
   const elapsed = Math.max(0, frame - startFrame);
 
-  // Title
   const titleOpacity = interpolate(elapsed, [0, 20], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
+  // Left-to-right layout: Blog Post on left, references middle, embedded right
   const nodes: Node[] = useMemo(
     () => [
+      // Column 1: Blog Post
       {
         id: "blogPost",
         type: "contentType",
-        position: { x: 460, y: 20 },
+        position: { x: 0, y: 180 },
         data: { label: "📝 Blog Post", fields: 22, wave: 0, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
+      // Column 2: Direct references
       {
         id: "author",
         type: "contentType",
-        position: { x: 100, y: 200 },
+        position: { x: 340, y: 20 },
         data: { label: "👤 Author", fields: 12, wave: 1, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
       {
         id: "category",
         type: "contentType",
-        position: { x: 460, y: 200 },
+        position: { x: 340, y: 180 },
         data: { label: "📂 Category", fields: 8, wave: 1, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
       {
         id: "tag",
         type: "contentType",
-        position: { x: 820, y: 200 },
+        position: { x: 340, y: 340 },
         data: { label: "🏷️ Tag", fields: 2, wave: 1, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
+      // Column 3: Embedded in rich text
       {
         id: "codeBlock",
         type: "contentType",
-        position: { x: 100, y: 400 },
+        position: { x: 680, y: 20 },
         data: { label: "💻 Code Block", fields: 6, wave: 2, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
       {
         id: "gallery",
         type: "contentType",
-        position: { x: 460, y: 400 },
+        position: { x: 680, y: 180 },
         data: { label: "📸 Gallery", fields: 4, wave: 2, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
       {
         id: "newsletter",
         type: "contentType",
-        position: { x: 820, y: 400 },
+        position: { x: 680, y: 340 },
         data: { label: "📰 Newsletter", fields: 4, wave: 2, startFrame },
-        sourcePosition: Position.Bottom,
-        targetPosition: Position.Top,
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
       },
     ],
     [startFrame]
   );
 
+  const edgeStyle = {
+    stroke: COLORS.accent,
+    strokeWidth: 1.5,
+  };
+  const dashedEdgeStyle = {
+    stroke: COLORS.accent,
+    strokeWidth: 1,
+    strokeDasharray: "6 4",
+    opacity: 0.6,
+  };
+  const marker = {
+    type: MarkerType.ArrowClosed as const,
+    color: COLORS.accent,
+    width: 14,
+    height: 14,
+  };
+
   const edges: Edge[] = useMemo(
     () => [
-      {
-        id: "e-author",
-        source: "blogPost",
-        target: "author",
-        animated: true,
-        style: { stroke: COLORS.accent, strokeWidth: 1.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 16, height: 16 },
-      },
-      {
-        id: "e-category",
-        source: "blogPost",
-        target: "category",
-        animated: true,
-        style: { stroke: COLORS.accent, strokeWidth: 1.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 16, height: 16 },
-      },
-      {
-        id: "e-tag",
-        source: "blogPost",
-        target: "tag",
-        animated: true,
-        style: { stroke: COLORS.accent, strokeWidth: 1.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 16, height: 16 },
-      },
-      {
-        id: "e-code",
-        source: "blogPost",
-        target: "codeBlock",
-        animated: true,
-        style: { stroke: COLORS.accent, strokeWidth: 1, strokeDasharray: "6 4", opacity: 0.6 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 14, height: 14 },
-      },
-      {
-        id: "e-gallery",
-        source: "blogPost",
-        target: "gallery",
-        animated: true,
-        style: { stroke: COLORS.accent, strokeWidth: 1, strokeDasharray: "6 4", opacity: 0.6 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 14, height: 14 },
-      },
-      {
-        id: "e-newsletter",
-        source: "blogPost",
-        target: "newsletter",
-        animated: true,
-        style: { stroke: COLORS.accent, strokeWidth: 1, strokeDasharray: "6 4", opacity: 0.6 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: COLORS.accent, width: 14, height: 14 },
-      },
+      // Blog Post → direct references
+      { id: "e-author", source: "blogPost", target: "author", animated: true, style: edgeStyle, markerEnd: marker },
+      { id: "e-category", source: "blogPost", target: "category", animated: true, style: edgeStyle, markerEnd: marker },
+      { id: "e-tag", source: "blogPost", target: "tag", animated: true, style: edgeStyle, markerEnd: marker },
+      // Blog Post → embedded (via rich text)
+      { id: "e-code", source: "blogPost", target: "codeBlock", animated: true, style: dashedEdgeStyle, markerEnd: marker },
+      { id: "e-gallery", source: "blogPost", target: "gallery", animated: true, style: dashedEdgeStyle, markerEnd: marker },
+      { id: "e-newsletter", source: "blogPost", target: "newsletter", animated: true, style: dashedEdgeStyle, markerEnd: marker },
+      // Cross connections
+      { id: "e-cat-self", source: "category", target: "category", animated: true, style: dashedEdgeStyle, markerEnd: marker },
+      { id: "e-blog-self", source: "blogPost", target: "blogPost", animated: true, style: dashedEdgeStyle, markerEnd: marker, label: "related" },
     ],
     []
   );
 
-  // Edge visibility — fade in after nodes
-  const edgeOpacity = interpolate(elapsed, [25, 40], [0, 1], {
+  const edgeOpacity = interpolate(elapsed, [20, 35], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -225,7 +195,7 @@ export const ModelGraph: React.FC<ModelGraphProps> = ({ startFrame = 0 }) => {
       <div
         style={{
           position: "absolute",
-          top: 40,
+          top: 30,
           left: 0,
           right: 0,
           textAlign: "center",
@@ -240,14 +210,14 @@ export const ModelGraph: React.FC<ModelGraphProps> = ({ startFrame = 0 }) => {
         Your content model, fully managed
       </div>
 
-      {/* React Flow graph */}
+      {/* React Flow */}
       <div
         style={{
           position: "absolute",
-          top: 80,
-          left: 80,
-          width: VIDEO_WIDTH - 160,
-          height: VIDEO_HEIGHT - 120,
+          top: 70,
+          left: 100,
+          width: VIDEO_WIDTH - 200,
+          height: VIDEO_HEIGHT - 100,
         }}
       >
         <div style={{ width: "100%", height: "100%", opacity: edgeOpacity > 0 ? 1 : 0 }}>
@@ -256,6 +226,7 @@ export const ModelGraph: React.FC<ModelGraphProps> = ({ startFrame = 0 }) => {
             edges={edges}
             nodeTypes={nodeTypes}
             fitView
+            fitViewOptions={{ padding: 0.2 }}
             panOnDrag={false}
             zoomOnScroll={false}
             zoomOnPinch={false}

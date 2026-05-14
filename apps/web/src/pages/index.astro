@@ -195,8 +195,9 @@ export default product;`;
 
     <!-- ═══════════════ DEMO VIDEO ═══════════════ -->
     <section class="mx-auto max-w-5xl px-6 py-12 md:py-16">
-      <div class="fade-in overflow-hidden rounded-2xl border border-[var(--color-border)]">
+      <div class="fade-in relative overflow-hidden rounded-2xl border border-[var(--color-border)]">
         <video
+          id="demo-video"
           autoplay
           loop
           muted
@@ -206,6 +207,37 @@ export default product;`;
         >
           <source src={`${import.meta.env.BASE_URL}/demo.mp4`} type="video/mp4" />
         </video>
+        <!-- Progress circle / play-pause button -->
+        <button
+          id="video-control"
+          class="absolute bottom-4 right-4 h-10 w-10 cursor-pointer rounded-full bg-[var(--color-bg)]/70 backdrop-blur-sm transition-opacity hover:opacity-100"
+          style="opacity: 0.6;"
+          aria-label="Play/Pause"
+        >
+          <svg viewBox="0 0 40 40" class="h-10 w-10">
+            <!-- Background ring -->
+            <circle cx="20" cy="20" r="17" fill="none" stroke="var(--color-border)" stroke-width="2" />
+            <!-- Progress ring -->
+            <circle
+              id="progress-ring"
+              cx="20" cy="20" r="17"
+              fill="none"
+              stroke="var(--color-accent)"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-dasharray="106.81"
+              stroke-dashoffset="106.81"
+              transform="rotate(-90 20 20)"
+            />
+            <!-- Play icon (shown when paused) -->
+            <polygon id="play-icon" points="16,12 16,28 30,20" fill="var(--color-text)" style="display:none;" />
+            <!-- Pause icon (shown when playing) -->
+            <g id="pause-icon">
+              <rect x="14" y="13" width="4" height="14" rx="1" fill="var(--color-text)" />
+              <rect x="22" y="13" width="4" height="14" rx="1" fill="var(--color-text)" />
+            </g>
+          </svg>
+        </button>
       </div>
     </section>
 
@@ -429,5 +461,37 @@ export default product;`;
         (e.currentTarget as HTMLElement).style.setProperty('--mouse-y', `${y}%`);
       });
     });
+
+    // Video progress circle + play/pause
+    (() => {
+      const video = document.getElementById('demo-video') as HTMLVideoElement;
+      const ring = document.getElementById('progress-ring') as SVGCircleElement;
+      const playIcon = document.getElementById('play-icon') as SVGElement;
+      const pauseIcon = document.getElementById('pause-icon') as SVGElement;
+      const btn = document.getElementById('video-control') as HTMLButtonElement;
+      if (!video || !ring || !btn) return;
+
+      const circumference = 2 * Math.PI * 17; // r=17
+
+      // Update progress ring on timeupdate
+      video.addEventListener('timeupdate', () => {
+        if (!video.duration) return;
+        const progress = video.currentTime / video.duration;
+        ring.style.strokeDashoffset = String(circumference * (1 - progress));
+      });
+
+      // Toggle play/pause
+      btn.addEventListener('click', () => {
+        if (video.paused) {
+          video.play();
+          playIcon.style.display = 'none';
+          pauseIcon.style.display = 'block';
+        } else {
+          video.pause();
+          playIcon.style.display = 'block';
+          pauseIcon.style.display = 'none';
+        }
+      });
+    })();
   </script>
 </Layout>
