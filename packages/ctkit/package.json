@@ -57,7 +57,7 @@
     "type": "git",
     "url": "git+https://github.com/gcampes/ctkit.git"
   },
-  "homepage": "https://ctkit.dev",
+  "homepage": "https://gcampes.github.io/ctkit/",
   "bugs": {
     "url": "https://github.com/gcampes/ctkit/issues"
   },

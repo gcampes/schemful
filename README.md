@@ -104,7 +104,7 @@ This is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspaces):
 |---------|-------------|
 | [`packages/ctkit`](packages/ctkit/) | CLI tool ([npm](https://www.npmjs.com/package/@ctkit/cli)) |
 | [`packages/core`](packages/core/) | Types, constants, and validators ([npm](https://www.npmjs.com/package/@ctkit/core)) |
-| [`apps/web`](apps/web/) | Marketing site ([ctkit.dev](https://ctkit.dev)) |
+| [`apps/web`](apps/web/) | Marketing site ([gcampes.github.io/ctkit](https://gcampes.github.io/ctkit/)) |
 
 ## Development
 

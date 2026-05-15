@@ -494,8 +494,8 @@ The [`examples/`](examples/) directory contains complete schema sets for common 
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for development setup, testing, and PR guidelines.
+Contributions are welcome. See the [documentation](https://gcampes.github.io/ctkit/) and [GitHub repo](https://github.com/gcampes/ctkit) for development setup and guidelines.
 
 ## License
 
-[MIT](../../LICENSE)
+[MIT](https://github.com/gcampes/ctkit/blob/main/LICENSE)

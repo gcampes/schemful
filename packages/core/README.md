@@ -60,8 +60,8 @@ const blogPost: ContentTypeSchema = {
 
 ## Documentation
 
-See [ctkit.dev](https://ctkit.dev) for full documentation.
+See the [full documentation](https://gcampes.github.io/ctkit/) for guides, schema reference, and command details.
 
 ## License
 
-[MIT](../../LICENSE)
+[MIT](https://github.com/gcampes/ctkit/blob/main/LICENSE)
