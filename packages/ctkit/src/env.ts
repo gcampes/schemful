@@ -18,16 +18,23 @@ const envSchema = z.object({
     .default("development"),
 });
 
-// Validate environment variables
-function validateEnv() {
+type Env = z.infer<typeof envSchema>;
+
+// Lazy validation — only runs when env is first accessed
+let _env: Env | null = null;
+
+function getEnv(): Env {
+  if (_env) return _env;
+
   try {
-    return envSchema.parse({
+    _env = envSchema.parse({
       CONTENTFUL_MANAGEMENT_TOKEN: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
       CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID,
       CONTENTFUL_ENVIRONMENT_ID:
         process.env.CONTENTFUL_ENVIRONMENT_ID || "master",
       NODE_ENV: process.env.NODE_ENV || "development",
     });
+    return _env;
   } catch (error: unknown) {
     console.error("❌ Environment validation failed:");
     if (error instanceof z.ZodError) {
@@ -39,6 +46,9 @@ function validateEnv() {
   }
 }
 
-const env = validateEnv();
-
-export { env };
+// Proxy that lazily validates on first property access
+export const env = new Proxy({} as Env, {
+  get(_target, prop: string) {
+    return getEnv()[prop as keyof Env];
+  },
+});

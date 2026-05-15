@@ -21,7 +21,8 @@ require('tsx/cjs');
 export async function loadSchemas(schemaDirectory = "schemas"): Promise<ContentTypeSchema[]> {
   // Always look in the current working directory for schemas
   // (this is the user's project directory, not the ctkit package directory)
-  const schemasDir = path.join(process.cwd(), schemaDirectory);
+  // path.resolve handles both relative ("schemas") and absolute ("/tmp/foo") paths
+  const schemasDir = path.resolve(process.cwd(), schemaDirectory);
 
   console.log(chalk.gray(`🔍 Looking for schemas in: ${schemasDir}`));
 

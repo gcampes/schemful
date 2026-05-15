@@ -7,9 +7,12 @@
 import { createClient, Environment, type ContentType } from "contentful-management";
 import { config } from "dotenv";
 import { expect } from "vitest";
+import * as path from "path";
 
-// Load .env from project root
-config();
+// Load .env — try multiple locations
+config(); // cwd
+config({ path: path.resolve(__dirname, "../../../.env") }); // packages/ctkit/.env
+config({ path: path.resolve(__dirname, "../../../../../.env") }); // monorepo root .env
 
 // ---------------------------------------------------------------------------
 // Client

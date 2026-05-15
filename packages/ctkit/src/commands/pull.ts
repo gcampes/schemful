@@ -11,6 +11,7 @@ import { execSync } from "child_process";
 export interface PullOptions {
   contentType?: string;
   force?: boolean;
+  outputDir?: string;
 }
 
 /**
@@ -78,7 +79,9 @@ export async function pullSchemas(options: PullOptions = {}): Promise<void> {
     }
 
     // Ensure schemas directory exists
-    const schemasDir = path.join(process.cwd(), "schemas");
+    const schemasDir = options.outputDir
+      ? path.resolve(options.outputDir)
+      : path.join(process.cwd(), "schemas");
     if (!fs.existsSync(schemasDir)) {
       fs.mkdirSync(schemasDir, { recursive: true });
     }
