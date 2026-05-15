@@ -8,6 +8,32 @@ import chalk from "chalk";
 
 const MOVE_TO_TOP_SENTINEL = "__MOVE_TO_TOP__";
 
+/**
+ * Deep equality comparison that is key-order-independent.
+ * Contentful API returns objects with keys in a different order
+ * than what we send, so JSON.stringify comparison produces false positives.
+ */
+function deepEqual(a: any, b: any): boolean {
+  if (a === b) return true;
+  if (a == null || b == null) return a === b;
+  if (typeof a !== typeof b) return false;
+
+  if (Array.isArray(a)) {
+    if (!Array.isArray(b) || a.length !== b.length) return false;
+    return a.every((item, i) => deepEqual(item, b[i]));
+  }
+
+  if (typeof a === "object") {
+    const keysA = Object.keys(a).sort();
+    const keysB = Object.keys(b).sort();
+    if (keysA.length !== keysB.length) return false;
+    if (!keysA.every((k, i) => k === keysB[i])) return false;
+    return keysA.every((k) => deepEqual(a[k], b[k]));
+  }
+
+  return false;
+}
+
 function escapeSingleQuote(str: string): string {
   return str.replace(/'/g, "\\'");
 }
@@ -309,23 +335,17 @@ function hasFieldChanged(existingField: any, schemaField: Field): boolean {
     return true;
   }
 
-  // Deep comparison of validations
-  const existingValidationsJson = JSON.stringify(existingValidations);
-  const schemaValidationsJson = JSON.stringify(schemaValidations);
-
-  if (existingValidationsJson !== schemaValidationsJson) {
+  // Deep comparison of validations (key-order-independent)
+  if (!deepEqual(existingValidations, schemaValidations)) {
     return true;
   }
 
-  // Compare items for Array fields
+  // Compare items for Array fields (key-order-independent)
   if (existingField.type === FieldType.Array) {
     const existingItems = existingField.items || {};
     const schemaItems = ("items" in schemaField && schemaField.items) || {};
 
-    const existingItemsJson = JSON.stringify(existingItems);
-    const schemaItemsJson = JSON.stringify(schemaItems);
-
-    if (existingItemsJson !== schemaItemsJson) {
+    if (!deepEqual(existingItems, schemaItems)) {
       return true;
     }
   }
@@ -543,13 +563,11 @@ function generateFieldEditCode(contentTypeId: string, field: Field, existingFiel
     lines.push(`    .required(${field.required})`);
   }
 
-  // Only set validations if they have changed
+  // Only set validations if they have changed (key-order-independent)
   const existingValidations = existingField?.validations || [];
   const schemaValidations = ("validations" in field && field.validations) || [];
-  const existingValidationsJson = JSON.stringify(existingValidations);
-  const schemaValidationsJson = JSON.stringify(schemaValidations);
 
-  if (existingValidationsJson !== schemaValidationsJson) {
+  if (!deepEqual(existingValidations, schemaValidations)) {
     const validationsCode = generateValidationsCode(schemaValidations);
     lines.push(`    .validations(${validationsCode})`);
   }
@@ -574,7 +592,7 @@ function generateFieldEditCode(contentTypeId: string, field: Field, existingFiel
   if (field.type === FieldType.Array && "items" in field) {
     const existingItems = existingField?.items || {};
     const schemaItems = field.items;
-    if (JSON.stringify(existingItems) !== JSON.stringify(schemaItems)) {
+    if (!deepEqual(existingItems, schemaItems)) {
       const itemsCode = JSON.stringify(schemaItems, null, 6).replace(/\n/g, "\n    ");
       lines.push(`    .items(${itemsCode})`);
     }
@@ -589,7 +607,12 @@ function generateFieldEditCode(contentTypeId: string, field: Field, existingFiel
  * Generate field deletion code
  */
 function generateFieldDeletionCode(contentTypeId: string, field: Field): string {
-  return `  ${contentTypeId}.deleteField('${escapeSingleQuote(field.id)}');`;
+  // Contentful requires fields to be omitted before deletion
+  const id = escapeSingleQuote(field.id);
+  const lines: string[] = [];
+  lines.push(`  ${contentTypeId}.editField('${id}').omitted(true).disabled(true);`);
+  lines.push(`  ${contentTypeId}.deleteField('${id}');`);
+  return lines.join("\n");
 }
 
 /**

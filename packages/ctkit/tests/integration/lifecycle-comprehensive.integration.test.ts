@@ -266,9 +266,7 @@ const postV2: ContentTypeSchema = {
             "blockquote",
             "hyperlink",
             "table",
-            "table-row",
-            "table-cell",
-            "table-header-cell",
+            "embedded-asset-block",
           ],
         },
       ],
@@ -526,8 +524,10 @@ describe("Comprehensive Lifecycle (generate → migrate → pull)", () => {
       try {
         await executeMigration(updateResult.code, config);
       } catch (err: any) {
-        // Log the generated code for debugging
         console.error("Generated migration code:\n", updateResult.code);
+        console.error("Error details:", JSON.stringify(err, null, 2));
+        console.error("Error message:", err.message);
+        if (err.errors) console.error("Validation errors:", JSON.stringify(err.errors, null, 2));
         throw err;
       }
     });
@@ -565,9 +565,7 @@ describe("Comprehensive Lifecycle (generate → migrate → pull)", () => {
           expect.objectContaining({
             enabledNodeTypes: expect.arrayContaining([
               "table",
-              "table-row",
-              "table-cell",
-              "table-header-cell",
+              "embedded-asset-block",
             ]),
           }),
         ])
